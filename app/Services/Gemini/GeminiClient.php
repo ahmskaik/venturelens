@@ -1,0 +1,213 @@
+<?php
+
+namespace App\Services\Gemini;
+
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use RuntimeException;
+
+class GeminiClient
+{
+    private const BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
+
+    /** @var list<string> */
+    private const DEPRECATED_MODELS = [
+        'gemini-2.0-flash',
+        'gemini-2.0-flash-lite',
+    ];
+
+    /** @var list<int> */
+    private const RETRYABLE_STATUS_CODES = [429, 500, 502, 503, 504];
+
+    public function __construct(
+        private readonly string $apiKey,
+        private readonly int $timeoutSeconds = 60,
+        private readonly int $maxRetries = 5,
+    ) {}
+
+    public static function fromConfig(): self
+    {
+        $apiKey = config('services.gemini.api_key');
+
+        if (empty($apiKey)) {
+            throw new RuntimeException('GEMINI_API_KEY is not configured.');
+        }
+
+        return new self(
+            apiKey: $apiKey,
+            timeoutSeconds: (int) config('services.gemini.timeout', 60),
+            maxRetries: (int) config('services.gemini.max_retries', 5),
+        );
+    }
+
+    /**
+     * @param  array<string, mixed>  $generationConfig
+     * @return array{content: string, prompt_tokens: int, completion_tokens: int, latency_ms: int, raw: array}
+     */
+    public function generateContent(string $model, string $systemPrompt, string $userPrompt, array $generationConfig = []): array
+    {
+        if (in_array($model, self::DEPRECATED_MODELS, true)) {
+            throw new RuntimeException(
+                "Model {$model} was shut down on 2026-06-01. Set GEMINI_MODEL_FLASH=gemini-2.5-flash in your .env file."
+            );
+        }
+
+        $url = sprintf('%s/%s:generateContent?key=%s', self::BASE_URL, $model, $this->apiKey);
+
+        $payload = [
+            'systemInstruction' => [
+                'parts' => [['text' => $systemPrompt]],
+            ],
+            'contents' => [
+                [
+                    'role' => 'user',
+                    'parts' => [['text' => $userPrompt]],
+                ],
+            ],
+            'generationConfig' => array_merge([
+                'responseMimeType' => 'application/json',
+                'temperature' => 0.2,
+            ], $generationConfig),
+        ];
+
+        $attempt = 0;
+        $lastException = null;
+        $lastStatus = null;
+
+        while ($attempt < $this->maxRetries) {
+            $attempt++;
+            $started = microtime(true);
+
+            try {
+                /** @var Response $response */
+                $response = Http::timeout($this->timeoutSeconds)
+                    ->post($url, $payload);
+
+                $latencyMs = (int) round((microtime(true) - $started) * 1000);
+                $lastStatus = $response->status();
+
+                if ($response->failed()) {
+                    throw $this->buildApiException($response, $model);
+                }
+
+                $body = $response->json();
+                $text = data_get($body, 'candidates.0.content.parts.0.text');
+
+                if (! is_string($text) || $text === '') {
+                    throw new RuntimeException('Gemini returned empty content.');
+                }
+
+                $promptTokens = (int) data_get($body, 'usageMetadata.promptTokenCount', 0);
+                $completionTokens = (int) data_get($body, 'usageMetadata.candidatesTokenCount', 0);
+
+                if ($attempt > 1) {
+                    Log::info('gemini.api_call_recovered', [
+                        'model' => $model,
+                        'attempt' => $attempt,
+                        'latency_ms' => $latencyMs,
+                    ]);
+                }
+
+                Log::info('gemini.api_call', [
+                    'model' => $model,
+                    'prompt_tokens' => $promptTokens,
+                    'completion_tokens' => $completionTokens,
+                    'latency_ms' => $latencyMs,
+                    'attempt' => $attempt,
+                ]);
+
+                return [
+                    'content' => $text,
+                    'prompt_tokens' => $promptTokens,
+                    'completion_tokens' => $completionTokens,
+                    'latency_ms' => $latencyMs,
+                    'raw' => $body,
+                ];
+            } catch (RuntimeException $e) {
+                $lastException = $e;
+
+                if ($attempt >= $this->maxRetries || ! $this->shouldRetry($e, $lastStatus)) {
+                    break;
+                }
+
+                $delayMs = $this->retryDelayMilliseconds($e, $attempt, $lastStatus);
+
+                Log::warning('gemini.api_retry', [
+                    'model' => $model,
+                    'attempt' => $attempt,
+                    'max_retries' => $this->maxRetries,
+                    'delay_ms' => $delayMs,
+                    'status' => $lastStatus,
+                    'error' => $e->getMessage(),
+                ]);
+
+                usleep($delayMs * 1000);
+            }
+        }
+
+        throw $lastException ?? new RuntimeException('Gemini API call failed.');
+    }
+
+    private function buildApiException(Response $response, string $model): RuntimeException
+    {
+        $status = $response->status();
+        $body = $response->json();
+        $message = data_get($body, 'error.message', $response->body());
+
+        if ($status === 429 && str_contains((string) $message, 'limit: 0')) {
+            return new RuntimeException(
+                "Gemini quota unavailable for model {$model} (limit: 0). "
+                .'This usually means the model is deprecated or your project has no free-tier quota. '
+                .'Fix: set GEMINI_MODEL_FLASH=gemini-2.5-flash in .env. '
+                .'If it persists, enable billing in Google AI Studio (see docs/commercialization/GEMINI_SETUP.md).'
+            );
+        }
+
+        if (in_array($status, self::RETRYABLE_STATUS_CODES, true)) {
+            $retryAfter = $response->header('Retry-After');
+
+            return new RuntimeException(
+                "Gemini transient error ({$status}): {$message}"
+                .($retryAfter ? " [Retry-After: {$retryAfter}]" : '')
+            );
+        }
+
+        return new RuntimeException("Gemini API error ({$status}): {$message}");
+    }
+
+    private function shouldRetry(RuntimeException $e, ?int $status): bool
+    {
+        $message = $e->getMessage();
+
+        if (str_contains($message, 'limit: 0')) {
+            return false;
+        }
+
+        if ($status !== null && in_array($status, self::RETRYABLE_STATUS_CODES, true)) {
+            return true;
+        }
+
+        return str_contains($message, '(429)')
+            || str_contains($message, '(503)')
+            || str_contains($message, '(502)')
+            || str_contains($message, 'rate limit')
+            || str_contains($message, 'transient error');
+    }
+
+    private function retryDelayMilliseconds(RuntimeException $e, int $attempt, ?int $status): int
+    {
+        if (preg_match('/\[Retry-After: (\d+)\]/', $e->getMessage(), $matches)) {
+            return ((int) $matches[1] * 1000) + random_int(250, 750);
+        }
+
+        if (preg_match('/retry in ([\d.]+)s/i', $e->getMessage(), $matches)) {
+            return (int) (floatval($matches[1]) * 1000) + random_int(250, 750);
+        }
+
+        // 429: longer backoff; 5xx: standard exponential
+        $base = $status === 429 ? 1000 : 500;
+
+        return (int) (pow(2, $attempt - 1) * $base) + random_int(0, 500);
+    }
+}
