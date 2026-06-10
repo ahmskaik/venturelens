@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Organization;
 use App\Models\RevenueCharge;
 use App\Models\User;
+use App\Services\Agents\FinanceAgent;
+use App\Services\Agents\SuccessAgent;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -12,6 +14,8 @@ class BillingService
 {
     public function __construct(
         private readonly RevenueClassifier $revenueClassifier,
+        private readonly FinanceAgent $financeAgent,
+        private readonly SuccessAgent $successAgent,
     ) {}
 
     public function quotaForPlan(string $plan): int
@@ -68,7 +72,7 @@ class BillingService
             $revenueType = $session['metadata']['revenue_type']
                 ?? $this->revenueClassifier->classify($organization, $user);
 
-            return RevenueCharge::create([
+            $charge = RevenueCharge::create([
                 'organization_id' => $organization->id,
                 'stripe_checkout_session_id' => $sessionId,
                 'stripe_payment_intent_id' => $session['payment_intent'] ?? null,
@@ -83,6 +87,11 @@ class BillingService
                 ],
                 'paid_at' => now(),
             ]);
+
+            $this->financeAgent->recordStripeCharge($organization, $charge);
+            $this->successAgent->recordPayment($organization, $charge);
+
+            return $charge;
         });
     }
 
@@ -103,7 +112,7 @@ class BillingService
 
         $owner = $organization->users()->wherePivot('role', 'owner')->first();
 
-        return RevenueCharge::create([
+        $charge = RevenueCharge::create([
             'organization_id' => $organization->id,
             'stripe_invoice_id' => $invoiceId,
             'stripe_subscription_id' => $invoice['subscription'] ?? null,
@@ -116,6 +125,11 @@ class BillingService
             'metadata' => ['billing_reason' => $invoice['billing_reason'] ?? null],
             'paid_at' => now(),
         ]);
+
+        $this->financeAgent->recordStripeCharge($organization, $charge);
+        $this->successAgent->recordPayment($organization, $charge);
+
+        return $charge;
     }
 
     public function planFromPriceId(?string $priceId): ?string

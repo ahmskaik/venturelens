@@ -6,6 +6,8 @@ VentureLens helps incubators, accelerators, and university innovation programs e
 
 > Built for the **Build with Gemini XPRIZE** · Category: **Entrepreneurship & Job Creation**
 
+**Project status (living doc):** [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — what's done, what's missing, KPIs, next steps.
+
 ---
 
 ## Judge Quickstart (read this first)
@@ -43,6 +45,7 @@ Deploy: see [`docs/commercialization/DEPLOY_CLOUD_RUN.md`](docs/commercializatio
 |-------|--------|
 | Stripe checkout (judges) | [`docs/commercialization/STRIPE_JUDGE_GUIDE.md`](docs/commercialization/STRIPE_JUDGE_GUIDE.md) |
 | Devpost evidence pack | [`docs/commercialization/JUDGE_EVIDENCE.md`](docs/commercialization/JUDGE_EVIDENCE.md) |
+| Demo video script | [`docs/commercialization/DEMO_VIDEO_SCRIPT.md`](docs/commercialization/DEMO_VIDEO_SCRIPT.md) |
 | Gemini API key + billing | [`docs/commercialization/GEMINI_SETUP.md`](docs/commercialization/GEMINI_SETUP.md) |
 | Cloud Run deploy | [`docs/commercialization/DEPLOY_CLOUD_RUN.md`](docs/commercialization/DEPLOY_CLOUD_RUN.md) |
 
@@ -85,6 +88,7 @@ Verify: `php artisan test --filter=StripeCheckoutFlowTest`
 ```bash
 php artisan agents:run-growth
 php artisan agents:run-support
+php artisan agents:run-finance   # backfill finance logs for existing Stripe charges
 ```
 
 Then open `/ai-operations` — registry shows all 6 agents; execution log updates after jobs run.

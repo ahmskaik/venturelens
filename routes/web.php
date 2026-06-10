@@ -4,6 +4,7 @@ use App\Http\Controllers\ImpactController;
 use App\Http\Controllers\Admin\AiOperationsController;
 use App\Http\Controllers\Admin\ApplicationController as AdminApplicationController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Applicant\ApplicationController as ApplicantApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -43,6 +44,11 @@ Route::prefix('apply/{slug}')->name('apply.')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
+    Route::get('/cohorts', [ProgramController::class, 'index'])->name('cohorts.index');
+
+    Route::get('/applications', [AdminApplicationController::class, 'organizationIndex'])
+        ->name('applications.index');
+
     Route::get('/programs/{program}/applications', [AdminApplicationController::class, 'index'])
         ->name('programs.applications.index');
 
@@ -51,6 +57,12 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/applications/{application}/rescreen', [AdminApplicationController::class, 'rescreen'])
         ->name('applications.rescreen');
+
+    Route::post('/applications/{application}/decision', [AdminApplicationController::class, 'decision'])
+        ->name('applications.decision');
+
+    Route::post('/applications/{application}/communications/{communication}/send', [AdminApplicationController::class, 'sendCommunication'])
+        ->name('applications.communications.send');
 
     Route::get('/billing', [BillingController::class, 'index'])->name('billing.index');
     Route::post('/billing/checkout/{plan}', [BillingController::class, 'checkout'])->name('billing.checkout');

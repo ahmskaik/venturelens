@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\RunOnboardingAgentJob;
 use App\Models\Organization;
 use App\Models\Rubric;
 use App\Models\User;
@@ -55,6 +56,8 @@ class RegisteredUserController extends Controller
             'criteria' => Rubric::defaultCriteria(),
             'is_default' => true,
         ]);
+
+        RunOnboardingAgentJob::dispatch($organization->id, $user->id);
 
         Auth::login($user);
 

@@ -29,6 +29,15 @@ A feature only matters if it does one of these. If it does none, defer it:
 5. Finance A5 + Success A6 agents
 6. Demo video + testimonials + evidence pack
 
+**Living status tracker:** `docs/PROJECT_STATUS.md` — **read at session start; update at session end** after any milestone (see file's *Milestone update protocol*). Never skip: Last updated, Changelog row, checklist/KPI sync.
+
+## PROJECT_STATUS.md — mandatory updates
+After shipping code, recording revenue, completing evidence/Devpost steps, fixing judge/demo blockers, or changing deferrals:
+1. Edit `docs/PROJECT_STATUS.md` (do not create a duplicate status file).
+2. Update **Last updated**, **Changelog**, and relevant sections (Implemented, checklist, KPIs, Next actions).
+3. Run `php artisan impact:snapshot` when revenue or screening activity changed; copy numbers into **Live KPIs**.
+4. Mention the status doc update briefly in your session summary to the user.
+
 ## AI-Native Operations (the winning bet)
 Build ≥4 of 6 agents (`app/Services/Agents/`): Growth, Onboarding, Support, Screening, Finance, Success. Each implements `BusinessAgentInterface`, calls Gemini, records an autonomy level (L0 observe → L3 autonomous), and respects guardrails (spend/rate caps, kill switch). Target ≥30% of logged actions at L2–L3. The story must be: **"the VentureLens company is operated by Gemini agents."**
 

@@ -5,14 +5,50 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Jobs\ScreenApplicationJob;
 use App\Models\Application;
+use App\Models\FounderCommunication;
 use App\Models\Program;
+use App\Services\ApplicationDecisionService;
+use App\Services\FounderCommunicationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ApplicationController extends Controller
 {
+    public function organizationIndex(Request $request): Response
+    {
+        $organization = $request->user()->primaryOrganization();
+
+        abort_unless($organization, 404, 'No organization found for this user.');
+
+        $programIds = $organization->programs()->pluck('id');
+
+        $applications = Application::query()
+            ->whereIn('program_id', $programIds)
+            ->with(['program', 'latestScreeningResult'])
+            ->latest('submitted_at')
+            ->get()
+            ->map(fn (Application $app) => [
+                'id' => $app->id,
+                'startup_name' => $app->startup_name,
+                'founder_name' => $app->founder_name,
+                'status' => $app->status,
+                'ai_overall_score' => $app->ai_overall_score,
+                'submitted_at' => $app->submitted_at?->toIso8601String(),
+                'recommendation' => $app->latestScreeningResult?->recommendation,
+                'program' => [
+                    'id' => $app->program->id,
+                    'name' => $app->program->name,
+                ],
+            ]);
+
+        return Inertia::render('Applications/OrganizationIndex', [
+            'applications' => $applications,
+        ]);
+    }
+
     public function index(Request $request, Program $program): Response
     {
         $this->authorizeProgramAccess($request, $program);
@@ -47,6 +83,10 @@ class ApplicationController extends Controller
 
         $this->authorizeProgramAccess($request, $application->program);
 
+        $latestDraft = FounderCommunication::where('application_id', $application->id)
+            ->latest('id')
+            ->first();
+
         return Inertia::render('Applications/Show', [
             'application' => [
                 'id' => $application->id,
@@ -59,6 +99,7 @@ class ApplicationController extends Controller
                 'status' => $application->status,
                 'form_data' => $application->form_data,
                 'ai_overall_score' => $application->ai_overall_score,
+                'decision_at' => $application->decision_at?->toIso8601String(),
                 'submitted_at' => $application->submitted_at?->toIso8601String(),
                 'files' => $application->files->map(fn ($f) => [
                     'id' => $f->id,
@@ -93,6 +134,15 @@ class ApplicationController extends Controller
                         'created_at' => $e->created_at?->toIso8601String(),
                     ]),
             ],
+            'founder_communication' => $latestDraft ? [
+                'id' => $latestDraft->id,
+                'decision' => $latestDraft->decision,
+                'subject' => $latestDraft->subject,
+                'body' => $latestDraft->body,
+                'status' => $latestDraft->status,
+                'sent_at' => $latestDraft->sent_at?->toIso8601String(),
+            ] : null,
+            'decisions' => ApplicationDecisionService::DECISIONS,
             'program' => [
                 'id' => $application->program->id,
                 'name' => $application->program->name,
@@ -108,6 +158,41 @@ class ApplicationController extends Controller
         ScreenApplicationJob::dispatch($application->id);
 
         return back()->with('success', 'Gemini screening queued — refresh in a few seconds.');
+    }
+
+    public function decision(
+        Request $request,
+        Application $application,
+        ApplicationDecisionService $decisions,
+        FounderCommunicationService $communications,
+    ): RedirectResponse {
+        $application->load('program');
+        $this->authorizeProgramAccess($request, $application->program);
+
+        $validated = $request->validate([
+            'decision' => ['required', Rule::in(ApplicationDecisionService::DECISIONS)],
+        ]);
+
+        $decisions->record($application, $request->user(), $validated['decision']);
+        $communications->draftForDecision($application->fresh(), $validated['decision']);
+
+        return back()->with('success', 'Decision recorded — review the AI-drafted founder email below.');
+    }
+
+    public function sendCommunication(
+        Request $request,
+        Application $application,
+        FounderCommunication $communication,
+        FounderCommunicationService $communications,
+    ): RedirectResponse {
+        $application->load('program');
+        $this->authorizeProgramAccess($request, $application->program);
+
+        abort_unless($communication->application_id === $application->id, 404);
+
+        $communications->send($communication, $request->user());
+
+        return back()->with('success', 'Founder email sent.');
     }
 
     private function authorizeProgramAccess(Request $request, Program $program): void

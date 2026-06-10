@@ -57,3 +57,7 @@ After `php artisan migrate --seed`:
 Full rules: [`STRIPE_JUDGE_GUIDE.md`](STRIPE_JUDGE_GUIDE.md#arms-length-vs-related-party-checklist).
 
 Use a **new registration** (Gmail + neutral org name) for arms-length Stripe evidence; use **demo login** for related-party split demo.
+
+## Demo video & Devpost copy
+
+Script, voiceover table, and paste-ready Devpost fields: [`DEMO_VIDEO_SCRIPT.md`](DEMO_VIDEO_SCRIPT.md).

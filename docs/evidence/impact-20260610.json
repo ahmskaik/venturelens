@@ -1,5 +1,5 @@
 {
-    "generated_at": "2026-06-10T14:53:26+00:00",
+    "generated_at": "2026-06-10T17:08:24+00:00",
     "assumptions": {
         "manual_review_minutes_per_app": 45,
         "avg_jobs_per_startup": 3,
@@ -13,36 +13,36 @@
         "subscription_renewals": 0
     },
     "activity": {
-        "applications_screened": 0,
-        "gemini_api_calls": 0,
-        "gemini_tokens": 0,
+        "applications_screened": 1,
+        "gemini_api_calls": 1,
+        "gemini_tokens": 1546,
         "registered_organizations": 5,
         "programs_enabled": 3,
         "countries_reached": 3
     },
     "ai_operations": {
-        "total_agent_actions": 16,
-        "ai_decided_actions": 9,
-        "pct_decisions_by_ai": 56.3,
+        "total_agent_actions": 23,
+        "ai_decided_actions": 16,
+        "pct_decisions_by_ai": 69.6,
         "autonomy_distribution": [
             1,
             6,
             2,
-            7
+            14
         ],
         "by_agent": {
-            "finance": 2,
+            "finance": 5,
             "growth": 4,
             "onboarding": 2,
-            "screening": 3,
+            "screening": 7,
             "success": 2,
             "support": 3
         },
-        "human_hours_displaced": 3.4
+        "human_hours_displaced": 4.4
     },
     "impact": {
-        "founder_hours_saved": 0,
-        "founders_timely_feedback": 0,
+        "founder_hours_saved": 0.8,
+        "founders_timely_feedback": 1,
         "jobs_influenced_modeled": 0,
         "accepted_startups": 0
     },
@@ -55,6 +55,69 @@
         }
     ],
     "recent_agent_executions": [
+        {
+            "agent_name": "screening",
+            "step": "screening_complete",
+            "decision": "shortlist",
+            "action_taken": "Scored 75.0 \u2014 status set to screened",
+            "autonomy_level": 3,
+            "status": "completed",
+            "created_at": "2026-06-10T17:08:19+00:00"
+        },
+        {
+            "agent_name": "screening",
+            "step": "intake_received",
+            "decision": "process_application",
+            "action_taken": "Application queued for Gemini screening",
+            "autonomy_level": 3,
+            "status": "completed",
+            "created_at": "2026-06-10T17:08:06+00:00"
+        },
+        {
+            "agent_name": "screening",
+            "step": "document_parsed",
+            "decision": "documents_ready",
+            "action_taken": "Extracted text from 0 file(s)",
+            "autonomy_level": 3,
+            "status": "completed",
+            "created_at": "2026-06-10T17:08:06+00:00"
+        },
+        {
+            "agent_name": "screening",
+            "step": "gemini_screen_called",
+            "decision": "call_gemini",
+            "action_taken": "Invoking Gemini screening API",
+            "autonomy_level": 3,
+            "status": "started",
+            "created_at": "2026-06-10T17:08:06+00:00"
+        },
+        {
+            "agent_name": "finance",
+            "step": "stripe_reconcile",
+            "decision": "classify_arms_length",
+            "action_taken": "Auto-classified Stripe starter charge ($299.00) as arms-length (source: checkout)",
+            "autonomy_level": 3,
+            "status": "completed",
+            "created_at": "2026-06-10T16:39:27+00:00"
+        },
+        {
+            "agent_name": "finance",
+            "step": "stripe_reconcile",
+            "decision": "classify_arms_length",
+            "action_taken": "Auto-classified Stripe cohort charge ($199.00) as arms-length (source: checkout)",
+            "autonomy_level": 3,
+            "status": "completed",
+            "created_at": "2026-06-10T16:39:27+00:00"
+        },
+        {
+            "agent_name": "finance",
+            "step": "stripe_reconcile",
+            "decision": "classify_related_party",
+            "action_taken": "Auto-classified Stripe cohort charge ($199.00) as related-party (source: checkout)",
+            "autonomy_level": 3,
+            "status": "completed",
+            "created_at": "2026-06-10T16:39:27+00:00"
+        },
         {
             "agent_name": "growth",
             "step": "growth_gemini_error",
@@ -171,33 +234,6 @@
             "autonomy_level": 1,
             "status": "completed",
             "created_at": "2026-06-10T01:01:35+00:00"
-        },
-        {
-            "agent_name": "growth",
-            "step": "growth_outreach_drafted",
-            "decision": "draft_outreach",
-            "action_taken": "Drafted outreach to Istanbul University Innovation Hub",
-            "autonomy_level": 1,
-            "status": "completed",
-            "created_at": "2026-06-10T00:01:35+00:00"
-        },
-        {
-            "agent_name": "screening",
-            "step": "quota_check",
-            "decision": "allow",
-            "action_taken": "Quota available \u2014 proceeding",
-            "autonomy_level": 3,
-            "status": "completed",
-            "created_at": "2026-06-09T23:01:35+00:00"
-        },
-        {
-            "agent_name": "screening",
-            "step": "gemini_screen",
-            "decision": "score_78",
-            "action_taken": "Screened application with Gemini",
-            "autonomy_level": 3,
-            "status": "completed",
-            "created_at": "2026-06-09T22:01:35+00:00"
         }
     ],
     "scorecard_floors": {
