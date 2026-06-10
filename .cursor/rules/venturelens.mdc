@@ -1,0 +1,49 @@
+---
+description: VentureLens build standards & competition priorities (Build with Gemini XPRIZE)
+alwaysApply: true
+---
+
+# VentureLens — Agent Operating Rules
+
+You are building **VentureLens**, an AI-native SaaS that screens startup applications for incubators, entered in the **Build with Gemini XPRIZE** (Category: Entrepreneurship & Job Creation). The full spec is `docs/VENTURELENS_SYSTEM_REQUIREMENTS.md` — treat it as the source of truth and follow its priority labels (P0 > P1 > P2) and 🏆 markers.
+
+## Prime directive
+A feature only matters if it does one of these. If it does none, defer it:
+1. **Earns revenue** (Business Viability)
+2. **Lets AI run the business** (AI-Native Operations) — the decisive criterion
+3. **Generates judge-visible evidence** (Category Impact / proof)
+
+## Hard rules (never violate)
+- **Gemini only** for LLM calls in production — no OpenAI/Anthropic/etc. in the deployed app.
+- **≥1 Gemini API call per submitted application**, always logged with token counts + latency.
+- **At least one Google Cloud product** in production (Cloud Run + Cloud SQL + Cloud Storage).
+- **New code only** (post-2026-05-19). Disclose any boilerplate; never copy Gohorto proprietary code.
+- Every AI decision writes to `agent_executions` (agent_name, decision, action_taken, autonomy_level, confidence).
+- Never commit secrets. Use Secret Manager / `.env` (which is gitignored).
+
+## Build order (Phase 0 — do not reorder)
+1. Core screening loop in production (Gemini + Cloud Run) — passes Stage 1 gate
+2. Stripe live + first paying customer
+3. ≥2 business agents live (Growth A1 + Support A3 or Onboarding A2)
+4. `/impact` page + `CompetitionMetrics` service
+5. Finance A5 + Success A6 agents
+6. Demo video + testimonials + evidence pack
+
+## AI-Native Operations (the winning bet)
+Build ≥4 of 6 agents (`app/Services/Agents/`): Growth, Onboarding, Support, Screening, Finance, Success. Each implements `BusinessAgentInterface`, calls Gemini, records an autonomy level (L0 observe → L3 autonomous), and respects guardrails (spend/rate caps, kill switch). Target ≥30% of logged actions at L2–L3. The story must be: **"the VentureLens company is operated by Gemini agents."**
+
+## Evidence is a first-class feature
+- `CompetitionMetrics` computes all KPIs from production data; render on public `/impact`.
+- Nightly snapshot to `docs/evidence/impact-YYYYMMDD.json` (committed).
+- Seed realistic demo data + a "replay live screening" button for judges.
+
+## Stack & conventions
+- **Backend:** PHP 8.2+ / Laravel 11+. Services in `app/Services/`, jobs async via queue.
+- **Frontend:** Vue 3 + Inertia + Tailwind. Pages in `resources/js/Pages/`.
+- **Gemini:** all calls go through `app/Services/Gemini/GeminiClient.php`; use `responseMimeType: application/json` for structured output; retry 3x with backoff; never block the web request — screen via `ScreenApplicationJob`.
+- **Money:** Finance Agent classifies every Stripe charge as `arms_length` or `related_party`. Keep no single customer > 40% of revenue.
+- **Tests:** mock Gemini in unit tests; feature test the submit→screen→result flow.
+- **i18n:** UI English first; Gemini must accept EN/AR/TR application content.
+
+## When unsure
+Prefer the smallest change that advances revenue, AI-ops, or evidence. Cite the relevant FR/section from the spec in your reasoning. Ship to production over polishing locally.
