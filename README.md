@@ -42,6 +42,7 @@ Deploy: see [`docs/commercialization/DEPLOY_CLOUD_RUN.md`](docs/commercializatio
 | Topic | Guide |
 |-------|--------|
 | Stripe checkout (judges) | [`docs/commercialization/STRIPE_JUDGE_GUIDE.md`](docs/commercialization/STRIPE_JUDGE_GUIDE.md) |
+| Devpost evidence pack | [`docs/commercialization/JUDGE_EVIDENCE.md`](docs/commercialization/JUDGE_EVIDENCE.md) |
 | Gemini API key + billing | [`docs/commercialization/GEMINI_SETUP.md`](docs/commercialization/GEMINI_SETUP.md) |
 | Cloud Run deploy | [`docs/commercialization/DEPLOY_CLOUD_RUN.md`](docs/commercialization/DEPLOY_CLOUD_RUN.md) |
 

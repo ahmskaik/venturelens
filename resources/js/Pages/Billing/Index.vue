@@ -1,5 +1,5 @@
 <script setup>
-import { Link, router, usePage } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 
 defineProps({
     organization: Object,
@@ -14,7 +14,20 @@ defineProps({
 const page = usePage();
 
 function checkout(plan) {
-    router.post(`/billing/checkout/${plan}`);
+    // External Stripe redirect — use full page POST, not Inertia XHR
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/billing/checkout/${plan}`;
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (token) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_token';
+        input.value = token;
+        form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
 }
 </script>
 

@@ -47,4 +47,43 @@ class RevenueClassifierTest extends TestCase
 
         $this->assertSame('arms_length', $type);
     }
+
+    public function test_classifies_gmail_neutral_org_as_arms_length(): void
+    {
+        $org = Organization::create([
+            'name' => 'Pacific Innovation Lab',
+            'slug' => 'pacific-innovation-lab-x7k2',
+            'country_code' => 'US',
+            'website' => 'https://pacific-innovation-lab.example',
+            'plan' => 'free',
+            'screenings_quota' => 5,
+            'screenings_used' => 0,
+        ]);
+
+        $user = User::factory()->create(['email' => 'director@gmail.com']);
+        $org->users()->attach($user->id, ['role' => 'owner']);
+
+        $type = app(RevenueClassifier::class)->classify($org, $user);
+
+        $this->assertSame('arms_length', $type);
+    }
+
+    public function test_classifies_bina_org_slug_prefix_as_related_party(): void
+    {
+        $org = Organization::create([
+            'name' => 'BINA',
+            'slug' => 'bina-r7pp',
+            'country_code' => 'TR',
+            'plan' => 'free',
+            'screenings_quota' => 5,
+            'screenings_used' => 0,
+        ]);
+
+        $user = User::factory()->create(['email' => 'ahmskaik@binaprogram.org']);
+        $org->users()->attach($user->id, ['role' => 'owner']);
+
+        $type = app(RevenueClassifier::class)->classify($org, $user);
+
+        $this->assertSame('related_party', $type);
+    }
 }

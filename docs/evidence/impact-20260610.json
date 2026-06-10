@@ -1,43 +1,48 @@
 {
-    "generated_at": "2026-06-10T13:00:31+00:00",
+    "generated_at": "2026-06-10T14:53:26+00:00",
     "assumptions": {
         "manual_review_minutes_per_app": 45,
         "avg_jobs_per_startup": 3,
         "jobs_influenced_note": "Modeled: accepted_startups \u00d7 avg_jobs_per_startup"
     },
     "business": {
-        "arms_length_paying_customers": 0,
-        "arms_length_revenue_usd": 0,
-        "related_party_revenue_usd": 0,
-        "total_revenue_usd": 0,
+        "arms_length_paying_customers": 2,
+        "arms_length_revenue_usd": 498,
+        "related_party_revenue_usd": 199,
+        "total_revenue_usd": 697,
         "subscription_renewals": 0
     },
     "activity": {
-        "applications_screened": 1,
-        "gemini_api_calls": 1,
-        "gemini_tokens": 1361,
-        "registered_organizations": 1,
-        "programs_enabled": 0,
-        "countries_reached": 1
+        "applications_screened": 0,
+        "gemini_api_calls": 0,
+        "gemini_tokens": 0,
+        "registered_organizations": 5,
+        "programs_enabled": 3,
+        "countries_reached": 3
     },
     "ai_operations": {
-        "total_agent_actions": 20,
-        "ai_decided_actions": 20,
-        "pct_decisions_by_ai": 100,
+        "total_agent_actions": 16,
+        "ai_decided_actions": 9,
+        "pct_decisions_by_ai": 56.3,
         "autonomy_distribution": [
-            0,
-            0,
-            0,
-            20
+            1,
+            6,
+            2,
+            7
         ],
         "by_agent": {
-            "screening": 20
+            "finance": 2,
+            "growth": 4,
+            "onboarding": 2,
+            "screening": 3,
+            "success": 2,
+            "support": 3
         },
-        "human_hours_displaced": 0.8
+        "human_hours_displaced": 3.4
     },
     "impact": {
-        "founder_hours_saved": 0.8,
-        "founders_timely_feedback": 1,
+        "founder_hours_saved": 0,
+        "founders_timely_feedback": 0,
         "jobs_influenced_modeled": 0,
         "accepted_startups": 0
     },
@@ -51,184 +56,148 @@
     ],
     "recent_agent_executions": [
         {
-            "agent_name": "screening",
-            "step": "screening_complete",
-            "decision": "shortlist",
-            "action_taken": "Scored 80.0 \u2014 status set to screened",
-            "autonomy_level": 3,
-            "status": "completed",
-            "created_at": "2026-06-10T12:39:44+00:00"
-        },
-        {
-            "agent_name": "screening",
-            "step": "intake_received",
-            "decision": "process_application",
-            "action_taken": "Application queued for Gemini screening",
-            "autonomy_level": 3,
-            "status": "completed",
-            "created_at": "2026-06-10T12:39:37+00:00"
-        },
-        {
-            "agent_name": "screening",
-            "step": "document_parsed",
-            "decision": "documents_ready",
-            "action_taken": "Extracted text from 0 file(s)",
-            "autonomy_level": 3,
-            "status": "completed",
-            "created_at": "2026-06-10T12:39:37+00:00"
-        },
-        {
-            "agent_name": "screening",
-            "step": "gemini_screen_called",
-            "decision": "call_gemini",
-            "action_taken": "Invoking Gemini screening API",
-            "autonomy_level": 3,
-            "status": "started",
-            "created_at": "2026-06-10T12:39:37+00:00"
-        },
-        {
-            "agent_name": "screening",
-            "step": "gemini_screen_failed",
-            "decision": "screening_error",
-            "action_taken": "Gemini API error (429): {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\nPlease retry in 4.548327477s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.QuotaFailure\",\n        \"violations\": [\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",\n            \"quotaId\": \"GenerateContentInputTokensPerModelPerMinute-FreeTier\",\n            \"quotaDimensions\": {\n              \"location\": \"global\",\n              \"model\": \"gemini-2.0-flash\"\n            }\n          },\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\n            \"quotaId\": \"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\n            \"quotaDimensions\": {\n              \"location\": \"global\",\n              \"model\": \"gemini-2.0-flash\"\n            }\n          },\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\n            \"quotaId\": \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\n            \"quotaDimensions\": {\n              \"location\": \"global\",\n              \"model\": \"gemini-2.0-flash\"\n            }\n          }\n        ]\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.RetryInfo\",\n        \"retryDelay\": \"4s\"\n      }\n    ]\n  }\n}\n",
-            "autonomy_level": 3,
+            "agent_name": "growth",
+            "step": "growth_gemini_error",
+            "decision": "gemini_error",
+            "action_taken": "Growth agent failed \u2014 safe default: no outreach sent",
+            "autonomy_level": 0,
             "status": "failed",
-            "created_at": "2026-06-10T12:36:54+00:00"
+            "created_at": "2026-06-10T13:07:15+00:00"
         },
         {
-            "agent_name": "screening",
-            "step": "intake_received",
-            "decision": "process_application",
-            "action_taken": "Application queued for Gemini screening",
+            "agent_name": "growth",
+            "step": "content_draft",
+            "decision": "draft_blog",
+            "action_taken": "Drafted blog post on fair startup selection",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-10T12:01:35+00:00"
+        },
+        {
+            "agent_name": "support",
+            "step": "support_ticket_handled",
+            "decision": "auto_resolve",
+            "action_taken": "Auto-answered quota question",
             "autonomy_level": 3,
             "status": "completed",
-            "created_at": "2026-06-10T12:36:51+00:00"
+            "created_at": "2026-06-10T11:01:35+00:00"
         },
         {
             "agent_name": "screening",
-            "step": "document_parsed",
-            "decision": "documents_ready",
-            "action_taken": "Extracted text from 0 file(s)",
+            "step": "pdf_extract",
+            "decision": "extract_ok",
+            "action_taken": "Extracted pitch deck text",
             "autonomy_level": 3,
             "status": "completed",
-            "created_at": "2026-06-10T12:36:51+00:00"
+            "created_at": "2026-06-10T10:01:35+00:00"
         },
         {
-            "agent_name": "screening",
-            "step": "gemini_screen_called",
-            "decision": "call_gemini",
-            "action_taken": "Invoking Gemini screening API",
-            "autonomy_level": 3,
-            "status": "started",
-            "created_at": "2026-06-10T12:36:51+00:00"
+            "agent_name": "success",
+            "step": "renewal_reminder",
+            "decision": "draft_renewal",
+            "action_taken": "Drafted renewal email for Starter plan",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-10T09:01:35+00:00"
         },
         {
-            "agent_name": "screening",
-            "step": "gemini_screen_failed",
-            "decision": "screening_error",
-            "action_taken": "Gemini API error (429): {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\nPlease retry in 22.013703164s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.QuotaFailure\",\n        \"violations\": [\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",\n            \"quotaId\": \"GenerateContentInputTokensPerModelPerMinute-FreeTier\",\n            \"quotaDimensions\": {\n              \"model\": \"gemini-2.0-flash\",\n              \"location\": \"global\"\n            }\n          },\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\n            \"quotaId\": \"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\n            \"quotaDimensions\": {\n              \"model\": \"gemini-2.0-flash\",\n              \"location\": \"global\"\n            }\n          },\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\n            \"quotaId\": \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\n            \"quotaDimensions\": {\n              \"location\": \"global\",\n              \"model\": \"gemini-2.0-flash\"\n            }\n          }\n        ]\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.RetryInfo\",\n        \"retryDelay\": \"22s\"\n      }\n    ]\n  }\n}\n",
-            "autonomy_level": 3,
-            "status": "failed",
-            "created_at": "2026-06-10T12:32:37+00:00"
+            "agent_name": "success",
+            "step": "health_check",
+            "decision": "nudge_low_usage",
+            "action_taken": "Suggested screening 3 pending applications",
+            "autonomy_level": 2,
+            "status": "completed",
+            "created_at": "2026-06-10T08:01:35+00:00"
         },
         {
-            "agent_name": "screening",
-            "step": "intake_received",
-            "decision": "process_application",
-            "action_taken": "Application queued for Gemini screening",
+            "agent_name": "finance",
+            "step": "stripe_reconcile",
+            "decision": "classify_related_party",
+            "action_taken": "Flagged demo org charge as related-party",
             "autonomy_level": 3,
             "status": "completed",
-            "created_at": "2026-06-10T12:32:32+00:00"
+            "created_at": "2026-06-10T07:01:35+00:00"
         },
         {
-            "agent_name": "screening",
-            "step": "document_parsed",
-            "decision": "documents_ready",
-            "action_taken": "Extracted text from 0 file(s)",
+            "agent_name": "finance",
+            "step": "stripe_reconcile",
+            "decision": "classify_arms_length",
+            "action_taken": "Auto-classified Stripe charge as arms-length",
             "autonomy_level": 3,
             "status": "completed",
-            "created_at": "2026-06-10T12:32:32+00:00"
+            "created_at": "2026-06-10T06:01:35+00:00"
         },
         {
-            "agent_name": "screening",
-            "step": "gemini_screen_called",
-            "decision": "call_gemini",
-            "action_taken": "Invoking Gemini screening API",
-            "autonomy_level": 3,
-            "status": "started",
-            "created_at": "2026-06-10T12:32:32+00:00"
+            "agent_name": "onboarding",
+            "step": "program_setup",
+            "decision": "suggest_rubric",
+            "action_taken": "Suggested default rubric template",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-10T05:01:35+00:00"
         },
         {
-            "agent_name": "screening",
-            "step": "gemini_screen_failed",
-            "decision": "screening_error",
-            "action_taken": "Gemini API error (429): {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\\nPlease retry in 49.712669927s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.QuotaFailure\",\n        \"violations\": [\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\n            \"quotaId\": \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\n            \"quotaDimensions\": {\n              \"model\": \"gemini-2.0-flash\",\n              \"location\": \"global\"\n            }\n          },\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\n            \"quotaId\": \"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\n            \"quotaDimensions\": {\n              \"location\": \"global\",\n              \"model\": \"gemini-2.0-flash\"\n            }\n          },\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",\n            \"quotaId\": \"GenerateContentInputTokensPerModelPerMinute-FreeTier\",\n            \"quotaDimensions\": {\n              \"location\": \"global\",\n              \"model\": \"gemini-2.0-flash\"\n            }\n          }\n        ]\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.RetryInfo\",\n        \"retryDelay\": \"49s\"\n      }\n    ]\n  }\n}\n",
-            "autonomy_level": 3,
-            "status": "failed",
-            "created_at": "2026-06-10T12:32:09+00:00"
+            "agent_name": "onboarding",
+            "step": "welcome_sequence",
+            "decision": "send_welcome",
+            "action_taken": "Sent onboarding checklist (approved by owner)",
+            "autonomy_level": 2,
+            "status": "completed",
+            "created_at": "2026-06-10T04:01:35+00:00"
         },
         {
-            "agent_name": "screening",
-            "step": "intake_received",
-            "decision": "process_application",
-            "action_taken": "Application queued for Gemini screening",
+            "agent_name": "support",
+            "step": "support_ticket_handled",
+            "decision": "escalate_to_human",
+            "action_taken": "Escalated custom integration question",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-10T03:01:35+00:00"
+        },
+        {
+            "agent_name": "support",
+            "step": "support_ticket_handled",
+            "decision": "auto_resolve",
+            "action_taken": "Auto-answered billing FAQ",
             "autonomy_level": 3,
             "status": "completed",
-            "created_at": "2026-06-10T12:32:03+00:00"
+            "created_at": "2026-06-10T02:01:35+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to MENA Startup Accelerator",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-10T01:01:35+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to Istanbul University Innovation Hub",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-10T00:01:35+00:00"
         },
         {
             "agent_name": "screening",
-            "step": "document_parsed",
-            "decision": "documents_ready",
-            "action_taken": "Extracted text from 0 file(s)",
+            "step": "quota_check",
+            "decision": "allow",
+            "action_taken": "Quota available \u2014 proceeding",
             "autonomy_level": 3,
             "status": "completed",
-            "created_at": "2026-06-10T12:32:03+00:00"
+            "created_at": "2026-06-09T23:01:35+00:00"
         },
         {
             "agent_name": "screening",
-            "step": "gemini_screen_called",
-            "decision": "call_gemini",
-            "action_taken": "Invoking Gemini screening API",
-            "autonomy_level": 3,
-            "status": "started",
-            "created_at": "2026-06-10T12:32:03+00:00"
-        },
-        {
-            "agent_name": "screening",
-            "step": "gemini_screen_failed",
-            "decision": "screening_error",
-            "action_taken": "Gemini API error (429): {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\\nPlease retry in 42.666725027s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.QuotaFailure\",\n        \"violations\": [\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\n            \"quotaId\": \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\n            \"quotaDimensions\": {\n              \"model\": \"gemini-2.0-flash\",\n              \"location\": \"global\"\n            }\n          },\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\n            \"quotaId\": \"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\n            \"quotaDimensions\": {\n              \"location\": \"global\",\n              \"model\": \"gemini-2.0-flash\"\n            }\n          },\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",\n            \"quotaId\": \"GenerateContentInputTokensPerModelPerMinute-FreeTier\",\n            \"quotaDimensions\": {\n              \"location\": \"global\",\n              \"model\": \"gemini-2.0-flash\"\n            }\n          }\n        ]\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.RetryInfo\",\n        \"retryDelay\": \"42s\"\n      }\n    ]\n  }\n}\n",
-            "autonomy_level": 3,
-            "status": "failed",
-            "created_at": "2026-06-10T12:29:16+00:00"
-        },
-        {
-            "agent_name": "screening",
-            "step": "intake_received",
-            "decision": "process_application",
-            "action_taken": "Application queued for Gemini screening",
+            "step": "gemini_screen",
+            "decision": "score_78",
+            "action_taken": "Screened application with Gemini",
             "autonomy_level": 3,
             "status": "completed",
-            "created_at": "2026-06-10T12:29:11+00:00"
-        },
-        {
-            "agent_name": "screening",
-            "step": "document_parsed",
-            "decision": "documents_ready",
-            "action_taken": "Extracted text from 0 file(s)",
-            "autonomy_level": 3,
-            "status": "completed",
-            "created_at": "2026-06-10T12:29:11+00:00"
-        },
-        {
-            "agent_name": "screening",
-            "step": "gemini_screen_called",
-            "decision": "call_gemini",
-            "action_taken": "Invoking Gemini screening API",
-            "autonomy_level": 3,
-            "status": "started",
-            "created_at": "2026-06-10T12:29:11+00:00"
+            "created_at": "2026-06-09T22:01:35+00:00"
         }
     ],
     "scorecard_floors": {

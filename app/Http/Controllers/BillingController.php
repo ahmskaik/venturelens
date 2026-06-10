@@ -84,17 +84,25 @@ class BillingController extends Controller
             'cancel_url' => route('billing.index'),
             'metadata' => $metadata,
             'client_reference_id' => (string) $organization->id,
+            // Avoid Stripe Link sending unsupported agent_identity_token on hosted checkout (subscription mode).
+            'wallet_options' => [
+                'link' => ['display' => 'never'],
+            ],
         ];
 
-        if ($plan === 'cohort') {
-            return $organization->checkout(
+        $checkout = $plan === 'cohort'
+            ? $organization->checkout(
                 [['price' => $priceId, 'quantity' => 1]],
                 array_merge($sessionOptions, ['mode' => 'payment']),
-            );
+            )
+            : $organization->newSubscription('default', $priceId)->checkout($sessionOptions);
+
+        // Stripe Checkout is external — Inertia XHR cannot follow it (CORS). Force full navigation.
+        if ($request->header('X-Inertia')) {
+            return Inertia::location($checkout->url);
         }
 
-        return $organization->newSubscription('default', $priceId)
-            ->checkout($sessionOptions);
+        return $checkout;
     }
 
     public function success(Request $request, BillingService $billing): Response
