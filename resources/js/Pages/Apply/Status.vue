@@ -48,6 +48,9 @@ const statusLabel = {
                 <p class="mt-2 text-xs uppercase tracking-wide text-slate-400">Recommendation: {{ application.screening.recommendation }}</p>
             </div>
 
+            <Link v-if="application.founder_portal_url" :href="application.founder_portal_url" class="mt-4 inline-block text-sm font-medium text-emerald-600 hover:underline">
+                Open in founder portal →
+            </Link>
             <Link href="/" class="mt-8 inline-block text-sm text-indigo-600 hover:underline">Back to VentureLens</Link>
         </div>
     </div>

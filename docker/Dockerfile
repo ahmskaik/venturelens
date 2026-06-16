@@ -11,14 +11,14 @@ RUN apk add --no-cache \
     nodejs \
     npm
 
-RUN docker-php-ext-install pdo_mysql intl zip pcntl
+RUN docker-php-ext-install pdo_mysql intl zip pcntl bcmath
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
 COPY composer.json composer.lock ./
-RUN composer install --no-interaction --prefer-dist --no-scripts
+RUN composer install --no-interaction --prefer-dist --no-scripts --no-dev
 
 COPY package.json package-lock.json ./
 RUN npm ci

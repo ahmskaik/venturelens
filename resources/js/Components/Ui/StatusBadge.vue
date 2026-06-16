@@ -14,6 +14,7 @@ const classes = computed(() => {
         processing: 'bg-blue-100 text-blue-800 ring-blue-200 animate-pulse',
         submitted: 'bg-slate-100 text-slate-700 ring-slate-200',
         needs_info: 'bg-orange-100 text-orange-800 ring-orange-200',
+        waitlisted: 'bg-violet-100 text-violet-800 ring-violet-200',
     };
     return map[props.status] ?? 'bg-slate-100 text-slate-700 ring-slate-200';
 });

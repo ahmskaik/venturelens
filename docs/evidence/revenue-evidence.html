@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VentureLens Revenue Evidence</title>
+<style>
+body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; color: #1e293b; }
+h1 { font-size: 1.5rem; }
+table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.9rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.5rem 0.75rem; text-align: left; }
+th { background: #f8fafc; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; }
+.stat { border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; }
+.stat strong { display: block; font-size: 1.5rem; color: #059669; }
+.note { font-size: 0.85rem; color: #64748b; margin-top: 2rem; }
+</style>
+</head>
+<body>
+<h1>VentureLens — Revenue Evidence (Stripe test mode)</h1>
+<p>Exported: 2026-06-11T08:50:45+00:00</p>
+<div class="stats">
+  <div class="stat"><span>Arms-length</span><strong>$697</strong></div>
+  <div class="stat"><span>Related-party</span><strong>$199</strong></div>
+  <div class="stat"><span>Paying customers (arms-length)</span><strong>3</strong></div>
+</div>
+<table>
+<thead><tr><th>Date</th><th>Organization</th><th>Plan</th><th>Amount</th><th>Type</th></tr></thead>
+<tbody><tr><td>2026-06-10</td><td>BINA</td><td>cohort</td><td>$199.00</td><td>related party</td></tr><tr><td>2026-06-10</td><td>Pacific Innovation Lab</td><td>cohort</td><td>$199.00</td><td>arms length</td></tr><tr><td>2026-06-10</td><td>grandsolo</td><td>starter</td><td>$299.00</td><td>arms length</td></tr><tr><td>2026-06-11</td><td>Pacific Innovation Lab</td><td>cohort</td><td>$199.00</td><td>arms length</td></tr></tbody>
+</table>
+<p class="note">Arms-length vs related-party per RevenueClassifier (email domain + org slug). Cross-check with Stripe Dashboard test payments and /billing in the app.</p>
+</body>
+</html>

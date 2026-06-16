@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\AgentExecution;
 use App\Models\Application;
 use App\Models\BusinessAgent;
+use App\Models\FounderProfile;
 use App\Models\Organization;
 use App\Models\Program;
 use App\Models\Rubric;
@@ -79,15 +80,38 @@ class DatabaseSeeder extends Seeder
                 'founder_email' => 'founder@example.com',
                 'country_code' => 'TR',
                 'stage' => 'mvp',
-                'sector' => 'FinTech',
+                'sector' => 'fintech',
                 'form_data' => [
-                    'one_liner' => 'AI-powered financial literacy for emerging markets',
-                    'problem' => 'Millions lack access to basic financial education.',
-                    'solution' => 'Mobile app with Gemini-personalized learning paths.',
-                    'market' => '$12B TAM in MENA fintech education',
-                    'traction' => '2,000 beta users, 3 pilot partnerships',
-                    'team' => '2 technical founders, 1 industry advisor',
-                    'funding_needs' => '$150K pre-seed',
+                    'profile_version' => 2,
+                    'basic' => [
+                        'short_description' => 'AI-powered financial literacy for emerging markets',
+                        'website' => 'https://sample-startup.example.com',
+                        'business_type' => 'b2c',
+                        'operating_status' => 'active',
+                        'legally_incorporated' => 'no',
+                    ],
+                    'business' => [
+                        'business_model' => 'saas',
+                        'target_customers' => 'Young adults in MENA',
+                        'founding_year' => 2024,
+                        'business_model_summary' => 'Freemium app with premium learning paths.',
+                    ],
+                    'funding' => [
+                        'revenue_generating' => 'no',
+                        'received_funding' => 'no',
+                        'funding_needs' => '$150K pre-seed',
+                    ],
+                    'team' => [
+                        'co_founder_count' => 2,
+                        'team_member_count' => 1,
+                        'application_reason' => 'Access to mentor network and cohort visibility.',
+                    ],
+                    'narrative' => [
+                        'problem' => 'Millions lack access to basic financial education.',
+                        'solution' => 'Mobile app with Gemini-personalized learning paths.',
+                        'market' => '$12B TAM in MENA fintech education',
+                        'traction' => '2,000 beta users, 3 pilot partnerships',
+                    ],
                 ],
                 'status' => 'submitted',
                 'submitted_at' => now()->subDay(),
@@ -109,6 +133,28 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->seedDemoAgentExecutions($organization);
+        $this->seedDemoFounder();
+    }
+
+    private function seedDemoFounder(): void
+    {
+        $founder = User::firstOrCreate(
+            ['email' => config('venturelens.demo.founder_email')],
+            [
+                'name' => 'Alex Founder',
+                'password' => Hash::make(config('venturelens.demo.founder_password')),
+                'account_type' => 'founder',
+            ]
+        );
+
+        FounderProfile::firstOrCreate(
+            ['user_id' => $founder->id],
+            ['default_country_code' => 'TR']
+        );
+
+        Application::where('founder_email', $founder->email)
+            ->whereNull('founder_user_id')
+            ->update(['founder_user_id' => $founder->id]);
     }
 
     private function seedDemoAgentExecutions(Organization $organization): void

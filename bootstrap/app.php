@@ -12,6 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->trustProxies(at: '*');
+
+        $middleware->alias([
+            'incubator' => \App\Http\Middleware\EnsureIncubatorAccount::class,
+            'founder' => \App\Http\Middleware\EnsureFounderAccount::class,
+        ]);
+
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
         ]);

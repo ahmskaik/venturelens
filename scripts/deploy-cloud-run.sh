@@ -53,8 +53,16 @@ deploy_web() {
     --min-instances 0 \
     --max-instances 10 \
     --add-cloudsql-instances "${SQL_INSTANCE}" \
-    --set-env-vars "$(base_env_vars),RUN_MIGRATIONS=true" \
+    --set-env-vars "$(base_env_vars),RUN_MIGRATIONS=true,RUN_SEED=true" \
     --set-secrets "${secrets}"
+}
+
+set_app_url() {
+  local url
+  url="$(gcloud run services describe "${SERVICE_WEB}" --region "${REGION}" --format='value(status.url)')"
+  gcloud run services update "${SERVICE_WEB}" --region "${REGION}" \
+    --update-env-vars "APP_URL=${url}" --quiet
+  echo "${url}"
 }
 
 deploy_worker() {
@@ -63,6 +71,7 @@ deploy_worker() {
     --region "${REGION}" \
     --platform managed \
     --no-allow-unauthenticated \
+    --no-cpu-throttling \
     --memory 1Gi \
     --cpu 1 \
     --min-instances 1 \
@@ -81,15 +90,23 @@ case "${cmd}" in
     if [[ -f .env ]]; then
       set -a
       # shellcheck disable=SC1091
-      source <(grep -E '^(STRIPE_|DEMO_|GEMINI_MAX)' .env | sed 's/\r$//')
+      source <(grep -E '^(STRIPE_|DEMO_|GEMINI_MAX|DB_PASSWORD|GCP_)' .env | sed 's/\r$//')
       set +a
+    fi
+    if [[ -x scripts/setup-gcp-infra.sh ]]; then
+      bash scripts/setup-gcp-infra.sh
+    fi
+    if [[ -x scripts/setup-gcp-secrets.sh ]]; then
+      bash scripts/setup-gcp-secrets.sh
     fi
     build
     deploy_web
     deploy_worker
+    url="$(set_app_url)"
     echo ""
-    echo "Web URL:"
-    gcloud run services describe "${SERVICE_WEB}" --region "${REGION}" --format='value(status.url)'
+    echo "Deployed. Web URL: ${url}"
+    echo "  Impact: ${url}/impact"
+    echo "  Health: ${url}/up"
     ;;
   web)
     deploy_web

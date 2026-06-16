@@ -16,10 +16,13 @@ defineProps({
                 <Logo />
                 <nav class="flex items-center gap-2 text-sm">
                     <Link href="/impact" class="vl-btn-ghost hidden sm:inline-flex">Impact</Link>
-                    <Link v-if="auth?.user" href="/dashboard" class="vl-btn-primary">Dashboard</Link>
+                    <Link v-if="auth?.user" :href="auth.user.account_type === 'founder' ? '/founder/dashboard' : '/dashboard'" class="vl-btn-primary">
+                        Dashboard
+                    </Link>
                     <template v-else>
                         <Link href="/login" class="vl-btn-ghost">Log in</Link>
-                        <Link href="/register" class="vl-btn-primary">Start free</Link>
+                        <Link href="/register" class="vl-btn-primary hidden sm:inline-flex">Incubator</Link>
+                        <Link href="/founder/register" class="vl-btn-secondary border-emerald-200 text-emerald-700">Founders</Link>
                     </template>
                 </nav>
             </div>

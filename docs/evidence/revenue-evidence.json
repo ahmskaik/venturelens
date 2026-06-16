@@ -1,0 +1,58 @@
+{
+    "exported_at": "2026-06-11T08:50:45+00:00",
+    "source": "venturelens.revenue_charges",
+    "business_summary": {
+        "arms_length_paying_customers": 3,
+        "arms_length_revenue_usd": 697,
+        "related_party_revenue_usd": 199,
+        "total_revenue_usd": 896,
+        "subscription_renewals": 0
+    },
+    "charges": [
+        {
+            "id": 1,
+            "organization": "BINA",
+            "org_slug": "bina-r7pp",
+            "plan": "cohort",
+            "amount_usd": 199,
+            "revenue_type": "related_party",
+            "stripe_checkout_session_id": "cs_test_a1wr5lDjISGRmkq5QitKXZCY7pI0Eh6F8deIJTAVE97i6y3bAl6wYMe3GN",
+            "stripe_invoice_id": null,
+            "paid_at": "2026-06-10T14:20:37+00:00"
+        },
+        {
+            "id": 2,
+            "organization": "Pacific Innovation Lab",
+            "org_slug": "pacific-innovation-lab-qxi5",
+            "plan": "cohort",
+            "amount_usd": 199,
+            "revenue_type": "arms_length",
+            "stripe_checkout_session_id": "cs_verify_arms_orfgyprl",
+            "stripe_invoice_id": null,
+            "paid_at": "2026-06-10T14:27:18+00:00"
+        },
+        {
+            "id": 3,
+            "organization": "grandsolo",
+            "org_slug": "grandsolo-jgsl",
+            "plan": "starter",
+            "amount_usd": 299,
+            "revenue_type": "arms_length",
+            "stripe_checkout_session_id": "cs_test_a10MNX5io0gQvaagghxMXaYdorLC2pfs5XYeH1t41ZklXQxraRGVI8EnuG",
+            "stripe_invoice_id": null,
+            "paid_at": "2026-06-10T14:52:53+00:00"
+        },
+        {
+            "id": 4,
+            "organization": "Pacific Innovation Lab",
+            "org_slug": "pacific-innovation-lab-tqeo",
+            "plan": "cohort",
+            "amount_usd": 199,
+            "revenue_type": "arms_length",
+            "stripe_checkout_session_id": "cs_verify_arms_a5o7jypi",
+            "stripe_invoice_id": null,
+            "paid_at": "2026-06-11T08:50:09+00:00"
+        }
+    ],
+    "classification_note": "Arms-length vs related-party per RevenueClassifier (email domain + org slug)."
+}

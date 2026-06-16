@@ -6,6 +6,8 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -24,6 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'account_type',
     ];
 
     /**
@@ -58,5 +61,50 @@ class User extends Authenticatable
     public function primaryOrganization(): ?Organization
     {
         return $this->organizations()->first();
+    }
+
+    public function organizationRole(?Organization $organization = null): ?string
+    {
+        $organization ??= $this->primaryOrganization();
+
+        if (! $organization) {
+            return null;
+        }
+
+        return $this->organizations()
+            ->where('organizations.id', $organization->id)
+            ->first()
+            ?->pivot
+            ?->role;
+    }
+
+    public function canManageOrganization(?Organization $organization = null): bool
+    {
+        return in_array($this->organizationRole($organization), ['owner', 'manager'], true);
+    }
+
+    public function isFounder(): bool
+    {
+        return $this->account_type === 'founder';
+    }
+
+    public function isIncubator(): bool
+    {
+        return $this->account_type === 'incubator';
+    }
+
+    public function homeRoute(): string
+    {
+        return $this->isFounder() ? 'founder.dashboard' : 'dashboard';
+    }
+
+    public function founderProfile(): HasOne
+    {
+        return $this->hasOne(FounderProfile::class);
+    }
+
+    public function founderApplications(): HasMany
+    {
+        return $this->hasMany(Application::class, 'founder_user_id');
     }
 }

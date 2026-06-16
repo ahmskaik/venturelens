@@ -6,6 +6,53 @@ return [
     'demo' => [
         'email' => env('DEMO_USER_EMAIL', 'demo@venturelens.app'),
         'password' => env('DEMO_USER_PASSWORD', 'demo-password-change-me'),
+        'founder_email' => env('DEMO_FOUNDER_EMAIL', 'founder@example.com'),
+        'founder_password' => env('DEMO_FOUNDER_PASSWORD', 'demo-password-change-me'),
+    ],
+
+    'project_profile' => [
+        'version' => 2,
+        'stages' => [
+            'idea' => 'Idea stage',
+            'pre_seed' => 'Pre-seed',
+            'seed' => 'Seed stage',
+            'mvp' => 'MVP / early traction',
+            'growth' => 'Growth stage',
+            'scale' => 'Scale stage',
+        ],
+        'business_types' => [
+            'b2b' => 'B2B',
+            'b2c' => 'B2C',
+            'b2b2c' => 'B2B2C',
+            'marketplace' => 'Marketplace',
+        ],
+        'operating_statuses' => [
+            'active' => 'Active',
+            'inactive' => 'Inactive',
+        ],
+        'business_models' => [
+            'saas' => 'SaaS',
+            'marketplace' => 'Marketplace',
+            'hardware' => 'Hardware',
+            'services' => 'Services',
+            'subscription' => 'Subscription',
+            'transaction' => 'Transaction / commission',
+            'licensing' => 'Licensing',
+            'other' => 'Other',
+        ],
+        'sectors' => [
+            'agtech' => 'AgTech',
+            'cleantech' => 'CleanTech / Environmental',
+            'edtech' => 'EdTech',
+            'fintech' => 'FinTech',
+            'healthtech' => 'HealthTech',
+            'hrtech' => 'HR / Future of Work',
+            'impact' => 'Impact / Social',
+            'mobility' => 'Mobility',
+            'proptech' => 'PropTech',
+            'retail' => 'Retail / E-commerce',
+            'other' => 'Other',
+        ],
     ],
 
     'plans' => [

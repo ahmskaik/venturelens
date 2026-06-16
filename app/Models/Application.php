@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\FounderApplicationService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,6 +13,7 @@ class Application extends Model
 {
     protected $fillable = [
         'program_id',
+        'founder_user_id',
         'startup_name',
         'founder_name',
         'founder_email',
@@ -51,6 +53,16 @@ class Application extends Model
     public function program(): BelongsTo
     {
         return $this->belongsTo(Program::class);
+    }
+
+    public function founder(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'founder_user_id');
+    }
+
+    public function isEditableByFounder(): bool
+    {
+        return in_array($this->status, FounderApplicationService::EDITABLE_STATUSES, true);
     }
 
     public function files(): HasMany

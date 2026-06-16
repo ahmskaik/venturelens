@@ -19,13 +19,29 @@ function Set-GcpSecret($Name, $Value) {
         Write-Warning "Skipping empty secret: $Name"
         return
     }
-    $exists = gcloud secrets describe $Name --project=$ProjectId 2>$null
-    if ($LASTEXITCODE -eq 0) {
+    $prevErrorAction = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    $null = gcloud secrets describe $Name --project=$ProjectId 2>$null
+    $exists = $LASTEXITCODE -eq 0
+    $ErrorActionPreference = $prevErrorAction
+    if ($exists) {
         Write-Host "Updating secret $Name..."
-        $Value | gcloud secrets versions add $Name --project=$ProjectId --data-file=-
+        $tmp = [System.IO.Path]::GetTempFileName()
+        try {
+            [System.IO.File]::WriteAllText($tmp, $Value)
+            gcloud secrets versions add $Name --project=$ProjectId --data-file=$tmp
+        } finally {
+            Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+        }
     } else {
         Write-Host "Creating secret $Name..."
-        $Value | gcloud secrets create $Name --project=$ProjectId --replication-policy="automatic" --data-file=-
+        $tmp = [System.IO.Path]::GetTempFileName()
+        try {
+            [System.IO.File]::WriteAllText($tmp, $Value)
+            gcloud secrets create $Name --project=$ProjectId --replication-policy="automatic" --data-file=$tmp
+        } finally {
+            Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+        }
     }
 }
 

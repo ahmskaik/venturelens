@@ -12,6 +12,16 @@ const props = defineProps({
     decisions: Array,
 });
 
+const sectorLabel = (key) => {
+    if (!key) return '—';
+    return props.application.profile_options?.sectors?.[key] ?? key.replace(/_/g, ' ');
+};
+
+const stageLabel = (key) => {
+    if (!key) return '—';
+    return props.application.profile_options?.stages?.[key] ?? key.replace(/_/g, ' ');
+};
+
 const page = usePage();
 
 const decisionStyles = {
@@ -157,17 +167,44 @@ function sendEmail() {
         </section>
 
         <div class="mt-6 grid gap-6 lg:grid-cols-2">
-            <!-- Application details -->
+            <!-- Project profile -->
             <section class="vl-card p-6">
-                <h2 class="vl-display font-bold">Application details</h2>
+                <h2 class="vl-display font-bold">Project profile</h2>
                 <dl class="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-                    <div><dt class="text-slate-500">Stage</dt><dd class="font-medium">{{ application.stage }}</dd></div>
-                    <div><dt class="text-slate-500">Sector</dt><dd class="font-medium">{{ application.sector || '—' }}</dd></div>
+                    <div><dt class="text-slate-500">Stage</dt><dd class="font-medium capitalize">{{ stageLabel(application.stage) }}</dd></div>
+                    <div><dt class="text-slate-500">Sector</dt><dd class="font-medium">{{ sectorLabel(application.sector) }}</dd></div>
+                    <div><dt class="text-slate-500">Country</dt><dd class="font-medium">{{ application.country_code }}</dd></div>
+                    <div><dt class="text-slate-500">Submitted</dt><dd class="font-medium">{{ application.submitted_at?.slice(0, 10) ?? '—' }}</dd></div>
                 </dl>
-                <div v-if="application.form_data" class="mt-6 space-y-4 border-t border-slate-100 pt-6 text-sm">
-                    <div v-for="(value, key) in application.form_data" :key="key">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">{{ String(key).replace('_', ' ') }}</p>
-                        <p class="mt-1 text-slate-800">{{ value }}</p>
+
+                <div v-if="application.files?.length" class="mt-6 border-t border-slate-100 pt-6">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Attachments</p>
+                    <ul class="mt-2 space-y-1 text-sm">
+                        <li v-for="file in application.files" :key="file.id" class="text-slate-700">
+                            <span class="capitalize">{{ file.type.replace('_', ' ') }}</span> · {{ file.original_filename }}
+                        </li>
+                    </ul>
+                </div>
+
+                <div v-if="application.profile_sections?.length" class="mt-6 space-y-6 border-t border-slate-100 pt-6">
+                    <div v-for="section in application.profile_sections" :key="section.key">
+                        <h3 class="text-sm font-semibold text-brand-700">{{ section.title }}</h3>
+                        <dl class="mt-3 space-y-3 text-sm">
+                            <div v-for="field in section.fields" :key="field.key">
+                                <dt class="text-slate-500">{{ field.label }}</dt>
+                                <dd class="mt-1 font-medium text-slate-800">
+                                    <a
+                                        v-if="field.type === 'url'"
+                                        :href="field.value"
+                                        target="_blank"
+                                        rel="noopener"
+                                        class="text-brand-600 hover:underline"
+                                    >{{ field.value }}</a>
+                                    <span v-else-if="field.type === 'textarea'" class="block whitespace-pre-wrap font-normal leading-relaxed">{{ field.value }}</span>
+                                    <span v-else>{{ field.value }}</span>
+                                </dd>
+                            </div>
+                        </dl>
                     </div>
                 </div>
             </section>

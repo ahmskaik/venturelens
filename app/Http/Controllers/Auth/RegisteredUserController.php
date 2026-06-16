@@ -37,6 +37,7 @@ class RegisteredUserController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'account_type' => 'incubator',
         ]);
 
         $organization = Organization::create([

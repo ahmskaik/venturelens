@@ -33,7 +33,7 @@ const form = useForm({
                 </div>
                 <div class="vl-card-elevated p-8">
                     <h1 class="vl-display text-2xl font-bold text-slate-900">Welcome back</h1>
-                    <p class="mt-1 text-sm text-slate-600">Sign in to your incubator dashboard</p>
+                    <p class="mt-1 text-sm text-slate-600">Sign in to your incubator or founder account</p>
 
                     <form class="mt-8 space-y-5" @submit.prevent="form.post('/login')">
                         <div>
@@ -51,7 +51,9 @@ const form = useForm({
                     </form>
 
                     <p class="mt-6 text-center text-sm text-slate-600">
-                        <Link href="/register" class="font-medium text-brand-600 hover:text-brand-700">Create an account</Link>
+                        <Link href="/register" class="font-medium text-brand-600 hover:text-brand-700">Incubator signup</Link>
+                        ·
+                        <Link href="/founder/register" class="font-medium text-emerald-600 hover:text-emerald-700">Founder portal</Link>
                     </p>
                 </div>
             </div>

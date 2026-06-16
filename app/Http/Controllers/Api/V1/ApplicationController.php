@@ -9,6 +9,7 @@ use App\Models\Application;
 use App\Models\ApplicationFile;
 use App\Models\Program;
 use App\Services\AgentExecutionLogger;
+use App\Support\ApplicationProfile;
 use Illuminate\Http\JsonResponse;
 
 class ApplicationController extends Controller
@@ -29,9 +30,7 @@ class ApplicationController extends Controller
             'country_code' => $validated['country_code'],
             'stage' => $validated['stage'],
             'sector' => $validated['sector'] ?? null,
-            'form_data' => collect($validated)->only([
-                'one_liner', 'problem', 'solution', 'market', 'traction', 'team', 'funding_needs',
-            ])->filter()->all(),
+            'form_data' => ApplicationProfile::buildFromValidated($validated),
             'status' => 'submitted',
             'submitted_at' => now(),
         ]);
@@ -59,7 +58,7 @@ class ApplicationController extends Controller
             actionTaken: 'API submission — dispatching ScreenApplicationJob',
         );
 
-        ScreenApplicationJob::dispatch($application->id);
+        ScreenApplicationJob::dispatch($application->id)->afterResponse();
 
         return response()->json([
             'id' => $application->id,

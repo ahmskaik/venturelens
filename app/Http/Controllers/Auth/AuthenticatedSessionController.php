@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\FounderApplicationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class AuthenticatedSessionController extends Controller
         return Inertia::render('Auth/Login');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, FounderApplicationService $founderService): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -29,7 +30,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard'));
+        $user = $request->user();
+
+        if ($user->isFounder()) {
+            $founderService->claimApplicationsForUser($user);
+        }
+
+        return redirect()->intended(route($user->homeRoute()));
     }
 
     public function destroy(Request $request): RedirectResponse

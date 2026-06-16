@@ -7,9 +7,15 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Applicant\ApplicationController as ApplicantApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredFounderController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\Founder\ApplicationController as FounderApplicationController;
+use App\Http\Controllers\Founder\DashboardController as FounderDashboardController;
+use App\Http\Controllers\Founder\ProgramController as FounderProgramController;
+use App\Http\Controllers\Founder\SettingsController as FounderSettingsController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,6 +35,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('/register', [RegisteredUserController::class, 'store']);
+    Route::get('/founder/register', [RegisteredFounderController::class, 'create'])->name('founder.register');
+    Route::post('/founder/register', [RegisteredFounderController::class, 'store']);
 });
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
@@ -41,7 +49,7 @@ Route::prefix('apply/{slug}')->name('apply.')->group(function () {
     Route::get('/status/{token}', [ApplicantApplicationController::class, 'status'])->name('status');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'incubator'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/cohorts', [ProgramController::class, 'index'])->name('cohorts.index');
@@ -71,4 +79,19 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/ai-operations', [AiOperationsController::class, 'index'])->name('ai-operations.index');
     Route::post('/ai-operations/support', [AiOperationsController::class, 'storeSupportRequest'])->name('ai-operations.support');
+
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::put('/settings/organization', [SettingsController::class, 'updateOrganization'])->name('settings.organization.update');
+});
+
+Route::middleware(['auth', 'founder'])->prefix('founder')->name('founder.')->group(function () {
+    Route::get('/dashboard', FounderDashboardController::class)->name('dashboard');
+    Route::get('/applications', [FounderApplicationController::class, 'index'])->name('applications.index');
+    Route::get('/applications/{application}', [FounderApplicationController::class, 'show'])->name('applications.show');
+    Route::get('/applications/{application}/edit', [FounderApplicationController::class, 'edit'])->name('applications.edit');
+    Route::put('/applications/{application}', [FounderApplicationController::class, 'update'])->name('applications.update');
+    Route::get('/programs', [FounderProgramController::class, 'index'])->name('programs.index');
+    Route::get('/settings', [FounderSettingsController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [FounderSettingsController::class, 'update'])->name('settings.update');
 });

@@ -9,6 +9,7 @@ use App\Models\FounderCommunication;
 use App\Models\Program;
 use App\Services\ApplicationDecisionService;
 use App\Services\FounderCommunicationService;
+use App\Support\ApplicationProfile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -98,6 +99,8 @@ class ApplicationController extends Controller
                 'sector' => $application->sector,
                 'status' => $application->status,
                 'form_data' => $application->form_data,
+                'profile_sections' => ApplicationProfile::displaySections($application->form_data),
+                'profile_options' => config('venturelens.project_profile'),
                 'ai_overall_score' => $application->ai_overall_score,
                 'decision_at' => $application->decision_at?->toIso8601String(),
                 'submitted_at' => $application->submitted_at?->toIso8601String(),

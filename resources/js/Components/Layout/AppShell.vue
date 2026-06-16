@@ -19,9 +19,12 @@ const nav = [
     { href: '/ai-operations', label: 'AI Operations' },
     { href: '/impact', label: 'Impact' },
     { href: '/billing', label: 'Billing' },
+    { href: '/settings', label: 'Settings' },
 ];
 
 const currentPath = computed(() => page.url.split('?')[0]);
+const user = computed(() => page.props.auth?.user);
+const userInitial = computed(() => (user.value?.name?.[0] ?? '?').toUpperCase());
 
 function isActive(href) {
     const path = currentPath.value;
@@ -33,6 +36,8 @@ function isActive(href) {
             return path === '/cohorts' || /^\/programs\/\d+\/applications$/.test(path);
         case '/applications':
             return path === '/applications' || /^\/applications\/\d+$/.test(path);
+        case '/settings':
+            return path === '/settings' || path.startsWith('/settings/');
         default:
             return path === href || path.startsWith(`${href}/`);
     }
@@ -78,6 +83,7 @@ function isActive(href) {
                     <Link href="/cohorts" class="vl-btn-ghost px-2">Cohorts</Link>
                     <Link href="/applications" class="vl-btn-ghost px-2">Apps</Link>
                     <Link href="/ai-operations" class="vl-btn-ghost px-2">AI Ops</Link>
+                    <Link href="/settings" class="vl-btn-ghost px-2">Settings</Link>
                 </nav>
             </div>
         </header>
@@ -92,7 +98,20 @@ function isActive(href) {
                             <h1 class="vl-display text-3xl font-bold tracking-tight text-slate-900">{{ title }}</h1>
                             <p v-if="subtitle" class="mt-2 max-w-2xl text-slate-600">{{ subtitle }}</p>
                         </div>
-                        <slot name="actions" />
+                        <div class="flex flex-wrap items-center gap-3">
+                            <slot name="actions" />
+                            <Link
+                                v-if="user"
+                                href="/settings"
+                                class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-brand-200 hover:text-brand-700"
+                                title="Account settings"
+                            >
+                                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-800">
+                                    {{ userInitial }}
+                                </span>
+                                <span class="hidden sm:inline">{{ user.name }}</span>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </header>

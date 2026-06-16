@@ -21,7 +21,8 @@ class HandleInertiaRequests extends Middleware
                 'name' => config('app.name'),
             ],
             'auth' => [
-                'user' => $request->user()?->only(['id', 'name', 'email']),
+                'user' => $request->user()?->only(['id', 'name', 'email', 'account_type']),
+                'home_route' => $request->user()?->homeRoute(),
             ],
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),

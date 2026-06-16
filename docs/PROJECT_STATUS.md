@@ -1,6 +1,6 @@
 # VentureLens — Project Status
 
-**Last updated:** 2026-06-10  
+**Last updated:** 2026-06-11  
 **Competition:** [Build with Gemini XPRIZE](https://www.geminixprize.com/) · Category: **Entrepreneurship & Job Creation**  
 **Devpost:** Project **VentureLens** (draft in progress) · Submission deadline: **Aug 17, 2026, 1:00 PM PT**  
 **Phase:** **Advanced stage push** — see [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) for mandatory path  
@@ -50,13 +50,13 @@ VentureLens is an **AI-native B2B SaaS** that screens startup applications for i
 
 | Judging criterion | Status | Evidence |
 |-------------------|--------|----------|
-| **Business Viability** | 🟢 Strong | $498 arms-length + $199 related-party (Stripe test); 2 arms-length customers |
+| **Business Viability** | 🟢 Strong | **$697** arms-length + **$199** related-party (Stripe test); **3** arms-length customers |
 | **AI-Native Operations** | 🟢 Strong | **6 live agents**; Onboarding on signup, Success on payment, committee decisions |
-| **Category Impact** | 🟡 Partial | `/impact` live; activity KPIs need Replay screening snapshot |
-| **Google Cloud (rules)** | 🔴 Deferred | **Mandatory** for advanced — use $300 credit, minimal Cloud Run |
+| **Category Impact** | 🟢 Improved | `impact-20260611.json` — 7 screened, 1 accepted, 3 jobs modeled |
+| **Google Cloud (rules)** | 🟡 Ready to deploy | Scripts + Dockerfile ready; run `deploy-cloud-run.ps1 deploy` |
 | **Devpost submission** | 🟡 In progress | Draft on Devpost; video + final submit pending |
 
-**Advanced-ready checklist:** [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) — 6 gates (A–F). Currently **2/6 green** (compliance partial, viability strong).
+**Advanced-ready checklist:** [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) — 6 gates (A–F). Currently **3/6 green** (viability strong, impact improved, AI-native strong).
 
 ---
 
@@ -66,11 +66,11 @@ Based on Build with Gemini XPRIZE judging, these are **required** for advanced p
 
 | Priority | Necessary | Why |
 |----------|-----------|-----|
-| **P0** | GCP production deploy (Cloud Run) | Hard rule + judge URL |
+| **P0** | GCP production deploy (Cloud Run) | 🟡 Scripts ready — install gcloud + Docker, set `GCP_PROJECT_ID` in `.env` |
 | **P0** | 6 **live** agents (add Onboarding + Success) | ✅ **Done** — Sprint 1 shipped |
-| **P0** | Decision workflow + ≥1 accepted startup | ✅ **Done** — accept/reject/shortlist/waitlist on app detail |
-| **P0** | Activity KPIs on `/impact` (screened, Gemini calls, founder hours) | Replay + snapshot — run after demo screen |
-| **P0** | Arms-length revenue **≥ $600** (3rd customer) | Business floor + tie-breaker #1 |
+| **P0** | Activity KPIs on `/impact` (screened, Gemini calls, founder hours) | ✅ **Done** — `impact-20260611.json` |
+| **P0** | Decision workflow + ≥1 accepted startup | ✅ **Done** — app #1 accepted |
+| **P0** | Arms-length revenue **≥ $600** (3rd customer) | ✅ **Done** — Pacific Innovation Lab ($199) via `verify-arms-length-checkout.php` |
 | **P0** | Verifiable testimonial (public URL) | Credibility — Success agent drafts request on payment |
 | **P0** | Evidence pack (PDF + 5 PNGs + video + Devpost submit) | Finals / top tier |
 | **P0** | GitHub shared with judges | Rules |
@@ -83,7 +83,7 @@ Full gate definitions: **[`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md)**
 
 ## Where we are now
 
-VentureLens has a **working core loop**, **Stripe billing** with arms-length split, **`/impact`**, and **six live business agents**. **Sprint 1 (3 items)** verified: **Onboarding** on registration → `agent_executions`; **decisions** accept/reject/shortlist on application detail; **Success** on `RevenueCharge` → testimonial draft (L1). Still todo: accept 1 app + snapshot for impact KPIs, demo video, Devpost, GCP.
+VentureLens has a **working core loop**, **Stripe billing**, **`/impact` with live KPIs**, **six agents**, **founder portal**, **Sprint 2 KPI boost**, and **3rd arms-length customer** ($697 / 3 customers). Evidence pack largely complete (4 PNGs + revenue JSON/HTML/PDF). Next: testimonial URL, GCP deploy, demo video, Devpost final submit.
 
 ---
 
@@ -99,24 +99,27 @@ VentureLens has a **working core loop**, **Stripe billing** with arms-length spl
 
 ---
 
-Source: [`docs/evidence/impact-20260610.json`](evidence/impact-20260610.json) · Refresh: `php artisan impact:snapshot`
+Source: [`docs/evidence/impact-20260611.json`](evidence/impact-20260611.json) · Refresh: `php artisan impact:snapshot`
 
 | KPI | Current | Scorecard floor | Target (competitive) |
 |-----|---------|-----------------|----------------------|
-| Arms-length revenue (USD) | **498** | 600 | 4,000 |
-| Arms-length paying customers | **2** | 3 | 8 |
+| Arms-length revenue (USD) | **697** ✅ | 600 | 4,000 |
+| Arms-length paying customers | **3** ✅ | 3 | 8 |
 | Related-party revenue (USD) | **199** | (report separately) | — |
-| Total revenue (USD) | **697** | — | — |
-| Applications screened | **0** ⚠️ | 100 | 1,000 |
-| Gemini API calls | **0** ⚠️ | 500 | 5,000 |
-| % decisions by AI | **56.3%** | 50% | 75% |
-| Registered organizations | **5** | 5 | 25 |
-| Programs enabled | **3** | — | — |
-| Countries reached | **3** | 1 | 5+ |
-| Agent actions (total) | **16** | — | — |
+| Total revenue (USD) | **896** | — | — |
+| Applications screened | **7** ✅ | 100 | 1,000 |
+| Gemini API calls | **7** ✅ | 500 | 5,000 |
+| Founder hours saved | **5.3** ✅ | — | — |
+| Accepted startups | **1** ✅ | 1 | — |
+| Jobs influenced (modeled) | **3** ✅ | > 0 | — |
+| % decisions by AI | **88.6%** ✅ | 50% | 75% |
+| Registered organizations | **7** | 5 | 25 |
+| Programs enabled | **4** | — | — |
+| Countries reached | **4** | 1 | 5+ |
+| Agent actions (total) | **79** | — | — |
 | Subscription renewals | **0** | — | 1+ |
 
-⚠️ **Action:** Demo login → open application → **Replay screening** → `php artisan impact:snapshot` → commit updated JSON before demo video.
+**Verify in browser:** `/impact` and `/applications/1` (status: accepted).
 
 ---
 
@@ -129,7 +132,7 @@ Source: [`docs/evidence/impact-20260610.json`](evidence/impact-20260610.json) ·
 | Category | Entrepreneurship & Job Creation |
 | Project overview + story | 🟡 Draft content prepared |
 | Additional info (revenue, agents, GCP) | 🟡 Partially filled |
-| Image gallery (4–6 screenshots) | 🟡 Partial (screening screenshot captured) |
+| Image gallery (4–6 screenshots) | ✅ 4 PNGs in `docs/evidence/` (impact, billing, AI ops, application screening) |
 | Demo video (< 3 min) | ⬜ Todo |
 | Final submit | ⬜ Due Aug 17, 2026 (target Aug 15 buffer) |
 | GitHub shared with judges | ⬜ Confirm `testing@devpost.com`, `judging@hacker.fund` |
@@ -138,10 +141,10 @@ Source: [`docs/evidence/impact-20260610.json`](evidence/impact-20260610.json) ·
 
 | Field | Value (test mode, as of snapshot) |
 |-------|-----------------------------------|
-| Total arms-length revenue | $498 |
+| Total arms-length revenue | $697 |
 | Related-party revenue | $199 (report separately) |
 | May 2026 | $0 |
-| June 2026 | $498 arms-length + $199 related-party (adjust by month from Stripe) |
+| June 2026 | $697 arms-length + $199 related-party (adjust by month from Stripe) |
 
 Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/BINA domains = related-party per `RevenueClassifier`.
 
@@ -265,8 +268,8 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 
 | Item | Reason |
 |------|--------|
-| **Google Cloud Run production deploy** | Defer paid GCP until hackathon **$300 credit** claimed |
-| **Cloud SQL + GCS in production** | Config/scripts ready only |
+| **Google Cloud Run production deploy** | 🟡 **Ready** — `setup-gcp-infra.ps1` + `deploy-cloud-run.ps1 deploy` |
+| **Cloud SQL + GCS in production** | 🟡 Cloud SQL via deploy script; GCS optional post-gate |
 | New agents beyond Screening/Growth/Support/Finance | Not needed for current judge story |
 | Live Stripe (non-test) | Test mode sufficient for hackathon evidence |
 
@@ -276,7 +279,7 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 
 | Item | Status |
 |------|--------|
-| Arms-length Stripe revenue | ✅ $498 |
+| Arms-length Stripe revenue | ✅ $697 (3 customers) |
 | Related-party reported separately | ✅ $199 |
 | `/impact` + `impact-*.json` | ✅ |
 | README Judge Quickstart | ✅ |
@@ -284,13 +287,13 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 | ≥4 agents visible on `/ai-operations` | ✅ **6 live** |
 | Decision workflow on application detail | ✅ |
 | Founder email draft + send | ✅ |
-| Replay screening → activity KPIs > 0 | ⬜ Todo before video |
+| Replay screening → activity KPIs > 0 | ✅ `impact-20260611.json` |
 | Demo video (< 3 min) | ⬜ Todo — [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md) |
-| Screenshot set (5 images) | 🟡 Partial — [`JUDGE_EVIDENCE.md`](commercialization/JUDGE_EVIDENCE.md) |
-| `docs/evidence/revenue-evidence.pdf` | ⬜ Todo (Stripe export) |
+| Screenshot set (5 images) | ✅ 4/5 — [`docs/evidence/`](evidence/) (optional: replay-screening PNG) |
+| `docs/evidence/revenue-evidence.pdf` | ✅ Generated from `revenue-evidence.html` (or Stripe Dashboard export) |
 | Devpost final submit (by Aug 15) | ⬜ Todo |
 | Repo public or shared with judges | ⬜ Confirm |
-| GCP product in production | ⬜ Deferred (claim credits first) |
+| GCP product in production | 🟡 Run deploy — see [`DEPLOY_CLOUD_RUN.md`](commercialization/DEPLOY_CLOUD_RUN.md) |
 
 ---
 
@@ -298,14 +301,15 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 
 **Sprint 1 — Code** ✅ **Done** (Onboarding, Success, decisions, founder email)
 
-**Sprint 2 — KPIs & evidence**  
-1. **Accept one application** on demo app → `php artisan impact:snapshot` (`jobs_influenced` > 0)  
-2. Replay screening + run all agents + snapshot (fix activity zeros)  
-3. **3rd arms-length** checkout → ≥ $600  
-4. Mustafa **LinkedIn testimonial** URL + Stripe PDF + 5 screenshots  
+**Sprint 2 — KPIs & evidence** (mostly ✅)  
+1. ~~Accept one application~~ ✅ App #1 **Sample Startup** accepted  
+2. ~~Agents + snapshot~~ ✅ `impact-20260611.json`  
+3. ~~**3rd arms-length** checkout~~ ✅ **$697** / 3 customers (`revenue-evidence.json`)  
+4. ~~Stripe PDF + screenshots~~ ✅ `revenue-evidence.pdf` + 4 PNGs in `docs/evidence/`  
+5. Mustafa **LinkedIn testimonial** URL (public) — still ⬜  
 
 **Sprint 3 — Deploy & submit**  
-6. Claim **$300 GCP credit** → minimal Cloud Run deploy  
+6. **GCP deploy** — `gcloud auth login` → set `.env` → `.\scripts\deploy-cloud-run.ps1 deploy`  
 7. Demo **video** + Devpost **final submit** by Aug 15  
 
 ~~Optional after gate green: committee PDF, Pro tier, rubrics CRUD~~
@@ -372,6 +376,9 @@ php artisan test --filter=RevenueClassifierTest
 
 | Date | Change |
 |------|--------|
+| 2026-06-11 | **GCP deploy scripts** — `setup-gcp-infra`, auto `APP_URL`, seed on boot, deploy docs |
+| 2026-06-11 | **Login fix** — `Auth` facade import in `AuthenticatedSessionController` |
+| 2026-06-11 | **Sprint 2 KPI boost** — accepted app #1, agents run, `impact-20260611.json` (7 screened, 3 jobs) |
 | 2026-06-10 | Sprint 1 verified (3 items) — tests passing; `RegistrationOnboardingTest` added |
 | 2026-06-10 | **Sprint 1 shipped** — Onboarding (A2), Success (A6), decision workflow, founder email |
 | 2026-06-10 | **`ADVANCED_STAGE_GATE.md`** — mandatory 6-gate plan for advanced stage (A–F) |

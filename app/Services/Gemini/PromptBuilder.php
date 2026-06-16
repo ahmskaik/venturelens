@@ -4,6 +4,7 @@ namespace App\Services\Gemini;
 
 use App\Models\Application;
 use App\Models\Rubric;
+use App\Support\ApplicationProfile;
 
 class PromptBuilder
 {
@@ -20,7 +21,7 @@ class PromptBuilder
             'country_code' => $application->country_code,
             'stage' => $application->stage,
             'sector' => $application->sector,
-            'fields' => $application->form_data ?? [],
+            'fields' => ApplicationProfile::flattenForScreening($application->form_data),
         ];
 
         $outputSchema = [
