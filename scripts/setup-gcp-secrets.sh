@@ -8,7 +8,7 @@ cd "$ROOT"
 if [[ -f .env ]]; then
   set -a
   # shellcheck disable=SC1091
-  source <(grep -E '^(APP_KEY|GEMINI_API_KEY|STRIPE_|DB_PASSWORD|GCP_|GOOGLE_CLOUD_)' .env | sed 's/\r$//')
+  source <(grep -E '^(APP_KEY|GEMINI_API_KEY|STRIPE_|DB_PASSWORD=|GCP_DB_PASSWORD=|GCP_|GOOGLE_CLOUD_)' .env | sed 's/\r$//')
   set +a
 fi
 
@@ -43,7 +43,7 @@ gcloud config set project "$PROJECT" --quiet
 set_gcp_secret "venturelens-app-key" "${APP_KEY:-}"
 set_gcp_secret "gemini-api-key" "${GEMINI_API_KEY:-}"
 set_gcp_secret "stripe-secret" "${STRIPE_SECRET:-}"
-set_gcp_secret "venturelens-db-password" "${DB_PASSWORD:-}"
+set_gcp_secret "venturelens-db-password" "${GCP_DB_PASSWORD:-${DB_PASSWORD:-}}"
 
 if [[ -n "${STRIPE_WEBHOOK_SECRET:-}" ]]; then
   set_gcp_secret "stripe-webhook-secret" "$STRIPE_WEBHOOK_SECRET"

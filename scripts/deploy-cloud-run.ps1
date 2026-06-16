@@ -42,7 +42,7 @@ function Get-StripeEnvVars {
 }
 
 function Get-BaseEnvVars {
-    return "APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,QUEUE_CONNECTION=database,DB_CONNECTION=mysql,DB_SOCKET=/cloudsql/${SqlInstance},DB_DATABASE=venturelens,DB_USERNAME=venturelens,$(Get-StripeEnvVars)"
+    return "APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,QUEUE_CONNECTION=database,DB_CONNECTION=mysql,DB_SOCKET=/cloudsql/${SqlInstance},DB_DATABASE=venturelens,DB_USERNAME=venturelens,FILESYSTEM_UPLOADS_DISK=gcs,GOOGLE_CLOUD_PROJECT_ID=${ProjectId},GOOGLE_CLOUD_STORAGE_BUCKET=venturelens-uploads-${ProjectId},$(Get-StripeEnvVars)"
 }
 
 function Set-WebAppUrl($Url) {

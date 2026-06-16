@@ -8,7 +8,7 @@ cd "$ROOT"
 if [[ -f .env ]]; then
   set -a
   # shellcheck disable=SC1091
-  source <(grep -E '^(GCP_|GOOGLE_CLOUD_|DB_PASSWORD=)' .env | sed 's/\r$//')
+  source <(grep -E '^(GCP_|GOOGLE_CLOUD_|DB_PASSWORD=|GCP_DB_PASSWORD=)' .env | sed 's/\r$//')
   set +a
 fi
 
@@ -52,8 +52,9 @@ if ! gcloud storage buckets describe "gs://${BUCKET_NAME}" --project="$PROJECT" 
 fi
 
 if [[ "$SKIP_SQL" != "1" ]]; then
-  if [[ -z "${DB_PASSWORD:-}" ]]; then
-    echo "Set DB_PASSWORD in .env" >&2
+  CLOUD_DB_PASSWORD="${GCP_DB_PASSWORD:-${DB_PASSWORD:-}}"
+  if [[ -z "$CLOUD_DB_PASSWORD" ]]; then
+    echo "Set GCP_DB_PASSWORD in .env" >&2
     exit 1
   fi
 
@@ -66,14 +67,14 @@ if [[ "$SKIP_SQL" != "1" ]]; then
       --project="$PROJECT" \
       --storage-size=10GB \
       --storage-auto-increase \
-      --root-password="$DB_PASSWORD"
+      --root-password="$CLOUD_DB_PASSWORD"
   fi
 
   gcloud sql databases create "$DB_NAME" --instance="$SQL_INSTANCE" --project="$PROJECT" 2>/dev/null || true
   if ! gcloud sql users describe "$DB_USER" --instance="$SQL_INSTANCE" --project="$PROJECT" &>/dev/null; then
-    gcloud sql users create "$DB_USER" --instance="$SQL_INSTANCE" --password="$DB_PASSWORD" --project="$PROJECT"
+    gcloud sql users create "$DB_USER" --instance="$SQL_INSTANCE" --password="$CLOUD_DB_PASSWORD" --project="$PROJECT"
   else
-    gcloud sql users set-password "$DB_USER" --instance="$SQL_INSTANCE" --password="$DB_PASSWORD" --project="$PROJECT"
+    gcloud sql users set-password "$DB_USER" --instance="$SQL_INSTANCE" --password="$CLOUD_DB_PASSWORD" --project="$PROJECT"
   fi
 fi
 

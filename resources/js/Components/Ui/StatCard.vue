@@ -9,14 +9,14 @@ defineProps({
 
 <template>
     <div
-        class="vl-card p-5 transition hover:shadow-card-lg"
+        class="vl-card p-5"
         :class="{
-            'border-brand-200 bg-gradient-to-br from-brand-50/80 to-white': variant === 'brand',
-            'border-emerald-200 bg-gradient-to-br from-emerald-50/80 to-white': variant === 'success',
+            'border-l-4 border-l-brand-500': variant === 'brand',
+            'border-l-4 border-l-accent-500': variant === 'success',
         }"
     >
-        <p class="text-sm font-medium text-slate-500">{{ label }}</p>
-        <p class="vl-display mt-2 text-3xl font-bold tracking-tight text-slate-900">{{ value ?? '—' }}</p>
+        <p class="text-sm text-slate-500">{{ label }}</p>
+        <p class="mt-1 text-2xl font-semibold tabular-nums tracking-tight text-slate-900">{{ value ?? '—' }}</p>
         <p v-if="hint" class="mt-1 text-xs text-slate-400">{{ hint }}</p>
     </div>
 </template>

@@ -24,7 +24,7 @@ stripe_env_vars() {
 }
 
 base_env_vars() {
-  echo "APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,QUEUE_CONNECTION=database,DB_CONNECTION=mysql,DB_SOCKET=/cloudsql/${SQL_INSTANCE},DB_DATABASE=venturelens,DB_USERNAME=venturelens,GEMINI_MODEL_FLASH=gemini-2.5-flash,$(stripe_env_vars)"
+  echo "APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,QUEUE_CONNECTION=database,DB_CONNECTION=mysql,DB_SOCKET=/cloudsql/${SQL_INSTANCE},DB_DATABASE=venturelens,DB_USERNAME=venturelens,GEMINI_MODEL_FLASH=gemini-2.5-flash,FILESYSTEM_UPLOADS_DISK=gcs,GOOGLE_CLOUD_PROJECT_ID=${PROJECT},GOOGLE_CLOUD_STORAGE_BUCKET=venturelens-uploads-${PROJECT},$(stripe_env_vars)"
 }
 
 cmd="${1:-help}"

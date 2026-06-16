@@ -35,8 +35,7 @@ function checkout(plan) {
 <template>
     <AppShell
         title="Billing"
-        subtitle="Real SaaS revenue — arms-length and related-party tracked separately for judges."
-        badge="Business viability"
+        subtitle="Subscription plan, usage, and payment history."
     >
         <div v-if="page.props.flash?.error" class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
             {{ page.props.flash.error }}
@@ -61,7 +60,7 @@ function checkout(plan) {
                     </p>
                 </div>
                 <Link v-if="has_stripe_customer" href="/billing/portal" class="vl-btn-secondary text-sm">
-                    Manage in Stripe →
+                    Manage in Stripe
                 </Link>
             </div>
             <div

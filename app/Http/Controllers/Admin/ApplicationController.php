@@ -158,6 +158,8 @@ class ApplicationController extends Controller
         $application->load('program');
         $this->authorizeProgramAccess($request, $application->program);
 
+        // Mark immediately so the UI shows the in-progress preloader after redirect.
+        $application->markProcessing();
         ScreenApplicationJob::dispatch($application->id);
 
         return back()->with('success', 'Gemini screening queued — refresh in a few seconds.');

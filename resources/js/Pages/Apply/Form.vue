@@ -1,6 +1,8 @@
 <script setup>
-import { Link, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import SeoHead from '../../Components/Seo/SeoHead.vue';
+import { buildApplyJsonLd, seoDefaults } from '../../seo/defaults.js';
 
 const props = defineProps({
     program: Object,
@@ -48,6 +50,12 @@ const defaultForm = {
 };
 
 const tab = ref('basic');
+const page = usePage();
+
+const applySeo = computed(() =>
+    seoDefaults.apply(props.program.name, props.program.organization),
+);
+const applyJsonLd = computed(() => buildApplyJsonLd(page.props.seo?.appUrl ?? '', props.program));
 
 const form = ref({
     ...defaultForm,
@@ -129,13 +137,20 @@ async function submit() {
 </script>
 
 <template>
+    <SeoHead
+        :title="applySeo.title"
+        :description="program.description || applySeo.description"
+        :keywords="applySeo.keywords"
+        :url="`/apply/${program.slug}`"
+        :json-ld="applyJsonLd"
+    />
     <div class="min-h-screen bg-slate-50 py-10">
         <div class="mx-auto max-w-3xl px-4">
-            <Link href="/" class="text-sm text-brand-600 hover:underline">← VentureLens</Link>
-            <h1 class="vl-display mt-4 text-3xl font-bold">{{ program.name }}</h1>
+            <Link href="/" class="text-sm font-medium text-brand-600 hover:text-brand-700">VentureLens</Link>
+            <h1 class="mt-4 text-2xl font-semibold text-slate-900">{{ program.name }}</h1>
             <p class="mt-2 text-slate-600">{{ program.description }}</p>
             <p class="mt-1 text-sm text-slate-500">{{ program.organization }}</p>
-            <p v-if="founder_logged_in" class="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
+            <p v-if="founder_logged_in" class="mt-4 rounded-lg border border-slate-200 bg-slate-100 p-3 text-sm text-slate-700">
                 Signed in as founder —
                 <a href="/founder/dashboard" class="font-medium underline">open your portal</a>
             </p>
@@ -160,7 +175,7 @@ async function submit() {
                 <div class="vl-card mt-6 p-6">
                     <!-- Basic -->
                     <div v-show="tab === 'basic'" class="space-y-4">
-                        <h2 class="vl-display text-lg font-bold text-slate-900">Basic information</h2>
+                        <h2 class="text-base font-semibold text-slate-900">Basic information</h2>
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div class="sm:col-span-2">
                                 <label class="text-sm font-medium">Project name *</label>
@@ -222,7 +237,7 @@ async function submit() {
 
                     <!-- Business -->
                     <div v-show="tab === 'business'" class="space-y-4">
-                        <h2 class="vl-display text-lg font-bold text-slate-900">Business information</h2>
+                        <h2 class="text-base font-semibold text-slate-900">Business information</h2>
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
                                 <label class="text-sm font-medium">Sector / industry</label>
@@ -284,7 +299,7 @@ async function submit() {
 
                     <!-- Funding -->
                     <div v-show="tab === 'funding'" class="space-y-4">
-                        <h2 class="vl-display text-lg font-bold text-slate-900">Funding</h2>
+                        <h2 class="text-base font-semibold text-slate-900">Funding</h2>
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
                                 <label class="text-sm font-medium">Are you revenue generating?</label>
@@ -325,7 +340,7 @@ async function submit() {
 
                     <!-- Team -->
                     <div v-show="tab === 'team'" class="space-y-4">
-                        <h2 class="vl-display text-lg font-bold text-slate-900">Team & project story</h2>
+                        <h2 class="text-base font-semibold text-slate-900">Team & project story</h2>
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
                                 <label class="text-sm font-medium">Co-founders</label>

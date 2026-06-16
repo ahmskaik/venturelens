@@ -6,6 +6,23 @@ Minimal production stack: **Cloud Run** (web + queue worker) + **Cloud SQL** (My
 
 ---
 
+## Local-first workflow (recommended)
+
+| Environment | Purpose |
+|-------------|---------|
+| **Local (XAMPP)** | Day-to-day development, seeds, UI, screening tests |
+| **GCP (Cloud Run)** | Judge demo, production URL, evidence — deploy in **batches** |
+
+**Do not deploy on every small change.** Typical loop:
+
+1. Develop locally → `php artisan migrate` / `db:seed` / `npm run build` / `php artisan serve`
+2. Test at http://127.0.0.1:8000
+3. When ready → `.\scripts\deploy-cloud-run.ps1 build` + `web` + `worker`
+
+Local `.env` uses **XAMPP MySQL** (`DB_PASSWORD` empty for root). Cloud deploy uses **`GCP_DB_PASSWORD`** for Cloud SQL + Secret Manager — keep them separate.
+
+---
+
 ## Prerequisites
 
 | Requirement | Notes |
@@ -24,7 +41,7 @@ Add to your `.env` (copy from `.env.example` if needed):
 ```env
 GCP_PROJECT_ID=your-gcp-project-id
 GCP_REGION=us-central1
-DB_PASSWORD=choose-a-strong-password-min-12-chars
+GCP_DB_PASSWORD=choose-a-strong-password-min-12-chars
 
 APP_KEY=base64:...          # php artisan key:generate
 GEMINI_API_KEY=...
@@ -36,11 +53,58 @@ STRIPE_WEBHOOK_SECRET=      # optional until webhook registered
 DEMO_USER_PASSWORD=demo-password-change-me
 ```
 
-`DB_PASSWORD` is used for Cloud SQL user `venturelens` and must match what Secret Manager stores.
+`GCP_DB_PASSWORD` is used for Cloud SQL user `venturelens` and must match what Secret Manager stores. Local Laravel uses `DB_PASSWORD` for XAMPP only.
 
 ---
 
-## Deploy (Windows PowerShell)
+## Manual deploy (incremental)
+
+After the first full deploy, use these steps when you have a batch of changes ready:
+
+### Windows PowerShell
+
+```powershell
+cd c:\xampp\htdocs\venturelens
+gcloud config set project YOUR_PROJECT_ID
+
+# Code / frontend changes
+.\scripts\deploy-cloud-run.ps1 build
+.\scripts\deploy-cloud-run.ps1 web
+.\scripts\deploy-cloud-run.ps1 worker
+
+# .env secrets changed (Gemini, Stripe, APP_KEY, GCP_DB_PASSWORD)
+.\scripts\deploy-cloud-run.ps1 secrets
+.\scripts\deploy-cloud-run.ps1 web
+.\scripts\deploy-cloud-run.ps1 worker
+```
+
+### Push seed / migration changes to production
+
+Migrations run automatically on web container boot (`RUN_MIGRATIONS=true`). For seeds:
+
+```powershell
+gcloud run deploy venturelens-web `
+  --image us-central1-docker.pkg.dev/YOUR_PROJECT_ID/venturelens/app:latest `
+  --region us-central1 `
+  --update-env-vars RUN_SEED=true
+
+# After one successful request, remove so seed does not re-run every cold start:
+gcloud run services update venturelens-web --region us-central1 --remove-env-vars RUN_SEED
+```
+
+### Docker auth on Windows
+
+If `docker push` fails with "Unauthenticated", add gcloud to PATH and login:
+
+```powershell
+$env:PATH = "$env:LOCALAPPDATA\Google\Cloud SDK\google-cloud-sdk\bin;$env:PATH"
+gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin us-central1-docker.pkg.dev
+```
+
+---
+
+## Deploy (Windows PowerShell) — first time
 
 ```powershell
 cd c:\xampp\htdocs\venturelens

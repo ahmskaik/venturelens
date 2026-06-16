@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ImpactController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Admin\AiOperationsController;
+use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\ApplicationController as AdminApplicationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProgramController;
@@ -23,6 +25,8 @@ use Inertia\Inertia;
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
 
 Route::get('/health', HealthController::class)->name('health');
+
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::get('/impact', ImpactController::class)->name('impact');
 
@@ -79,6 +83,10 @@ Route::middleware(['auth', 'incubator'])->group(function () {
 
     Route::get('/ai-operations', [AiOperationsController::class, 'index'])->name('ai-operations.index');
     Route::post('/ai-operations/support', [AiOperationsController::class, 'storeSupportRequest'])->name('ai-operations.support');
+
+    Route::get('/ask', [ChatController::class, 'index'])->name('ask.index');
+    Route::post('/ask', [ChatController::class, 'store'])->name('ask.store');
+    Route::post('/ask/clear', [ChatController::class, 'clear'])->name('ask.clear');
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile.update');

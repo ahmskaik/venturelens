@@ -52,7 +52,7 @@ gcloud config set project $ProjectId | Out-Null
 Set-GcpSecret "venturelens-app-key" $env:APP_KEY
 Set-GcpSecret "gemini-api-key" $env:GEMINI_API_KEY
 Set-GcpSecret "stripe-secret" $env:STRIPE_SECRET
-Set-GcpSecret "venturelens-db-password" $env:DB_PASSWORD
+Set-GcpSecret "venturelens-db-password" ($(if ($env:GCP_DB_PASSWORD) { $env:GCP_DB_PASSWORD } else { $env:DB_PASSWORD }))
 
 if ($env:STRIPE_WEBHOOK_SECRET) {
     Set-GcpSecret "stripe-webhook-secret" $env:STRIPE_WEBHOOK_SECRET

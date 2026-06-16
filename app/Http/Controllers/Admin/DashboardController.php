@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AgentExecution;
+use App\Models\Application;
 use App\Models\Organization;
 use App\Models\Program;
 use App\Models\ScreeningResult;
@@ -67,6 +68,20 @@ class DashboardController extends Controller
                 'applications_count' => $p->applications_count,
             ]);
 
+        $recentApplications = Application::whereIn('program_id', $programIds)
+            ->with('program:id,name')
+            ->latest('submitted_at')
+            ->limit(8)
+            ->get()
+            ->map(fn (Application $a) => [
+                'id' => $a->id,
+                'startup_name' => $a->startup_name,
+                'status' => $a->status,
+                'ai_overall_score' => $a->ai_overall_score,
+                'program_name' => $a->program?->name,
+                'submitted_at' => $a->submitted_at?->toIso8601String(),
+            ]);
+
         return Inertia::render('Dashboard/Index', [
             'organization' => [
                 'name' => $organization->name,
@@ -82,6 +97,7 @@ class DashboardController extends Controller
                 'gemini_tokens_30d' => (int) ($geminiUsage->tokens ?? 0),
             ],
             'programs' => $programs,
+            'recent_applications' => $recentApplications,
             'recent_executions' => $recentExecutions,
         ]);
     }

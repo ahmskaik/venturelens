@@ -74,9 +74,11 @@ class AiOperationsController extends Controller
                     'subject' => $r->subject,
                     'status' => $r->status,
                     'ai_response' => $r->ai_response,
+                    'sources' => $r->sources,
                     'confidence' => $r->confidence,
                     'created_at' => $r->created_at?->toIso8601String(),
                 ]),
+            'programs' => $organization->programs()->orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -88,11 +90,20 @@ class AiOperationsController extends Controller
         $validated = $request->validate([
             'subject' => ['required', 'string', 'max:255'],
             'question' => ['required', 'string', 'max:5000'],
+            'program_id' => ['nullable', 'integer', 'exists:programs,id'],
         ]);
+
+        if (! empty($validated['program_id'])) {
+            abort_unless(
+                $organization->programs()->where('id', $validated['program_id'])->exists(),
+                403
+            );
+        }
 
         $ticket = SupportRequest::create([
             'organization_id' => $organization->id,
             'user_id' => $request->user()->id,
+            'program_id' => $validated['program_id'] ?? null,
             'subject' => $validated['subject'],
             'question' => $validated['question'],
             'status' => 'open',

@@ -2,6 +2,8 @@
 import { Link } from '@inertiajs/vue3';
 import { onMounted, onUnmounted } from 'vue';
 import { router } from '@inertiajs/vue3';
+import SeoHead from '../../Components/Seo/SeoHead.vue';
+import { seoDefaults } from '../../seo/defaults.js';
 
 const props = defineProps({
     application: Object,
@@ -31,6 +33,11 @@ const statusLabel = {
 </script>
 
 <template>
+    <SeoHead
+        :title="seoDefaults.applyStatus.title"
+        :description="seoDefaults.applyStatus.description"
+        noindex
+    />
     <div class="min-h-screen bg-slate-50 py-16">
         <div class="mx-auto max-w-lg rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
             <h1 class="text-2xl font-bold">{{ application.startup_name }}</h1>
@@ -49,7 +56,7 @@ const statusLabel = {
             </div>
 
             <Link v-if="application.founder_portal_url" :href="application.founder_portal_url" class="mt-4 inline-block text-sm font-medium text-emerald-600 hover:underline">
-                Open in founder portal →
+                Open in founder portal
             </Link>
             <Link href="/" class="mt-8 inline-block text-sm text-indigo-600 hover:underline">Back to VentureLens</Link>
         </div>

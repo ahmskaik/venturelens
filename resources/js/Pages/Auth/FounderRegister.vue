@@ -1,6 +1,8 @@
 <script setup>
 import { useForm, Link } from '@inertiajs/vue3';
 import Logo from '../../Components/Brand/Logo.vue';
+import SeoHead from '../../Components/Seo/SeoHead.vue';
+import { seoDefaults } from '../../seo/defaults.js';
 
 const form = useForm({
     name: '',
@@ -12,38 +14,62 @@ const form = useForm({
 </script>
 
 <template>
+    <SeoHead
+        :title="seoDefaults.founderRegister.title"
+        :description="seoDefaults.founderRegister.description"
+        :keywords="seoDefaults.founderRegister.keywords"
+        url="/founder/register"
+    />
     <div class="flex min-h-screen">
-        <div class="hidden w-2/5 bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-950 lg:flex lg:flex-col lg:justify-between lg:p-12">
-            <Logo dark />
+        <div class="hidden w-2/5 flex-col justify-between border-r border-slate-200 bg-slate-50 lg:flex lg:p-12">
+            <Logo />
             <div>
-                <h2 class="vl-display text-3xl font-bold leading-tight text-white">
+                <h2 class="text-2xl font-semibold leading-snug text-slate-900">
                     Manage your startup applications in one place.
                 </h2>
-                <p class="mt-4 text-slate-400">Track Gemini screening, update your project profile, and read program decisions.</p>
+                <p class="mt-4 text-sm text-slate-600">Track screening results, update your profile, and read program decisions.</p>
             </div>
         </div>
 
-        <div class="flex flex-1 items-center justify-center bg-slate-50 px-6 py-12">
+        <div class="flex flex-1 items-center justify-center bg-white px-6 py-12">
             <div class="w-full max-w-lg">
-                <div class="vl-card-elevated p-8">
-                    <h1 class="vl-display text-2xl font-bold">Founder account</h1>
-                    <p class="mt-1 text-sm text-slate-600">Free — link applications by email automatically.</p>
+                <div class="mb-8 lg:hidden">
+                    <Logo />
+                </div>
+                <div class="vl-card p-8">
+                    <h1 class="text-xl font-semibold text-slate-900">Create founder account</h1>
+                    <p class="mt-1 text-sm text-slate-600">Free — applications link automatically by email.</p>
 
                     <form class="mt-8 space-y-4" @submit.prevent="form.post('/founder/register')">
-                        <input v-model="form.name" required placeholder="Your name" class="vl-input" />
-                        <input v-model="form.email" type="email" required placeholder="Email" class="vl-input" />
-                        <input v-model="form.default_country_code" maxlength="2" required placeholder="Country (TR)" class="vl-input uppercase" />
-                        <input v-model="form.password" type="password" required placeholder="Password" class="vl-input" />
-                        <input v-model="form.password_confirmation" type="password" required placeholder="Confirm password" class="vl-input" />
-                        <button type="submit" :disabled="form.processing" class="vl-btn-primary w-full bg-emerald-600 hover:bg-emerald-700">
-                            Create founder account
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Your name</label>
+                            <input v-model="form.name" required class="vl-input mt-1.5" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Email</label>
+                            <input v-model="form.email" type="email" required class="vl-input mt-1.5" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Country</label>
+                            <input v-model="form.default_country_code" maxlength="2" required class="vl-input mt-1.5 uppercase" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Password</label>
+                            <input v-model="form.password" type="password" required class="vl-input mt-1.5" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Confirm password</label>
+                            <input v-model="form.password_confirmation" type="password" required class="vl-input mt-1.5" />
+                        </div>
+                        <button type="submit" :disabled="form.processing" class="vl-btn-primary w-full">
+                            Create account
                         </button>
                     </form>
 
-                    <p class="mt-6 text-center text-sm">
-                        <Link href="/login" class="text-emerald-600 hover:underline">Log in</Link>
-                        ·
-                        <Link href="/register" class="text-brand-600 hover:underline">Incubator signup</Link>
+                    <p class="mt-6 text-center text-sm text-slate-600">
+                        <Link href="/login" class="font-medium text-brand-600 hover:text-brand-700">Sign in</Link>
+                        <span class="mx-2 text-slate-300">·</span>
+                        <Link href="/register" class="font-medium text-slate-700 hover:text-slate-900">Incubator signup</Link>
                     </p>
                 </div>
             </div>

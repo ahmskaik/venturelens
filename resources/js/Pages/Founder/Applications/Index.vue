@@ -9,7 +9,7 @@ defineProps({
 </script>
 
 <template>
-    <FounderShell title="My applications" subtitle="All cohort applications linked to your account." badge="Applications">
+    <FounderShell title="My applications" subtitle="All cohort applications linked to your account.">
         <div class="space-y-3">
             <Link
                 v-for="app in applications"

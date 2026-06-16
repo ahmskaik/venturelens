@@ -1,7 +1,7 @@
 <script setup>
+import { computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AppShell from '../../Components/Layout/AppShell.vue';
-import GeminiBadge from '../../Components/Brand/GeminiBadge.vue';
 import StatusBadge from '../../Components/Ui/StatusBadge.vue';
 import AgentTraceTimeline from '../../Components/Ui/AgentTraceTimeline.vue';
 
@@ -31,6 +31,8 @@ const decisionStyles = {
     needs_info: 'border-orange-300 bg-orange-50 text-orange-800 hover:bg-orange-100',
 };
 
+const screeningInProgress = computed(() => props.application?.status === 'processing');
+
 function rescreen() {
     router.post(`/applications/${props.application.id}/rescreen`);
 }
@@ -51,12 +53,37 @@ function sendEmail() {
     <AppShell
         :title="application.startup_name"
         :subtitle="`${application.founder_name} · ${application.founder_email}`"
-        badge="Application review"
     >
         <template #actions>
             <div class="flex flex-wrap items-center gap-3">
                 <StatusBadge :status="application.status" />
-                <button class="vl-btn-primary" @click="rescreen">Replay screening</button>
+
+                <button
+                    class="vl-btn-primary disabled:cursor-not-allowed disabled:opacity-60"
+                    :disabled="screeningInProgress"
+                    @click="rescreen"
+                >
+                    <span v-if="screeningInProgress" class="inline-flex items-center gap-2">
+                        <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+                        </svg>
+                        Running…
+                    </span>
+                    <span v-else>Replay screening</span>
+                </button>
+
+                <!-- Screening-initiated flag -->
+                <span
+                    v-if="screeningInProgress"
+                    class="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600"
+                >
+                    <svg class="h-3.5 w-3.5 animate-spin text-violet-500" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+                    </svg>
+                    Screening initiated
+                </span>
             </div>
         </template>
 
@@ -64,17 +91,16 @@ function sendEmail() {
             {{ page.props.flash.success }}
         </div>
 
-        <!-- Gemini hero panel — primary video shot -->
-        <section v-if="application.screening" class="vl-card-elevated overflow-hidden">
+        <section v-if="application.screening" class="vl-card overflow-hidden">
             <div class="grid lg:grid-cols-[auto_1fr]">
-                <div class="flex flex-col items-center justify-center bg-gradient-to-br from-brand-600 to-violet-800 px-10 py-10 text-white lg:min-w-[220px]">
-                    <p class="text-xs font-semibold uppercase tracking-widest text-violet-200">Gemini score</p>
-                    <div class="vl-score-ring mt-4">{{ application.screening.overall_score }}</div>
-                    <GeminiBadge size="lg" class="mt-6 !border-white/30 !from-white/10 !to-white/5 !text-white" />
+                <div class="flex flex-col items-center justify-center border-b border-slate-100 bg-slate-50 px-8 py-8 lg:min-w-[200px] lg:border-b-0 lg:border-r">
+                    <p class="text-xs font-medium text-slate-500">Overall score</p>
+                    <div class="vl-score-display mt-3">{{ application.screening.overall_score }}</div>
+                    <p class="mt-3 text-xs text-slate-400">{{ application.screening.model }}</p>
                 </div>
-                <div class="p-8">
+                <div class="p-6 lg:p-8">
                     <div class="flex flex-wrap items-center gap-3">
-                        <h2 class="vl-display text-xl font-bold text-slate-900">Gemini evaluation</h2>
+                        <h2 class="text-lg font-semibold text-slate-900">Screening evaluation</h2>
                         <span class="rounded-full bg-brand-100 px-3 py-1 text-xs font-medium capitalize text-brand-800">
                             {{ application.screening.recommendation ?? application.recommendation }}
                         </span>
@@ -87,7 +113,7 @@ function sendEmail() {
 
                     <div class="mt-6 grid gap-4 sm:grid-cols-3">
                         <div v-if="application.screening.strengths?.length">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-emerald-700">Strengths</p>
+                            <p class="text-xs font-medium text-slate-500">Strengths</p>
                             <ul class="mt-2 space-y-1 text-sm text-slate-600">
                                 <li v-for="(s, i) in application.screening.strengths" :key="i" class="flex gap-2">
                                     <span class="text-emerald-500">✓</span>{{ s }}
@@ -95,7 +121,7 @@ function sendEmail() {
                             </ul>
                         </div>
                         <div v-if="application.screening.weaknesses?.length">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-amber-700">Weaknesses</p>
+                            <p class="text-xs font-medium text-slate-500">Weaknesses</p>
                             <ul class="mt-2 space-y-1 text-sm text-slate-600">
                                 <li v-for="(w, i) in application.screening.weaknesses" :key="i" class="flex gap-2">
                                     <span class="text-amber-500">!</span>{{ w }}
@@ -103,7 +129,7 @@ function sendEmail() {
                             </ul>
                         </div>
                         <div v-if="application.screening.risk_flags?.length">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-red-700">Risk flags</p>
+                            <p class="text-xs font-medium text-slate-500">Risk flags</p>
                             <ul class="mt-2 space-y-1 text-sm">
                                 <li v-for="(r, i) in application.screening.risk_flags" :key="i" class="rounded-lg bg-red-50 px-2 py-1 text-red-800">
                                     [{{ r.severity }}] {{ r.message }}
@@ -115,14 +141,31 @@ function sendEmail() {
             </div>
         </section>
 
+        <!-- Screening in-progress preloader -->
+        <section v-else-if="screeningInProgress" class="vl-card overflow-hidden">
+            <div class="flex flex-col items-center gap-5 px-10 py-12 text-center">
+                <div class="relative flex h-16 w-16 items-center justify-center">
+                    <svg class="h-10 w-10 animate-spin text-brand-600" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/>
+                        <path class="opacity-80" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-base font-semibold text-slate-800">Screening in progress</p>
+                    <p class="mt-1 text-sm text-slate-500">Typically completes in 20–40 seconds.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- No screening yet -->
         <section v-else class="vl-card border-dashed p-10 text-center">
             <p class="text-slate-500">Screening pending or failed.</p>
-            <button class="vl-btn-primary mt-4" @click="rescreen">Run Gemini screening</button>
+            <button class="vl-btn-primary mt-4" @click="rescreen">Run screening</button>
         </section>
 
         <!-- Committee decision -->
         <section class="vl-card mt-6 p-6">
-            <h2 class="vl-display text-lg font-bold">Committee decision</h2>
+            <h2 class="text-base font-semibold text-slate-900">Committee decision</h2>
             <p class="mt-1 text-sm text-slate-600">
                 AI score: {{ application.ai_overall_score ?? '—' }} · Human L2 with AI-prepared context
             </p>
@@ -153,7 +196,7 @@ function sendEmail() {
                 </div>
                 <button
                     v-if="founder_communication.status === 'draft'"
-                    class="vl-btn-primary bg-emerald-600 hover:bg-emerald-700"
+                    class="vl-btn-primary"
                     @click="sendEmail"
                 >
                     Approve & send

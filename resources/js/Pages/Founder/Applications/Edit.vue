@@ -48,9 +48,8 @@ function submit() {
     <FounderShell
         :title="`Edit · ${form.startup_name || 'Project'}`"
         :subtitle="application.program.name"
-        badge="Project profile"
     >
-        <Link :href="`/founder/applications/${application.id}`" class="text-sm text-emerald-600 hover:underline">← Back to application</Link>
+        <Link :href="`/founder/applications/${application.id}`" class="text-sm font-medium text-brand-600 hover:text-brand-700">Back to application</Link>
 
         <form class="mt-6" novalidate @submit.prevent="submit">
             <div class="flex flex-wrap gap-2 border-b border-slate-200">
@@ -59,7 +58,7 @@ function submit() {
                     :key="t.key"
                     type="button"
                     class="border-b-2 px-4 py-3 text-sm font-semibold"
-                    :class="tab === t.key ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500'"
+                    :class="tab === t.key ? 'border-brand-600 text-brand-700' : 'border-transparent text-slate-500'"
                     @click="tab = t.key"
                 >
                     {{ t.label }}
@@ -116,7 +115,7 @@ function submit() {
             </div>
 
             <p v-if="error" class="mt-4 text-sm text-red-600">{{ error }}</p>
-            <button type="submit" :disabled="submitting" class="vl-btn-primary mt-6 bg-emerald-600 hover:bg-emerald-700">
+            <button type="submit" :disabled="submitting" class="vl-btn-primary mt-6">
                 {{ submitting ? 'Saving…' : 'Save project profile' }}
             </button>
         </form>

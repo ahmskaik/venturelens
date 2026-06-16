@@ -1,6 +1,6 @@
 # VentureLens — Project Status
 
-**Last updated:** 2026-06-11  
+**Last updated:** 2026-06-16  
 **Competition:** [Build with Gemini XPRIZE](https://www.geminixprize.com/) · Category: **Entrepreneurship & Job Creation**  
 **Devpost:** Project **VentureLens** (draft in progress) · Submission deadline: **Aug 17, 2026, 1:00 PM PT**  
 **Phase:** **Advanced stage push** — see [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) for mandatory path  
@@ -220,6 +220,7 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 | GCP secrets upload | `scripts/setup-gcp-secrets.ps1` |
 | GitHub Actions deploy | `.github/workflows/deploy.yml` |
 | Stripe wired into deploy | Secret Manager + env vars for prices |
+| File storage (GCS) | `venturelens-uploads-{project}` provisioned by `setup-gcp-infra` |
 
 ### Tests
 
@@ -241,7 +242,6 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 | **6 agents story** | All 6 live in production code | Seeded history still mixed with live logs in DB |
 | **Decision workflow** | Accept/reject/shortlist/waitlist + impact KPIs | Accept 1 app + snapshot for `jobs_influenced` |
 | **Gemini quota** | Retry/backoff in client | Free tier 429s during heavy demo — enable billing/credits |
-| **File storage** | GCS driver configured | Production uses `local` disk |
 | **Testimonials** | 1 seeded quote on `/impact` | 3+ public verifiable (e.g. Mustafa/BINA LinkedIn) |
 | **Evidence pack** | JSON snapshot + markdown docs | Demo video, Stripe PDF, PNG screenshots in repo |
 | **Devpost** | Draft + copy prepared | Final submit + gallery complete |
@@ -376,7 +376,12 @@ php artisan test --filter=RevenueClassifierTest
 
 | Date | Change |
 |------|--------|
-| 2026-06-11 | **GCP deploy scripts** — `setup-gcp-infra`, auto `APP_URL`, seed on boot, deploy docs |
+| 2026-06-16 | **SEO** — sitewide meta/OG/Twitter tags, JSON-LD, `SeoHead` component, `sitemap.xml`, enhanced `robots.txt` |
+| 2026-06-16 | **Storage transition** — updated GCP deployment scripts to provision and use GCS for file uploads |
+| 2026-06-16 | **RAG Ask chat** — project-scoped chatbot (`/ask`) indexes applications + screening; Support agent uses same RAG |
+| 2026-06-16 | **Ask chat + user menu** — `/ask` Gemini support chatbot; ElevenLabs-style avatar dropdown in header |
+| 2026-06-16 | **Dashboard UX** — ElevenLabs-inspired home: feature cards, quick pills, programs grid, recents |
+| 2026-06-16 | **UI polish** — professional design system: light sidebar, indigo palette, removed gradient/AI-slop patterns |
 | 2026-06-11 | **Login fix** — `Auth` facade import in `AuthenticatedSessionController` |
 | 2026-06-11 | **Sprint 2 KPI boost** — accepted app #1, agents run, `impact-20260611.json` (7 screened, 3 jobs) |
 | 2026-06-10 | Sprint 1 verified (3 items) — tests passing; `RegistrationOnboardingTest` added |

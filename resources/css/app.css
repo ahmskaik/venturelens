@@ -10,21 +10,22 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
     --font-display: 'Plus Jakarta Sans', var(--font-sans);
 
-    --color-brand-50: #f5f3ff;
-    --color-brand-100: #ede9fe;
-    --color-brand-200: #ddd6fe;
-    --color-brand-300: #c4b5fd;
-    --color-brand-500: #8b5cf6;
-    --color-brand-600: #7c3aed;
-    --color-brand-700: #6d28d9;
-    --color-brand-800: #5b21b6;
-    --color-brand-950: #2e1065;
+    --color-brand-50: #eef2ff;
+    --color-brand-100: #e0e7ff;
+    --color-brand-200: #c7d2fe;
+    --color-brand-300: #a5b4fc;
+    --color-brand-500: #6366f1;
+    --color-brand-600: #4f46e5;
+    --color-brand-700: #4338ca;
+    --color-brand-800: #3730a3;
+    --color-brand-950: #1e1b4b;
 
-    --color-accent-500: #10b981;
-    --color-accent-600: #059669;
+    --color-accent-500: #0d9488;
+    --color-accent-600: #0f766e;
 
-    --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.06), 0 1px 2px -1px rgb(15 23 42 / 0.06);
-    --shadow-card-lg: 0 10px 40px -10px rgb(91 33 182 / 0.15), 0 4px 12px -2px rgb(15 23 42 / 0.08);
+    --shadow-card: 0 1px 2px 0 rgb(15 23 42 / 0.04);
+    --shadow-card-lg: 0 4px 24px -6px rgb(15 23 42 / 0.08);
+    --shadow-feature: 0 1px 3px 0 rgb(15 23 42 / 0.06), 0 1px 2px -1px rgb(15 23 42 / 0.04);
 }
 
 @layer base {
@@ -38,47 +39,96 @@
         font-family: var(--font-display);
     }
 
-    .vl-gradient-text {
-        @apply bg-gradient-to-r from-brand-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent;
-    }
-
-    .vl-gradient-bg {
-        @apply bg-gradient-to-br from-brand-950 via-violet-950 to-slate-950;
-    }
-
     .vl-card {
-        @apply rounded-2xl border border-slate-200/80 bg-white shadow-card;
+        @apply rounded-lg border border-slate-200 bg-white shadow-card;
     }
 
     .vl-card-elevated {
-        @apply rounded-2xl border border-slate-200/60 bg-white shadow-card-lg;
+        @apply rounded-lg border border-slate-200 bg-white shadow-card-lg;
     }
 
     .vl-btn-primary {
-        @apply inline-flex items-center justify-center rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+        @apply inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50;
     }
 
     .vl-btn-secondary {
-        @apply inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50;
+        @apply inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2;
     }
 
     .vl-btn-ghost {
-        @apply inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-brand-700;
+        @apply inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900;
     }
 
     .vl-input {
-        @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20;
+        @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20;
     }
 
     .vl-sidebar-link {
-        @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-white;
+        @apply relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900;
     }
 
     .vl-sidebar-link-active {
-        @apply bg-white/10 text-white shadow-sm ring-1 ring-white/10;
+        @apply bg-slate-100 text-slate-900;
     }
 
-    .vl-score-ring {
-        @apply flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-violet-700 text-4xl font-bold text-white shadow-lg ring-4 ring-brand-100;
+    .vl-sidebar-link-active::before {
+        content: '';
+        @apply absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-slate-900;
+    }
+
+    .vl-sidebar-section {
+        @apply px-3 pt-4 pb-1 text-[11px] font-medium uppercase tracking-wide text-slate-400;
+    }
+
+    .vl-topbar-btn {
+        @apply inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900;
+    }
+
+    .vl-ask-btn {
+        @apply inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50;
+    }
+
+    .vl-menu-item {
+        @apply block px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-50;
+    }
+
+    .vl-feature-card {
+        @apply flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-feature transition hover:border-slate-300 hover:shadow-card-lg;
+    }
+
+    .vl-pill-btn {
+        @apply inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50;
+    }
+
+    .vl-promo-banner {
+        @apply overflow-hidden rounded-2xl border border-slate-200 bg-slate-50;
+    }
+
+    .vl-recent-card {
+        @apply overflow-hidden rounded-xl border border-slate-200 bg-white transition hover:border-slate-300 hover:shadow-card;
+    }
+
+    .vl-page-eyebrow {
+        @apply text-xs font-medium text-slate-500;
+    }
+
+    .vl-score-display {
+        @apply flex h-24 w-24 items-center justify-center rounded-full border-4 border-brand-100 bg-brand-50 text-3xl font-semibold tabular-nums text-brand-700;
+    }
+
+    .vl-data-table thead {
+        @apply bg-slate-50 text-left text-xs font-medium text-slate-500;
+    }
+
+    .vl-data-table th {
+        @apply px-4 py-3;
+    }
+
+    .vl-data-table td {
+        @apply px-4 py-3;
+    }
+
+    .vl-data-table tbody tr {
+        @apply border-t border-slate-100 transition hover:bg-slate-50/80;
     }
 }

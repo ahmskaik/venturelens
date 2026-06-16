@@ -21,7 +21,7 @@ const form = useForm({
 </script>
 
 <template>
-    <FounderShell title="Your profile" subtitle="Account details used across applications." badge="Settings">
+    <FounderShell title="Your profile" subtitle="Account details used across applications.">
         <div v-if="page.props.flash?.success" class="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
             {{ page.props.flash.success }}
         </div>
@@ -58,7 +58,7 @@ const form = useForm({
                     <input v-model="form.password_confirmation" type="password" placeholder="Confirm" class="vl-input" />
                 </div>
             </div>
-            <button type="submit" :disabled="form.processing" class="vl-btn-primary bg-emerald-600 hover:bg-emerald-700">Save profile</button>
+            <button type="submit" :disabled="form.processing" class="vl-btn-primary">Save profile</button>
         </form>
     </FounderShell>
 </template>

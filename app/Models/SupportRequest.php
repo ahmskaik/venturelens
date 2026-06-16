@@ -10,10 +10,12 @@ class SupportRequest extends Model
     protected $fillable = [
         'organization_id',
         'user_id',
+        'program_id',
         'subject',
         'question',
         'status',
         'ai_response',
+        'sources',
         'confidence',
         'autonomy_level',
     ];
@@ -22,6 +24,7 @@ class SupportRequest extends Model
     {
         return [
             'confidence' => 'decimal:3',
+            'sources' => 'array',
             'autonomy_level' => 'integer',
         ];
     }

@@ -1,0 +1,16 @@
+{
+    "name": "VentureLens",
+    "short_name": "VentureLens",
+    "description": "AI-powered startup application screening for incubators and accelerators",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f8fafc",
+    "theme_color": "#7c3aed",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "48x48",
+            "type": "image/x-icon"
+        }
+    ]
+}

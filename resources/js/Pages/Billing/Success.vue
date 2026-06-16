@@ -1,5 +1,6 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import SeoHead from '../../Components/Seo/SeoHead.vue';
 
 defineProps({
     organization: Object,
@@ -7,6 +8,7 @@ defineProps({
 </script>
 
 <template>
+    <SeoHead title="Payment successful" description="Your VentureLens subscription is active." noindex />
     <div class="flex min-h-screen items-center justify-center bg-slate-50 px-4">
         <div class="w-full max-w-md rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
             <div class="text-4xl">✓</div>

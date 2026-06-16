@@ -9,9 +9,19 @@ class UsageTracker
 {
     public function recordScreening(Organization $organization, int $geminiCalls, int $tokens): void
     {
+        $this->record($organization, 'screening', $geminiCalls, $tokens);
+    }
+
+    public function recordChat(Organization $organization, int $promptTokens, int $completionTokens): void
+    {
+        $this->record($organization, 'chat', 1, $promptTokens + $completionTokens);
+    }
+
+    private function record(Organization $organization, string $type, int $geminiCalls, int $tokens): void
+    {
         $record = UsageRecord::firstOrNew([
             'organization_id' => $organization->id,
-            'type' => 'screening',
+            'type' => $type,
             'recorded_at' => now()->toDateString(),
         ]);
 

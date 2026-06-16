@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-    <FounderShell title="Open programs" subtitle="Apply to cohorts accepting startups." badge="Discover">
+    <FounderShell title="Open programs" subtitle="Apply to cohorts accepting startups.">
         <div class="grid gap-4">
             <div v-for="program in programs" :key="program.id" class="vl-card flex flex-wrap items-start justify-between gap-4 p-6">
                 <div class="max-w-2xl">
@@ -21,9 +21,9 @@ defineProps({
                     <Link
                         v-if="program.accepting && !program.already_applied"
                         :href="program.apply_url"
-                        class="vl-btn-primary bg-emerald-600 hover:bg-emerald-700"
+                        class="vl-btn-primary"
                     >
-                        Apply →
+                        Apply
                     </Link>
                     <span v-else-if="!program.accepting" class="text-sm text-slate-500">Not accepting applications</span>
                     <Link v-else href="/founder/applications" class="vl-btn-secondary text-sm">View application</Link>

@@ -40,6 +40,10 @@ class ApplicationController extends Controller
             $disk = config('venturelens.uploads_disk', 'local');
             $path = $file->store("applications/{$application->id}", $disk);
 
+            if ($path === false) {
+                throw new \RuntimeException("Failed to store pitch_deck on disk [{$disk}].");
+            }
+
             ApplicationFile::create([
                 'application_id' => $application->id,
                 'type' => 'pitch_deck',

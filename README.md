@@ -53,6 +53,44 @@ Deploy: see [`docs/commercialization/DEPLOY_CLOUD_RUN.md`](docs/commercializatio
 
 ## Local setup
 
+**Develop locally first.** Only push to GCP when you have a batch of changes ready for judges/production (see [Deploy to Google Cloud Run](#deploy-to-google-cloud-run)).
+
+### Database (XAMPP MySQL)
+
+1. Start **MySQL** in the XAMPP Control Panel.
+2. In `.env`, use local credentials (not Cloud SQL):
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=venturelens
+DB_USERNAME=root
+DB_PASSWORD=                    # empty for default XAMPP root
+
+# Cloud SQL only — deploy scripts read this, not Laravel locally
+GCP_DB_PASSWORD=your-cloud-sql-password
+```
+
+3. Create DB and apply schema + demo data:
+
+```bash
+# Optional: create database if missing (XAMPP)
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS venturelens CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+php artisan migrate:fresh --seed   # resets tables + seeds demo startups
+# Or without wiping: php artisan migrate --seed
+```
+
+4. After changing `database/seeders/DatabaseSeeder.php`, re-run:
+
+```bash
+php artisan db:seed --force
+# Or full reset: php artisan migrate:fresh --seed
+```
+
+### App servers
+
 ```bash
 git clone <repo-url> && cd venturelens
 cp .env.example .env
@@ -64,12 +102,14 @@ npm run build                    # required after adding Vue pages
 # Terminal 1 — web
 php artisan serve
 
-# Terminal 2 — queue (screening + agents)
+# Terminal 2 — queue (screening + agents; use database queue locally)
 php artisan queue:work
 
 # Terminal 3 — scheduler (Growth daily, Support hourly) OR use:
 php artisan schedule:work
 ```
+
+For async Gemini screening locally, set `QUEUE_CONNECTION=database` in `.env` (not `sync`).
 
 Visit http://127.0.0.1:8000 and log in with demo credentials above.
 
@@ -121,18 +161,65 @@ DEMO_USER_PASSWORD=demo-password-change-me
 
 ## Deploy to Google Cloud Run
 
-### Windows (recommended)
+**When to deploy:** After a meaningful batch of local changes (features, seeds, UI), not every small edit. Production URL: https://venturelens.app
+
+### Manual deploy checklist (Windows)
 
 ```powershell
-$env:GCP_PROJECT_ID = "your-gcp-project-id"
-$env:GCP_REGION = "us-central1"
-# Ensure .env has STRIPE_SECRET, STRIPE_PRICE_*, GEMINI_API_KEY, DB_PASSWORD
+cd c:\xampp\htdocs\venturelens
+
+# 1. One-time: gcloud auth + project
+gcloud auth login
+gcloud config set project venturelens-499513
+
+# 2. Ensure .env has production secrets + GCP_DB_PASSWORD (Cloud SQL password)
+#    Local DB_PASSWORD can stay empty for XAMPP root.
+
+# 3. Pick what you need:
+
+# Full first-time deploy (infra + secrets + build + web + worker)
 .\scripts\deploy-cloud-run.ps1 deploy
+
+# Typical incremental deploy (code changes only):
+.\scripts\deploy-cloud-run.ps1 build    # docker build + push
+.\scripts\deploy-cloud-run.ps1 web      # redeploy web service
+.\scripts\deploy-cloud-run.ps1 worker   # redeploy queue worker
+
+# After changing .env secrets (Gemini, Stripe, APP_KEY):
+.\scripts\deploy-cloud-run.ps1 secrets
+.\scripts\deploy-cloud-run.ps1 web
+.\scripts\deploy-cloud-run.ps1 worker
+
+# Push new seed data to production (one-off):
+gcloud run deploy venturelens-web `
+  --image us-central1-docker.pkg.dev/venturelens-499513/venturelens/app:latest `
+  --region us-central1 --update-env-vars RUN_SEED=true
+# Then remove RUN_SEED after one request:
+gcloud run services update venturelens-web --region us-central1 --remove-env-vars RUN_SEED
 ```
 
-This uploads Stripe/Gemini secrets from `.env` to GCP Secret Manager, then deploys **web + worker** with price IDs as env vars.
+| Script command | Use when |
+|----------------|----------|
+| `infra` | First time only — Cloud SQL, Artifact Registry, IAM |
+| `secrets` | `.env` secrets changed (Gemini, Stripe, `GCP_DB_PASSWORD`) |
+| `build` | Any code/frontend change |
+| `web` | Redeploy HTTP service after `build` |
+| `worker` | Redeploy queue worker after `build` |
+| `deploy` | All of the above in one shot |
 
 Full guide: [`docs/commercialization/DEPLOY_CLOUD_RUN.md`](docs/commercialization/DEPLOY_CLOUD_RUN.md)
+
+### Windows (quick reference)
+
+```powershell
+$env:GCP_PROJECT_ID = "venturelens-499513"
+$env:GCP_REGION = "us-central1"
+.\scripts\deploy-cloud-run.ps1 build
+.\scripts\deploy-cloud-run.ps1 web
+.\scripts\deploy-cloud-run.ps1 worker
+```
+
+This uploads Stripe/Gemini secrets from `.env` to GCP Secret Manager when you run `secrets` or `deploy`.
 
 ### GitHub Actions secrets (for CI)
 

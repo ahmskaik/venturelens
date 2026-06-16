@@ -4,14 +4,14 @@ namespace App\Services\Agents;
 
 use App\Models\Organization;
 use App\Models\SupportRequest;
-use App\Services\Gemini\GeminiClient;
+use App\Services\Chat\ProjectRagChatService;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 class SupportAgent implements BusinessAgentInterface
 {
     public function __construct(
-        private readonly GeminiClient $client,
+        private readonly ProjectRagChatService $ragChat,
         private readonly AgentRegistry $registry,
     ) {}
 
@@ -58,42 +58,21 @@ class SupportAgent implements BusinessAgentInterface
     public function processRequest(SupportRequest $request): AgentResult
     {
         $organization = $request->organization;
-        $knowledge = $this->knowledgeBase();
 
         try {
-            $response = $this->client->generateContent(
-                model: config('services.gemini.models.flash', 'gemini-2.5-flash'),
-                systemPrompt: 'You are the VentureLens Support Agent. Answer customer questions using the knowledge base. Decide whether to resolve or escalate to a human. Return JSON only.',
-                userPrompt: json_encode([
-                    'knowledge_base' => $knowledge,
-                    'customer_question' => [
-                        'subject' => $request->subject,
-                        'question' => $request->question,
-                        'organization' => $organization->name,
-                        'plan' => $organization->plan,
-                    ],
-                    'output_schema' => [
-                        'answer' => 'string',
-                        'decision' => 'resolve|escalate',
-                        'confidence' => 'number 0-1',
-                        'reason' => 'string',
-                    ],
-                ], JSON_PRETTY_PRINT),
+            $rag = $this->ragChat->answerForSupportTicket(
+                $organization,
+                $request->question,
+                $request->program_id,
             );
 
-            $parsed = json_decode($response['content'], true);
-            if (! is_array($parsed)) {
-                throw new RuntimeException('Invalid support agent JSON');
-            }
-
-            $confidence = (float) ($parsed['confidence'] ?? 0);
-            $decision = $parsed['decision'] ?? 'escalate';
-            $threshold = (float) config('venturelens.agents.support.auto_reply_confidence', 0.85);
-            $autoResolve = $decision === 'resolve' && $confidence >= $threshold;
+            $threshold = (float) config('venturelens.agents.support.auto_reply_confidence', 0.65);
+            $autoResolve = ! $rag['escalate'] && $rag['confidence'] >= $threshold;
 
             $request->update([
-                'ai_response' => $parsed['answer'] ?? null,
-                'confidence' => $confidence,
+                'ai_response' => $rag['answer'],
+                'confidence' => $rag['confidence'],
+                'sources' => $rag['sources'],
                 'status' => $autoResolve ? 'answered' : 'escalated',
                 'autonomy_level' => $autoResolve ? 3 : 1,
             ]);
@@ -101,14 +80,14 @@ class SupportAgent implements BusinessAgentInterface
             $result = new AgentResult(
                 decision: $autoResolve ? 'auto_resolve' : 'escalate_to_human',
                 actionTaken: $autoResolve
-                    ? "Auto-answered support request #{$request->id}"
-                    : "Escalated support request #{$request->id} for human review",
+                    ? "RAG answered support request #{$request->id}"
+                    : "RAG answered with review flag for support request #{$request->id}",
                 autonomyLevel: $autoResolve ? 3 : 1,
-                confidence: $confidence,
+                confidence: $rag['confidence'],
                 humanMinutesSaved: $autoResolve ? 15 : 5,
                 metadata: [
                     'support_request_id' => $request->id,
-                    'reason' => $parsed['reason'] ?? null,
+                    'source_count' => count($rag['sources']),
                 ],
             );
 
@@ -131,20 +110,5 @@ class SupportAgent implements BusinessAgentInterface
 
             return $result;
         }
-    }
-
-    /**
-     * @return list<string>
-     */
-    private function knowledgeBase(): array
-    {
-        return [
-            'VentureLens screens startup applications using Google Gemini against configurable rubrics.',
-            'Free trial includes 5 screenings. Cohort package ($199) includes 50 screenings. Starter ($299/mo) includes 200 screenings/month.',
-            'Applications are screened asynchronously via a queue after submission.',
-            'Pitch decks (PDF) are extracted and sent to Gemini for evaluation.',
-            'Upgrade at Billing page. Manage subscription via Stripe customer portal.',
-            'Support email: noreply@venturelens.app. Demo login: demo@venturelens.app',
-        ];
     }
 }

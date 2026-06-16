@@ -4,7 +4,6 @@ import { onMounted, onUnmounted } from 'vue';
 import { router } from '@inertiajs/vue3';
 import FounderShell from '../../../Components/Layout/FounderShell.vue';
 import StatusBadge from '../../../Components/Ui/StatusBadge.vue';
-import GeminiBadge from '../../../Components/Brand/GeminiBadge.vue';
 
 const props = defineProps({
     application: Object,
@@ -32,16 +31,15 @@ const stageLabel = (key) => profileOptions.stages?.[key] ?? key?.replace(/_/g, '
     <FounderShell
         :title="application.startup_name"
         :subtitle="`${application.program.name} · ${application.organization}`"
-        badge="Application"
     >
         <template #actions>
             <StatusBadge :status="application.status" />
             <Link
                 v-if="application.editable"
                 :href="`/founder/applications/${application.id}/edit`"
-                class="vl-btn-primary bg-emerald-600 hover:bg-emerald-700"
+                class="vl-btn-primary"
             >
-                Edit project profile
+                Edit profile
             </Link>
         </template>
 
@@ -53,26 +51,25 @@ const stageLabel = (key) => profileOptions.stages?.[key] ?? key?.replace(/_/g, '
             The program team needs more information. Update your project profile and save to trigger re-screening.
         </div>
 
-        <section v-if="application.screening" class="vl-card-elevated overflow-hidden">
+        <section v-if="application.screening" class="vl-card overflow-hidden">
             <div class="grid lg:grid-cols-[auto_1fr]">
-                <div class="flex flex-col items-center justify-center bg-gradient-to-br from-emerald-600 to-teal-800 px-10 py-10 text-white lg:min-w-[200px]">
-                    <p class="text-xs font-semibold uppercase tracking-widest text-emerald-100">Gemini score</p>
-                    <div class="vl-score-ring mt-4">{{ application.screening.overall_score }}</div>
-                    <GeminiBadge size="lg" class="mt-6 !border-white/30 !from-white/10 !to-white/5 !text-white" />
+                <div class="flex flex-col items-center justify-center border-b border-slate-100 bg-slate-50 px-8 py-8 lg:min-w-[200px] lg:border-b-0 lg:border-r">
+                    <p class="text-xs font-medium text-slate-500">Overall score</p>
+                    <div class="vl-score-display mt-3">{{ application.screening.overall_score }}</div>
                 </div>
-                <div class="p-8">
-                    <h2 class="vl-display text-xl font-bold">AI evaluation</h2>
+                <div class="p-6 lg:p-8">
+                    <h2 class="text-lg font-semibold text-slate-900">Screening evaluation</h2>
                     <p class="mt-4 leading-relaxed text-slate-700">{{ application.screening.summary }}</p>
                     <p class="mt-3 text-sm capitalize text-slate-500">Recommendation: {{ application.screening.recommendation?.replace('_', ' ') }}</p>
                     <div class="mt-6 grid gap-4 sm:grid-cols-2">
                         <div v-if="application.screening.strengths?.length">
-                            <p class="text-xs font-semibold uppercase text-emerald-700">Strengths</p>
+                            <p class="text-xs font-medium text-slate-500">Strengths</p>
                             <ul class="mt-2 space-y-1 text-sm text-slate-600">
                                 <li v-for="(s, i) in application.screening.strengths" :key="i">✓ {{ s }}</li>
                             </ul>
                         </div>
                         <div v-if="application.screening.weaknesses?.length">
-                            <p class="text-xs font-semibold uppercase text-amber-700">Areas to improve</p>
+                            <p class="text-xs font-medium text-slate-500">Areas to improve</p>
                             <ul class="mt-2 space-y-1 text-sm text-slate-600">
                                 <li v-for="(w, i) in application.screening.weaknesses" :key="i">! {{ w }}</li>
                             </ul>

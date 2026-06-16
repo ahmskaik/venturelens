@@ -74,8 +74,9 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 if (-not $SkipSql) {
-    if ([string]::IsNullOrWhiteSpace($env:DB_PASSWORD)) {
-        Write-Error "Set DB_PASSWORD in .env before creating Cloud SQL (used for user $DbUser)"
+    $cloudDbPassword = if ($env:GCP_DB_PASSWORD) { $env:GCP_DB_PASSWORD } else { $env:DB_PASSWORD }
+    if ([string]::IsNullOrWhiteSpace($cloudDbPassword)) {
+        Write-Error "Set GCP_DB_PASSWORD in .env before creating Cloud SQL (used for user $DbUser)"
         exit 1
     }
 
@@ -89,7 +90,7 @@ if (-not $SkipSql) {
             --project=$ProjectId `
             --storage-size=10GB `
             --storage-auto-increase `
-            --root-password=$env:DB_PASSWORD
+            --root-password=$cloudDbPassword
         Write-Host "  Created instance $SqlInstance"
     } else {
         Write-Host "  Already exists: $SqlInstance"
@@ -103,10 +104,10 @@ if (-not $SkipSql) {
 
     $null = gcloud sql users describe $DbUser --instance=$SqlInstance --project=$ProjectId 2>$null
     if ($LASTEXITCODE -ne 0) {
-        gcloud sql users create $DbUser --instance=$SqlInstance --password=$env:DB_PASSWORD --project=$ProjectId
+        gcloud sql users create $DbUser --instance=$SqlInstance --password=$cloudDbPassword --project=$ProjectId
         Write-Host "  Created user $DbUser"
     } else {
-        gcloud sql users set-password $DbUser --instance=$SqlInstance --password=$env:DB_PASSWORD --project=$ProjectId
+        gcloud sql users set-password $DbUser --instance=$SqlInstance --password=$cloudDbPassword --project=$ProjectId
         Write-Host "  Updated password for $DbUser"
     }
 }

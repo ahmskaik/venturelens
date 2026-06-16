@@ -26,19 +26,18 @@ function formatDate(iso) {
 <template>
     <AppShell
         title="Cohorts"
-        subtitle="Manage open programs, share apply links with founders, and review submissions per cohort."
-        badge="Programs"
+        subtitle="Manage programs, share apply links, and review submissions per cohort."
     >
         <div v-if="programs.length" class="space-y-4">
             <div
                 v-for="program in programs"
                 :key="program.id"
-                class="vl-card-elevated p-6"
+                class="vl-card p-6"
             >
                 <div class="flex flex-wrap items-start justify-between gap-4">
                     <div class="min-w-0 flex-1">
                         <div class="flex flex-wrap items-center gap-2">
-                            <h2 class="vl-display text-xl font-bold text-slate-900">{{ program.name }}</h2>
+                            <h2 class="text-lg font-semibold text-slate-900">{{ program.name }}</h2>
                             <span
                                 class="rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ring-1 ring-inset"
                                 :class="program.status === 'open'
@@ -74,14 +73,14 @@ function formatDate(iso) {
                     </div>
                     <div class="flex flex-wrap gap-2">
                         <Link :href="`/programs/${program.id}/applications`" class="vl-btn-primary text-sm">
-                            View applications →
+                            View applications
                         </Link>
                     </div>
                 </div>
 
-                <div class="mt-5 flex flex-wrap items-center gap-3 rounded-xl border border-brand-100 bg-brand-50/50 px-4 py-3">
+                <div class="mt-5 flex flex-wrap items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
                     <div class="min-w-0 flex-1">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-brand-700">Founder apply link</p>
+                        <p class="text-xs font-medium text-slate-500">Founder apply link</p>
                         <p class="mt-1 truncate font-mono text-sm text-slate-700">{{ program.apply_url }}</p>
                     </div>
                     <button
@@ -91,8 +90,8 @@ function formatDate(iso) {
                     >
                         {{ copiedSlug === program.slug ? 'Copied!' : 'Copy link' }}
                     </button>
-                    <a :href="program.apply_url" target="_blank" rel="noopener" class="vl-btn-ghost shrink-0 text-sm text-brand-700">
-                        Preview →
+                    <a :href="program.apply_url" target="_blank" rel="noopener" class="vl-btn-ghost shrink-0 text-sm">
+                        Preview
                     </a>
                 </div>
             </div>
