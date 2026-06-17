@@ -4,7 +4,8 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "judge:smoke": "node scripts/judge-smoke/smoke.mjs"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.3.0",
@@ -17,6 +18,8 @@
     "dependencies": {
         "@inertiajs/vue3": "^3.3.1",
         "@vitejs/plugin-vue": "^6.0.7",
+        "dompurify": "^3.4.11",
+        "marked": "^18.0.5",
         "vue": "^3.5.35"
     }
 }

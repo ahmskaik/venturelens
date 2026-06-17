@@ -1,6 +1,6 @@
 # VentureLens — Project Status
 
-**Last updated:** 2026-06-16  
+**Last updated:** 2026-06-17  
 **Competition:** [Build with Gemini XPRIZE](https://www.geminixprize.com/) · Category: **Entrepreneurship & Job Creation**  
 **Devpost:** Project **VentureLens** (draft in progress) · Submission deadline: **Aug 17, 2026, 1:00 PM PT**  
 **Phase:** **Advanced stage push** — see [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) for mandatory path  
@@ -54,7 +54,7 @@ VentureLens is an **AI-native B2B SaaS** that screens startup applications for i
 | **AI-Native Operations** | 🟢 Strong | **6 live agents**; Onboarding on signup, Success on payment, committee decisions |
 | **Category Impact** | 🟢 Improved | `impact-20260611.json` — 7 screened, 1 accepted, 3 jobs modeled |
 | **Google Cloud (rules)** | 🟡 Ready to deploy | Scripts + Dockerfile ready; run `deploy-cloud-run.ps1 deploy` |
-| **Devpost submission** | 🟡 In progress | Draft on Devpost; video + final submit pending |
+| **Devpost submission** | 🟡 In progress | Paste-ready fields in [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md); video + final submit pending |
 
 **Advanced-ready checklist:** [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) — 6 gates (A–F). Currently **3/6 green** (viability strong, impact improved, AI-native strong).
 
@@ -125,15 +125,19 @@ Source: [`docs/evidence/impact-20260611.json`](evidence/impact-20260611.json) ·
 
 ## Devpost & registration
 
+**Paste-ready copy:** [`commercialization/DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) — field-by-field text aligned with orientation session (earned revenue, 500–1k narrative, AI ops evidence).
+
 | Item | Status |
 |------|--------|
 | Hackathon registration | ✅ Registered on Devpost |
 | Project page | ✅ VentureLens (draft) |
 | Category | Entrepreneurship & Job Creation |
-| Project overview + story | 🟡 Draft content prepared |
-| Additional info (revenue, agents, GCP) | 🟡 Partially filled |
+| Field-by-field submission copy | ✅ `DEVPOST_SUBMISSION.md` |
+| Project overview + story | 🟡 Paste from DEVPOST_SUBMISSION.md |
+| Written narrative (500–1,000 words) | ✅ Draft in DEVPOST_SUBMISSION.md |
+| Additional info (revenue, agents, GCP) | ✅ Draft in DEVPOST_SUBMISSION.md |
 | Image gallery (4–6 screenshots) | ✅ 4 PNGs in `docs/evidence/` (impact, billing, AI ops, application screening) |
-| Demo video (< 3 min) | ⬜ Todo |
+| Demo video (< 3 min) | ⬜ Todo — [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md) + `scripts/preflight-demo-video.ps1` |
 | Final submit | ⬜ Due Aug 17, 2026 (target Aug 15 buffer) |
 | GitHub shared with judges | ⬜ Confirm `testing@devpost.com`, `judging@hacker.fund` |
 
@@ -196,6 +200,7 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 | Feature | Location |
 |---------|----------|
 | AI Operations dashboard | `/ai-operations` |
+| **Ask RAG chat (vector + hybrid)** | `/ask` · `VectorRetriever` · Gemini embeddings · MySQL or Qdrant · `rag:reindex` |
 | Agent registry + daily caps | `AgentRegistry`, `business_agents` table |
 | Autonomy L0–L3 on executions | `agent_executions.autonomy_level` |
 
@@ -288,7 +293,8 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 | Decision workflow on application detail | ✅ |
 | Founder email draft + send | ✅ |
 | Replay screening → activity KPIs > 0 | ✅ `impact-20260611.json` |
-| Demo video (< 3 min) | ⬜ Todo — [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md) |
+| Devpost field-by-field copy | ✅ [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) |
+| Demo video (< 3 min) | ⬜ Todo — [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md) + `scripts/preflight-demo-video.ps1` |
 | Screenshot set (5 images) | ✅ 4/5 — [`docs/evidence/`](evidence/) (optional: replay-screening PNG) |
 | `docs/evidence/revenue-evidence.pdf` | ✅ Generated from `revenue-evidence.html` (or Stripe Dashboard export) |
 | Devpost final submit (by Aug 15) | ⬜ Todo |
@@ -309,8 +315,9 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 5. Mustafa **LinkedIn testimonial** URL (public) — still ⬜  
 
 **Sprint 3 — Deploy & submit**  
-6. **GCP deploy** — `gcloud auth login` → set `.env` → `.\scripts\deploy-cloud-run.ps1 deploy`  
-7. Demo **video** + Devpost **final submit** by Aug 15  
+6. **Fix production revenue** on `/impact` (Stripe test checkout or `verify-arms-length-checkout.php`) — required for video  
+7. Run `.\scripts\preflight-demo-video.ps1` → record demo **video**  
+8. Devpost **final submit** by Aug 15  
 
 ~~Optional after gate green: committee PDF, Pro tier, rubrics CRUD~~
 
@@ -366,7 +373,9 @@ php artisan test --filter=RevenueClassifierTest
 | [`VENTURELENS_SYSTEM_REQUIREMENTS.md`](VENTURELENS_SYSTEM_REQUIREMENTS.md) | Full spec + competition strategy |
 | [`commercialization/STRIPE_JUDGE_GUIDE.md`](commercialization/STRIPE_JUDGE_GUIDE.md) | Checkout + arms-length testing |
 | [`commercialization/JUDGE_EVIDENCE.md`](commercialization/JUDGE_EVIDENCE.md) | Screenshot + API checklist |
+| [`commercialization/DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) | **Paste-ready Devpost fields** + orientation alignment |
 | [`commercialization/DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md) | 2:45 video script |
+| [`transcript.txt`](transcript.txt) | Devpost innovation orientation session transcript |
 | [`commercialization/DEPLOY_CLOUD_RUN.md`](commercialization/DEPLOY_CLOUD_RUN.md) | GCP deploy when ready |
 | [`commercialization/GEMINI_SETUP.md`](commercialization/GEMINI_SETUP.md) | API key + quota |
 
@@ -376,6 +385,8 @@ php artisan test --filter=RevenueClassifierTest
 
 | Date | Change |
 |------|--------|
+| 2026-06-17 | **Demo video pack** — production pre-flight script, teleprompter v2 with `/ask` RAG beat; revenue blocker documented |
+| 2026-06-16 | **Vector RAG v2** — Gemini `embedContent`, `knowledge_chunks` table, hybrid retrieval; optional Qdrant OSS; `rag:reindex` + post-screening index job |
 | 2026-06-16 | **SEO** — sitewide meta/OG/Twitter tags, JSON-LD, `SeoHead` component, `sitemap.xml`, enhanced `robots.txt` |
 | 2026-06-16 | **Storage transition** — updated GCP deployment scripts to provision and use GCS for file uploads |
 | 2026-06-16 | **RAG Ask chat** — project-scoped chatbot (`/ask`) indexes applications + screening; Support agent uses same RAG |

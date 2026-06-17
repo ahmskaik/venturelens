@@ -1209,6 +1209,8 @@ applicant@test.com — Sample founder (optional)
 
 ## 23. Devpost Submission Checklist
 
+**Paste-ready field copy:** [`docs/commercialization/DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) (orientation session aligned).
+
 **Product & compliance**
 - [ ] Category: Entrepreneurship & Job Creation
 - [ ] GitHub repo public (MIT) or shared with `testing@devpost.com` + `judging@hacker.fund`

@@ -3,43 +3,81 @@
 **Target length:** 2:50 (hard cap **3:00**).  
 **Format:** 1920×1080, browser zoom 100%, hide bookmarks bar, cursor highlights only.
 
+**Pre-flight script:** `.\scripts\preflight-demo-video.ps1` (run before every take).
+
 **Record on production** (not localhost):
 
 | | |
 |---|---|
-| **App** | https://venturelens-web-362276424525.us-central1.run.app |
+| **App** | https://venturelens.app |
 | **Demo login** | `demo@venturelens.app` / `demo-password-change-me` |
 | **Impact** | `/impact` |
 | **Impact JSON** | `/api/v1/impact.json` |
 | **AI Operations** | `/ai-operations` |
+| **Ask (RAG)** | `/ask` |
+
+---
+
+## Production status (checked 2026-06-17)
+
+| Check | Status |
+|-------|--------|
+| `/up` health | ✅ 200 |
+| Applications screened | ✅ 9 |
+| Gemini API calls | ✅ 13 |
+| Agent actions / % AI | ✅ 61 / 86.9% |
+| Founder hours saved | ✅ 6.8 |
+| **Arms-length revenue** | 🔴 **$0** — **fix before recording** |
+| Accepted startups | 🟡 0 — optional: accept one app first |
+
+### Fix revenue before you record (required for Business Viability)
+
+Production DB lost Stripe charge rows. Pick **one**:
+
+**Option A — Stripe test checkout on production (best for judges)**  
+1. Register on production: new `@gmail.com`, org **"Pacific Innovation Lab"** (not BINA/demo/Gohorto).  
+2. **Billing** → Cohort $199 → card `4242 4242 4242 4242`.  
+3. Repeat for 2 more neutral orgs if you want `$697 / 3 customers` on `/impact`.  
+4. Login `demo@venturelens.app` → one related-party $199 checkout (optional split demo).  
+5. Confirm `/impact` shows arms-length > $0, then `php artisan impact:snapshot` against production DB.
+
+**Option B — Simulate charge (production DB access)**  
+```bash
+# Cloud SQL proxy or shell on Cloud Run job
+php scripts/verify-arms-length-checkout.php   # run 1–3× for arms-length
+php artisan impact:snapshot
+```
+
+**Option C — Fallback only (weaker)**  
+Show `docs/evidence/revenue-evidence.pdf` for 5s while voiceover cites committed `$697` snapshot — live `/impact` revenue panel will still show $0 unless fixed.
 
 ---
 
 ## Before you record (15 min)
 
-1. **Log in** on production with demo credentials.
-2. Open **Applications** → pick a scored app (or app #4 with GCS pitch deck) → click **Replay screening** → wait ~15s until score appears (worker must be healthy).
-3. Open **`/impact`** in another tab — **read live numbers from the page** for voiceover (do not use stale figures below).
-4. Optional: `php artisan impact:snapshot` against production DB, commit `docs/evidence/impact-YYYYMMDD.json`.
-5. Pre-open tabs in order: **Applications** → **AI Operations** → **Impact** → **Billing** → **Apply** (`/apply/summer-2026`).
-6. Close unrelated tabs; disable notifications.
+1. Run `.\scripts\preflight-demo-video.ps1` — all green or warnings only.
+2. **Log in** on production with demo credentials.
+3. **Applications** → open app with score **85** (or any `screened`) → **Replay screening** once → wait ~15s (worker must be healthy).
+4. Open **`/impact`** — copy live numbers into teleprompter below.
+5. Pre-open tabs (left to right): **Applications** → **AI Operations** → **Impact** → **Billing** → **Ask**.
+6. Close unrelated tabs; disable notifications; Do Not Disturb on.
 
 ### Reference KPIs (refresh from `/impact` before recording)
 
-*Last committed snapshot: 2026-06-11 — verify live on production.*
+*Production live as of 2026-06-17 — **replace revenue row after Option A/B**.*
 
-| Metric | Reference |
-|--------|-----------|
-| Arms-length revenue | **$697** |
-| Arms-length customers | **3** |
-| Related-party revenue | **$199** (report separately on Devpost) |
-| Applications screened | **7+** |
-| Gemini API calls | **7+** |
-| Founder hours saved | **5.3+** |
-| Accepted startups | **1** |
-| Jobs influenced (modeled) | **3** |
-| % decisions by AI (L2–L3) | **~89%** |
-| Agents live | **6** |
+| Metric | Production (live) | Committed snapshot (backup) |
+|--------|-------------------|----------------------------|
+| Arms-length revenue | **$0** 🔴 fix first | **$697** (`impact-20260611.json`) |
+| Arms-length customers | **0** | **3** |
+| Related-party revenue | **$0** | **$199** |
+| Applications screened | **9** | 7 |
+| Gemini API calls | **13** | 7 |
+| Founder hours saved | **6.8** | 5.3 |
+| Accepted startups | **0** | 1 |
+| Jobs influenced (modeled) | **0** | 3 |
+| % decisions by AI (L2–L3) | **86.9%** | 88.6% |
+| Agents live | **6** | 6 |
 
 ---
 
@@ -54,7 +92,11 @@
 
 ---
 
-## Devpost — one-liner & tagline
+## Devpost — paste-ready fields
+
+**Full field-by-field copy** (narrative, revenue, AI ops, category impact, testimonials): [`DEVPOST_SUBMISSION.md`](DEVPOST_SUBMISSION.md)
+
+Quick reference below — prefer `DEVPOST_SUBMISSION.md` for final paste.
 
 **One-liner:**  
 VentureLens is an AI-operated company that helps every incubator screen startup applications with Gemini — and earns real revenue doing it.
@@ -88,32 +130,37 @@ Founder hours saved, accepted startups, and jobs-influenced metrics are computed
 Laravel, Vue, Inertia, **Google Gemini API**, Stripe, **Google Cloud Run**, **Cloud SQL (MySQL)**, **Cloud Storage** (pitch decks & logos).
 
 **Try it**  
-Production: https://venturelens-web-362276424525.us-central1.run.app  
+Production: https://venturelens.app  
 Demo: `demo@venturelens.app` / `demo-password-change-me`
 
 ---
 
-## Video script (~2:50)
+## Video script (~2:50) — teleprompter
 
-Read **live KPIs** from `/impact` where dollar amounts appear.
+Read **live KPIs** from `/impact` where bracketed. Practice once with timer.
 
-| Time | Scene | Action | Voiceover |
-|------|-------|--------|-----------|
-| **0:00–0:12** | Title or Welcome | Show logo + Gemini badge | "VentureLens — AI-operated startup screening for incubators. Built for the Build with Gemini XPRIZE: Entrepreneurship and Job Creation." |
-| **0:12–0:22** | Browser URL bar | Show production URL | "This is live on Google Cloud — Cloud Run, Cloud SQL, and Cloud Storage. Not a prototype." |
-| **0:22–0:55** | Dashboard → Applications → open scored app | Show criterion scores, strengths, risks. Click **Replay screening** → cut to completed result if needed | "Every application is processed by Gemini before a human sees it. Structured scores, risk flags, committee-ready summaries — in minutes, not weeks. Managers can run fully automated screening or stay human-in-the-loop with override and committee decisions." |
-| **0:55–1:25** | `/ai-operations` | Point at agent registry (6 agents), autonomy chart L0–L3, % decisions by AI, recent execution log | "VentureLens isn't a thin AI wrapper. Six agents run the company — growth outreach, onboarding, support, finance, screening, and success. This dashboard shows autonomy levels and which operational decisions AI made without a human." |
-| **1:25–1:55** | `/impact` | Scroll: revenue panel (arms-length vs related-party), applications screened, Gemini calls, founder hours saved, agent feed | "Judges verify everything live. Arms-length revenue and related-party revenue are tracked separately. Applications screened, Gemini API calls, founder hours saved — auto-computed from production data, not hand-made slides." |
-| **1:55–2:08** | `/billing` | Show plan, quota, charge history with classification | "Programs upgrade via Stripe — cohort packages or subscriptions. The Finance agent classifies every charge as arms-length or related-party at checkout." |
-| **2:08–2:20** | Application detail → decision buttons (optional) | Flash Shortlist / Accept controls or AI-drafted founder email | "Committee decisions stay in human hands — with AI-prepared scores and optional Gemini-drafted founder emails." |
-| **2:20–2:32** | `/apply/summer-2026` (optional) | Show form + mention pitch deck upload | "Founders apply through a public intake form. Pitch decks land in Google Cloud Storage and feed multimodal Gemini screening." |
-| **2:32–2:50** | `/impact` or Welcome | End card: logo, URL, demo credentials | "VentureLens is an AI-operated company expanding fair startup selection to every incubator. Try the demo — link in the README and Devpost." |
+| Time | Scene | Action | Voiceover (read aloud) |
+|------|-------|--------|------------------------|
+| **0:00–0:12** | Title / Welcome | Logo + category text on screen or homepage | "VentureLens — AI-operated startup screening for incubators. Built for the Build with Gemini XPRIZE: Entrepreneurship and Job Creation." |
+| **0:12–0:22** | URL bar | Show `venturelens-web-…run.app` | "This is live on Google Cloud — Cloud Run, Cloud SQL, and Cloud Storage. Not a localhost demo." |
+| **0:22–0:55** | Dashboard → Applications → scored app | Scores, strengths, risks → **Replay screening** → cut to result | "Every application is processed by Gemini before a human sees it. Structured scores, risk flags, committee-ready summaries — in minutes, not weeks. Programs run fully automated screening or stay human-in-the-loop with committee decisions." |
+| **0:55–1:20** | `/ai-operations` | 6 agents, autonomy L0–L3, % AI decisions, execution log (point at `rag_chat_answer` if visible) | "VentureLens is not a thin AI wrapper. Six agents run the company — growth, onboarding, support, finance, screening, and success. [POINT AT %] Eighty-seven percent of operational decisions ran at L2 or L3 autonomy — logged in production." |
+| **1:20–1:45** | `/impact` | Revenue split, screened count, Gemini calls, founder hours | "Judges verify everything live. Arms-length and related-party revenue are tracked separately. [READ LIVE NUMBERS] Applications screened, Gemini API calls, founder hours saved — computed from production data." |
+| **1:45–1:55** | `/billing` | Plans + charge history with classification | "Programs pay via Stripe — cohort or subscription. The Finance agent classifies every charge at checkout." |
+| **1:55–2:05** | `/ask` | Type: "How many applications have we screened?" → show RAG answer | "Support runs on Gemini RAG — answers from indexed applications and screening history, with autonomy logging." |
+| **2:05–2:15** | Application detail | Accept / Shortlist buttons or founder email draft | "Committee decisions stay with humans — AI prepares evidence and drafts founder emails." |
+| **2:15–2:25** | `/apply/summer-2026` | Public form + pitch deck field | "Founders apply publicly; pitch decks land in Cloud Storage and feed Gemini screening." |
+| **2:25–2:50** | `/impact` end card | URL + demo credentials on screen | "VentureLens expands fair startup selection to every incubator — and earns real revenue doing it. Demo login in the README and Devpost." |
+
+### Shorter cut (if over 3:00)
+
+Drop `/apply` scene; keep Replay screening + AI Operations + Impact + Billing.
 
 ### On-screen overlays (optional lower-thirds)
 
 - `100% applications screened by Gemini`
 - `6 AI business agents · L0–L3 autonomy`
-- `$697 arms-length · $199 related-party` *(update from live `/impact`)*
+- `[LIVE $] arms-length · [LIVE $] related-party`
 - `Google Cloud Run + SQL + Storage`
 - `{production URL}/impact`
 
@@ -128,35 +175,46 @@ Read **live KPIs** from `/impact` where dollar amounts appear.
 
 ---
 
+## Recording setup
+
+| Tool | Settings |
+|------|----------|
+| **OBS / Xbox Game Bar / Loom** | 1920×1080, 30fps, capture browser window only |
+| **Browser** | Chrome incognito, zoom 100%, bookmarks bar hidden |
+| **Mic** | Headset preferred; test levels before take |
+| **Export** | H.264 MP4; upload YouTube **Unlisted** |
+| **Devpost** | Paste URL into `DEVPOST_SUBMISSION.md` → Video demo field |
+
+**Do not show:** `.env`, Stripe secret keys, Cloud Console credentials.
+
+---
+
 ## Recording checklist
 
-- [ ] Production health: https://venturelens-web-362276424525.us-central1.run.app/up → 200
-- [ ] Worker service healthy (screening completes in ~15s)
-- [ ] At least one application with Gemini score visible
-- [ ] **Replay screening** run once before filming
-- [ ] Tabs pre-opened: Applications → AI Operations → Impact → Billing
-- [ ] Live KPI numbers read from `/impact` (not this doc's table)
-- [ ] Demo login only — do not expose Stripe secret keys
-- [ ] Export 1920×1080, H.264; upload YouTube **unlisted**
-- [ ] Paste YouTube URL into Devpost
+- [ ] `.\scripts\preflight-demo-video.ps1` — no failures
+- [ ] Arms-length revenue > $0 on `/impact` (or evidence PDF fallback planned)
+- [ ] Worker healthy — replay screening completes in ~15s
+- [ ] Tabs: Applications → AI Operations → Impact → Billing → Ask
+- [ ] Live KPI numbers copied into teleprompter
+- [ ] One full dry run with phone timer (target 2:45)
+- [ ] Export 1920×1080 H.264 → YouTube unlisted
+- [ ] Paste YouTube URL into Devpost + `DEVPOST_SUBMISSION.md`
 - [ ] Capture 5 PNG screenshots per [JUDGE_EVIDENCE.md](JUDGE_EVIDENCE.md)
 
 ---
 
 ## Devpost field cheat sheet
 
-| Field | Suggested text |
-|-------|----------------|
-| Project name | VentureLens |
-| Tagline | AI-operated startup screening for incubators |
-| Category | Entrepreneurship & Job Creation |
-| GitHub | *(your repo — public or shared with testing@devpost.com, judging@hacker.fund)* |
-| **Demo URL** | https://venturelens-web-362276424525.us-central1.run.app |
-| **Video** | YouTube/Vimeo link after upload |
-| Login instructions | `demo@venturelens.app` / `demo-password-change-me` |
-| Cloud products used | Cloud Run, Cloud SQL, Cloud Storage, Gemini API |
-| Arms-length revenue | *(from live `/impact`)* |
-| Related-party revenue | *(from live `/impact` — separate field)* |
+See **[`DEVPOST_SUBMISSION.md`](DEVPOST_SUBMISSION.md)** for complete paste-ready text. Quick links:
+
+| Field | Doc section |
+|-------|-------------|
+| Tagline, inspiration, what it does | DEVPOST_SUBMISSION → Project details |
+| Written narrative (500–1k words) | DEVPOST_SUBMISSION → Written narrative |
+| Revenue / P&L / confirmations | DEVPOST_SUBMISSION → Revenue & financial evidence |
+| AI ops + GCP + Gemini | DEVPOST_SUBMISSION → AI-native operations evidence |
+| Category impact | DEVPOST_SUBMISSION → Category impact evidence |
+| Video / GitHub / gallery | DEVPOST_SUBMISSION → Media & repo |
 
 ---
 
@@ -164,6 +222,7 @@ Read **live KPIs** from `/impact` where dollar amounts appear.
 
 | Topic | Guide |
 |-------|--------|
+| **Devpost paste-ready fields** | [`DEVPOST_SUBMISSION.md`](DEVPOST_SUBMISSION.md) |
 | Judge screenshots & API | [JUDGE_EVIDENCE.md](JUDGE_EVIDENCE.md) |
 | Stripe & revenue split | [STRIPE_JUDGE_GUIDE.md](STRIPE_JUDGE_GUIDE.md) |
 | Advanced stage gate | [ADVANCED_STAGE_GATE.md](../ADVANCED_STAGE_GATE.md) |

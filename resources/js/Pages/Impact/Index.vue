@@ -51,6 +51,7 @@ function barWidth(count, max) {
                     <Link href="/login" class="vl-btn-ghost">Sign in</Link>
                     <Link href="/dashboard" class="vl-btn-ghost">Dashboard</Link>
                     <a href="/api/v1/impact.json" class="text-sm font-medium text-brand-600 hover:text-brand-700" target="_blank">JSON API</a>
+                    <a href="/widgets/impact/" class="text-sm font-medium text-brand-600 hover:text-brand-700" target="_blank">Embed widget</a>
                 </nav>
             </div>
         </header>

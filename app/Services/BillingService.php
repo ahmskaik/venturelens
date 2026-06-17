@@ -7,6 +7,7 @@ use App\Models\RevenueCharge;
 use App\Models\User;
 use App\Services\Agents\FinanceAgent;
 use App\Services\Agents\SuccessAgent;
+use App\Services\CompetitionMetrics;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -91,6 +92,8 @@ class BillingService
             $this->financeAgent->recordStripeCharge($organization, $charge);
             $this->successAgent->recordPayment($organization, $charge);
 
+            app(CompetitionMetrics::class)->forget();
+
             return $charge;
         });
     }
@@ -128,6 +131,8 @@ class BillingService
 
         $this->financeAgent->recordStripeCharge($organization, $charge);
         $this->successAgent->recordPayment($organization, $charge);
+
+        app(CompetitionMetrics::class)->forget();
 
         return $charge;
     }

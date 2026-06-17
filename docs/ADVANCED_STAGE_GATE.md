@@ -133,6 +133,7 @@ Required for advanced **product** + **impact** (small scope):
 | E10 | README Judge Quickstart (production URL) | `README.md` | 🟡 Local only |
 
 Script: [`commercialization/DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md)  
+**Field copy:** [`commercialization/DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md)  
 Checklist: [`commercialization/JUDGE_EVIDENCE.md`](commercialization/JUDGE_EVIDENCE.md)
 
 ---

@@ -16,6 +16,9 @@ class ChatMessage extends Model
         'confidence',
         'prompt_tokens',
         'completion_tokens',
+        'retrieval_ms',
+        'generation_ms',
+        'latency_ms',
     ];
 
     protected function casts(): array
@@ -25,6 +28,9 @@ class ChatMessage extends Model
             'confidence' => 'decimal:3',
             'prompt_tokens' => 'integer',
             'completion_tokens' => 'integer',
+            'retrieval_ms' => 'integer',
+            'generation_ms' => 'integer',
+            'latency_ms' => 'integer',
         ];
     }
 

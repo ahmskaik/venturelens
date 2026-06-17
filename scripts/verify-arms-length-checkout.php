@@ -71,7 +71,9 @@ if (! $charge || $charge->revenue_type !== 'arms_length') {
     exit(1);
 }
 
-$metrics = app(CompetitionMetrics::class)->all();
+$metrics = app(CompetitionMetrics::class);
+$metrics->forget();
+$metrics = $metrics->all();
 $armsUsd = $metrics['business']['arms_length_revenue_usd'] ?? 0;
 
 echo "OK arms-length verification\n";

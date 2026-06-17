@@ -46,6 +46,7 @@ Deploy: see [`docs/commercialization/DEPLOY_CLOUD_RUN.md`](docs/commercializatio
 | Stripe checkout (judges) | [`docs/commercialization/STRIPE_JUDGE_GUIDE.md`](docs/commercialization/STRIPE_JUDGE_GUIDE.md) |
 | Devpost evidence pack | [`docs/commercialization/JUDGE_EVIDENCE.md`](docs/commercialization/JUDGE_EVIDENCE.md) |
 | Demo video script | [`docs/commercialization/DEMO_VIDEO_SCRIPT.md`](docs/commercialization/DEMO_VIDEO_SCRIPT.md) |
+| **Devpost field-by-field copy** | [`docs/commercialization/DEVPOST_SUBMISSION.md`](docs/commercialization/DEVPOST_SUBMISSION.md) |
 | Gemini API key + billing | [`docs/commercialization/GEMINI_SETUP.md`](docs/commercialization/GEMINI_SETUP.md) |
 | Cloud Run deploy | [`docs/commercialization/DEPLOY_CLOUD_RUN.md`](docs/commercialization/DEPLOY_CLOUD_RUN.md) |
 
@@ -249,8 +250,20 @@ Full spec: [`docs/VENTURELENS_SYSTEM_REQUIREMENTS.md`](docs/VENTURELENS_SYSTEM_R
 
 [`docs/evidence/`](docs/evidence/) — impact JSON snapshots, screenshots. Nightly: `php artisan impact:snapshot`.
 
+**Judge / demo readiness**
+
+```bash
+npm run judge:smoke                                    # default: https://venturelens.app
+npm run judge:smoke -- --base-url=http://127.0.0.1:8000 --out=judge-smoke-report.json
+.\scripts\preflight-demo-video.ps1 -BaseUrl https://venturelens.app
+```
+
+**Live impact embed** — [`/widgets/impact/`](public/widgets/impact/) (static widget + embed snippet for partner sites). Public API: `GET /api/v1/impact.json` (CORS enabled).
+
+**Antigravity (satellite tools)** — copy-paste master brief: [`docs/commercialization/ANTIGRAVITY_PROMPT.md`](docs/commercialization/ANTIGRAVITY_PROMPT.md)
+
 ---
 
 ## License
 
-MIT — see [`LICENSE`](LICENSE).
+MIT — see [`LICENSE`](LICENSE). || https://venturelens-web-362276424525.us-central1.run.app

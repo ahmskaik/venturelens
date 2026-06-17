@@ -67,7 +67,12 @@ if ($env:STRIPE_KEY -and $env:STRIPE_KEY.StartsWith("pk_")) {
     Write-Warning "STRIPE_KEY is not a publishable key (pk_...) — set pk_test_ in .env before deploy for Stripe.js"
 }
 
+if ($env:QDRANT_API_KEY) {
+    Set-GcpSecret "qdrant-api-key" $env:QDRANT_API_KEY
+}
+
 Write-Host ""
 Write-Host "Done. Non-secret Stripe vars passed at deploy time:"
 Write-Host "  STRIPE_PRICE_COHORT=$($env:STRIPE_PRICE_COHORT)"
 Write-Host "  STRIPE_PRICE_STARTER=$($env:STRIPE_PRICE_STARTER)"
+Write-Host "  RAG_VECTOR_STORE=$($env:RAG_VECTOR_STORE)"

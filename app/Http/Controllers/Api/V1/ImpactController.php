@@ -10,6 +10,10 @@ class ImpactController extends Controller
 {
     public function __invoke(CompetitionMetrics $metrics): JsonResponse
     {
-        return response()->json($metrics->all());
+        return response()
+            ->json($metrics->all())
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+            ->header('Access-Control-Max-Age', '86400');
     }
 }

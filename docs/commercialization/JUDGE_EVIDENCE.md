@@ -60,4 +60,7 @@ Use a **new registration** (Gmail + neutral org name) for arms-length Stripe evi
 
 ## Demo video & Devpost copy
 
-Script, voiceover table, and paste-ready Devpost fields: [`DEMO_VIDEO_SCRIPT.md`](DEMO_VIDEO_SCRIPT.md).
+| Doc | Purpose |
+|-----|---------|
+| [`DEMO_VIDEO_SCRIPT.md`](DEMO_VIDEO_SCRIPT.md) | ≤3 min video shot list |
+| [`DEVPOST_SUBMISSION.md`](DEVPOST_SUBMISSION.md) | **Paste-ready Devpost fields** (narrative, revenue, AI ops) |

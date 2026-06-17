@@ -24,6 +24,43 @@ $ServiceWorker = "venturelens-worker"
 $ImageUri = "${Region}-docker.pkg.dev/${ProjectId}/${ImageName}:latest"
 $SqlInstance = "${ProjectId}:${Region}:venturelens"
 
+function Get-RagEnvVars {
+    $store = if ($env:RAG_VECTOR_STORE) { $env:RAG_VECTOR_STORE.ToLower() } else { 'mysql' }
+    if ($store -notin @('mysql', 'qdrant')) {
+        Write-Warning "Invalid RAG_VECTOR_STORE=$store — using mysql"
+        $store = 'mysql'
+    }
+
+    $embedModel = if ($env:GEMINI_EMBEDDING_MODEL) { $env:GEMINI_EMBEDDING_MODEL } else { 'gemini-embedding-001' }
+    $embedDims = if ($env:RAG_EMBEDDING_DIMENSIONS) { $env:RAG_EMBEDDING_DIMENSIONS } else { '768' }
+
+    $pairs = @(
+        "RAG_VECTOR_STORE=$store",
+        "GEMINI_EMBEDDING_MODEL=$embedModel",
+        "RAG_EMBEDDING_DIMENSIONS=$embedDims"
+    )
+
+    if ($store -eq 'qdrant') {
+        if (-not $env:QDRANT_URL) {
+            Write-Error "RAG_VECTOR_STORE=qdrant requires QDRANT_URL in .env before deploy"
+            exit 1
+        }
+        $collection = if ($env:QDRANT_COLLECTION) { $env:QDRANT_COLLECTION } else { 'venturelens_rag' }
+        $pairs += "QDRANT_URL=$($env:QDRANT_URL)"
+        $pairs += "QDRANT_COLLECTION=$collection"
+    }
+
+    return ($pairs -join ",")
+}
+
+function Get-RagSecrets {
+    $store = if ($env:RAG_VECTOR_STORE) { $env:RAG_VECTOR_STORE.ToLower() } else { 'mysql' }
+    if ($store -eq 'qdrant' -and $env:QDRANT_API_KEY) {
+        return "QDRANT_API_KEY=qdrant-api-key:latest"
+    }
+    return ""
+}
+
 function Get-StripeEnvVars {
     $pairs = @(
         "STRIPE_PRICE_COHORT=$($env:STRIPE_PRICE_COHORT)",
@@ -32,6 +69,7 @@ function Get-StripeEnvVars {
         "DEMO_USER_PASSWORD=$($env:DEMO_USER_PASSWORD)",
         "GEMINI_MODEL_FLASH=$($env:GEMINI_MODEL_FLASH)",
         "GEMINI_MAX_RETRIES=$($env:GEMINI_MAX_RETRIES)",
+        (Get-RagEnvVars),
         "SESSION_DRIVER=database",
         "CACHE_STORE=database"
     )
@@ -78,6 +116,8 @@ function Build-Image {
 function Deploy-Web {
     $envVars = "$(Get-BaseEnvVars),RUN_MIGRATIONS=true,RUN_SEED=true"
     $secrets = "APP_KEY=venturelens-app-key:latest,GEMINI_API_KEY=gemini-api-key:latest,DB_PASSWORD=venturelens-db-password:latest,STRIPE_SECRET=stripe-secret:latest,STRIPE_WEBHOOK_SECRET=stripe-webhook-secret:latest"
+    $ragSecrets = Get-RagSecrets
+    if ($ragSecrets) { $secrets += ",$ragSecrets" }
     gcloud run deploy $ServiceWeb `
         --image $ImageUri `
         --region $Region `
@@ -95,6 +135,9 @@ function Deploy-Web {
 
 function Deploy-Worker {
     $envVars = "$(Get-BaseEnvVars),CONTAINER_ROLE=worker"
+    $secrets = "APP_KEY=venturelens-app-key:latest,GEMINI_API_KEY=gemini-api-key:latest,DB_PASSWORD=venturelens-db-password:latest,STRIPE_SECRET=stripe-secret:latest"
+    $ragSecrets = Get-RagSecrets
+    if ($ragSecrets) { $secrets += ",$ragSecrets" }
     gcloud run deploy $ServiceWorker `
         --image $ImageUri `
         --region $Region `
@@ -107,7 +150,7 @@ function Deploy-Worker {
         --max-instances 3 `
         --add-cloudsql-instances $SqlInstance `
         --set-env-vars $envVars `
-        --set-secrets "APP_KEY=venturelens-app-key:latest,GEMINI_API_KEY=gemini-api-key:latest,DB_PASSWORD=venturelens-db-password:latest,STRIPE_SECRET=stripe-secret:latest"
+        --set-secrets $secrets
 }
 
 switch ($Command) {
@@ -122,8 +165,16 @@ switch ($Command) {
         Build-Image
         Deploy-Web
         Deploy-Worker
-        $url = gcloud run services describe $ServiceWeb --region $Region --format="value(status.url)"
-        Set-WebAppUrl $url
+        $customUrl = $env:APP_URL
+        if ($customUrl -match '^https?://[^#/\s]+') {
+            $customUrl = $Matches[0].TrimEnd('/')
+        } elseif ($env:CUSTOM_DOMAIN) {
+            $customUrl = "https://$($env:CUSTOM_DOMAIN.TrimEnd('/'))"
+        } else {
+            $customUrl = gcloud run services describe $ServiceWeb --region $Region --format="value(status.url)"
+        }
+        Set-WebAppUrl $customUrl
+        $url = $customUrl
         Write-Host ""
         Write-Host "Deployed. Web URL: $url"
         Write-Host "  Impact:   $url/impact"

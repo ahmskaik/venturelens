@@ -26,7 +26,8 @@ RUN npm ci
 COPY . .
 
 RUN composer dump-autoload --optimize \
-    && npm run build
+    && npm run build \
+    && rm -f public/hot
 
 ENV PORT=8080
 EXPOSE 8080

@@ -45,8 +45,14 @@ class GeminiClient
      * @param  array<string, mixed>  $generationConfig
      * @return array{content: string, prompt_tokens: int, completion_tokens: int, latency_ms: int, raw: array}
      */
-    public function generateContent(string $model, string $systemPrompt, string $userPrompt, array $generationConfig = []): array
-    {
+    public function generateContent(
+        string $model,
+        string $systemPrompt,
+        string $userPrompt,
+        array $generationConfig = [],
+        ?int $timeoutSeconds = null,
+        ?int $maxRetries = null,
+    ): array {
         if (in_array($model, self::DEPRECATED_MODELS, true)) {
             throw new RuntimeException(
                 "Model {$model} was shut down on 2026-06-01. Set GEMINI_MODEL_FLASH=gemini-2.5-flash in your .env file."
@@ -74,14 +80,16 @@ class GeminiClient
         $attempt = 0;
         $lastException = null;
         $lastStatus = null;
+        $timeout = $timeoutSeconds ?? $this->timeoutSeconds;
+        $retries = $maxRetries ?? $this->maxRetries;
 
-        while ($attempt < $this->maxRetries) {
+        while ($attempt < $retries) {
             $attempt++;
             $started = microtime(true);
 
             try {
                 /** @var Response $response */
-                $response = Http::timeout($this->timeoutSeconds)
+                $response = Http::timeout($timeout)
                     ->post($url, $payload);
 
                 $latencyMs = (int) round((microtime(true) - $started) * 1000);
@@ -127,7 +135,7 @@ class GeminiClient
             } catch (RuntimeException $e) {
                 $lastException = $e;
 
-                if ($attempt >= $this->maxRetries || ! $this->shouldRetry($e, $lastStatus)) {
+                if ($attempt >= $retries || ! $this->shouldRetry($e, $lastStatus)) {
                     break;
                 }
 
@@ -136,7 +144,7 @@ class GeminiClient
                 Log::warning('gemini.api_retry', [
                     'model' => $model,
                     'attempt' => $attempt,
-                    'max_retries' => $this->maxRetries,
+                    'max_retries' => $retries,
                     'delay_ms' => $delayMs,
                     'status' => $lastStatus,
                     'error' => $e->getMessage(),
@@ -180,7 +188,9 @@ class GeminiClient
     {
         $message = $e->getMessage();
 
-        if (str_contains($message, 'limit: 0')) {
+        if (str_contains($message, 'limit: 0')
+            || str_contains($message, 'exceeded your current quota')
+            || str_contains($message, 'Quota exceeded')) {
             return false;
         }
 
@@ -197,17 +207,18 @@ class GeminiClient
 
     private function retryDelayMilliseconds(RuntimeException $e, int $attempt, ?int $status): int
     {
+        $delayMs = 500;
+
         if (preg_match('/\[Retry-After: (\d+)\]/', $e->getMessage(), $matches)) {
-            return ((int) $matches[1] * 1000) + random_int(250, 750);
+            $delayMs = ((int) $matches[1] * 1000) + random_int(250, 750);
+        } elseif (preg_match('/retry in ([\d.]+)s/i', $e->getMessage(), $matches)) {
+            $delayMs = (int) (floatval($matches[1]) * 1000) + random_int(250, 750);
+        } else {
+            $base = $status === 429 ? 1000 : 500;
+            $delayMs = (int) (pow(2, $attempt - 1) * $base) + random_int(0, 500);
         }
 
-        if (preg_match('/retry in ([\d.]+)s/i', $e->getMessage(), $matches)) {
-            return (int) (floatval($matches[1]) * 1000) + random_int(250, 750);
-        }
-
-        // 429: longer backoff; 5xx: standard exponential
-        $base = $status === 429 ? 1000 : 500;
-
-        return (int) (pow(2, $attempt - 1) * $base) + random_int(0, 500);
+        // Never block chat/screening requests for a minute on quota backoff hints.
+        return min($delayMs, 8000);
     }
 }

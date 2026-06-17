@@ -131,4 +131,136 @@
     .vl-data-table tbody tr {
         @apply border-t border-slate-100 transition hover:bg-slate-50/80;
     }
+
+    /* Landing page */
+    @keyframes vl-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+
+    @keyframes vl-shimmer {
+        0% { background-position: 200% center; }
+        100% { background-position: -200% center; }
+    }
+
+    @keyframes vl-fade-up {
+        from { opacity: 0; transform: translateY(28px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .vl-hero-glow {
+        background:
+            radial-gradient(ellipse 80% 50% at 50% -20%, rgb(99 102 241 / 0.35), transparent),
+            radial-gradient(ellipse 60% 40% at 80% 50%, rgb(13 148 136 / 0.12), transparent);
+    }
+
+    .vl-reveal {
+        opacity: 0;
+        transform: translateY(28px);
+        transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .vl-reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .vl-reveal-delay-1 { transition-delay: 0.1s; }
+    .vl-reveal-delay-2 { transition-delay: 0.2s; }
+    .vl-reveal-delay-3 { transition-delay: 0.3s; }
+
+    .vl-screenshot-frame {
+        @apply overflow-hidden rounded-xl border border-slate-200/80 bg-slate-900 shadow-2xl shadow-slate-900/20;
+    }
+
+    .vl-screenshot-chrome {
+        @apply flex items-center gap-1.5 border-b border-white/10 bg-slate-800/90 px-4 py-2.5;
+    }
+
+    .vl-markdown {
+        @apply text-sm leading-relaxed text-slate-700;
+    }
+
+    .vl-markdown > :first-child {
+        @apply mt-0;
+    }
+
+    .vl-markdown > :last-child {
+        @apply mb-0;
+    }
+
+    .vl-markdown p {
+        @apply my-2;
+    }
+
+    .vl-markdown strong {
+        @apply font-semibold text-slate-900;
+    }
+
+    .vl-markdown em {
+        @apply italic;
+    }
+
+    .vl-markdown h1,
+    .vl-markdown h2,
+    .vl-markdown h3 {
+        @apply mt-4 mb-2 font-semibold text-slate-900;
+    }
+
+    .vl-markdown h1 {
+        @apply text-base;
+    }
+
+    .vl-markdown h2 {
+        @apply text-sm;
+    }
+
+    .vl-markdown h3 {
+        @apply text-sm;
+    }
+
+    .vl-markdown ul,
+    .vl-markdown ol {
+        @apply my-2 space-y-1 pl-5;
+    }
+
+    .vl-markdown ul {
+        @apply list-disc;
+    }
+
+    .vl-markdown ol {
+        @apply list-decimal;
+    }
+
+    .vl-markdown li {
+        @apply pl-0.5;
+    }
+
+    .vl-markdown li > p {
+        @apply my-1;
+    }
+
+    .vl-markdown code {
+        @apply rounded bg-slate-100 px-1 py-0.5 font-mono text-[0.85em] text-slate-800;
+    }
+
+    .vl-markdown pre {
+        @apply my-2 overflow-x-auto rounded-lg bg-slate-900 p-3 text-xs text-slate-100;
+    }
+
+    .vl-markdown pre code {
+        @apply bg-transparent p-0 text-inherit;
+    }
+
+    .vl-markdown blockquote {
+        @apply my-2 border-l-2 border-slate-200 pl-3 text-slate-600;
+    }
+
+    .vl-markdown a {
+        @apply font-medium text-brand-600 underline decoration-brand-200 underline-offset-2 hover:text-brand-700;
+    }
+
+    .vl-markdown hr {
+        @apply my-3 border-slate-200;
+    }
 }

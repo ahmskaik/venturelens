@@ -10,12 +10,42 @@ SERVICE_WORKER="${SERVICE_WORKER:-venturelens-worker}"
 IMAGE_URI="${REGION}-docker.pkg.dev/${PROJECT}/${IMAGE_NAME}:latest"
 SQL_INSTANCE="${SQL_INSTANCE:-${PROJECT}:${REGION}:venturelens}"
 
+rag_env_vars() {
+  local store="${RAG_VECTOR_STORE:-mysql}"
+  store="$(echo "$store" | tr '[:upper:]' '[:lower:]')"
+  if [[ "$store" != "mysql" && "$store" != "qdrant" ]]; then
+    echo "Warning: invalid RAG_VECTOR_STORE=$store — using mysql" >&2
+    store="mysql"
+  fi
+  local vars="RAG_VECTOR_STORE=${store}"
+  vars+=",GEMINI_EMBEDDING_MODEL=${GEMINI_EMBEDDING_MODEL:-gemini-embedding-001}"
+  vars+=",RAG_EMBEDDING_DIMENSIONS=${RAG_EMBEDDING_DIMENSIONS:-768}"
+  if [[ "$store" == "qdrant" ]]; then
+    if [[ -z "${QDRANT_URL:-}" ]]; then
+      echo "Error: RAG_VECTOR_STORE=qdrant requires QDRANT_URL in .env" >&2
+      exit 1
+    fi
+    vars+=",QDRANT_URL=${QDRANT_URL}"
+    vars+=",QDRANT_COLLECTION=${QDRANT_COLLECTION:-venturelens_rag}"
+  fi
+  echo "$vars"
+}
+
+rag_secrets() {
+  local store="${RAG_VECTOR_STORE:-mysql}"
+  store="$(echo "$store" | tr '[:upper:]' '[:lower:]')"
+  if [[ "$store" == "qdrant" && -n "${QDRANT_API_KEY:-}" ]]; then
+    echo "QDRANT_API_KEY=qdrant-api-key:latest"
+  fi
+}
+
 stripe_env_vars() {
   local vars="STRIPE_PRICE_COHORT=${STRIPE_PRICE_COHORT:-}"
   vars+=",STRIPE_PRICE_STARTER=${STRIPE_PRICE_STARTER:-}"
   vars+=",DEMO_USER_EMAIL=${DEMO_USER_EMAIL:-demo@venturelens.app}"
   vars+=",DEMO_USER_PASSWORD=${DEMO_USER_PASSWORD:-demo-password-change-me}"
   vars+=",GEMINI_MAX_RETRIES=${GEMINI_MAX_RETRIES:-5}"
+  vars+=",$(rag_env_vars)"
   vars+=",SESSION_DRIVER=database,CACHE_STORE=database"
   if [[ "${STRIPE_KEY:-}" == pk_* ]]; then
     vars+=",STRIPE_KEY=${STRIPE_KEY}"
@@ -42,6 +72,11 @@ deploy_web() {
   if [[ "${STRIPE_KEY:-}" == pk_* ]]; then
     secrets+=",STRIPE_KEY=stripe-key:latest"
   fi
+  local rag_secret
+  rag_secret="$(rag_secrets)"
+  if [[ -n "$rag_secret" ]]; then
+    secrets+=",${rag_secret}"
+  fi
   gcloud run deploy "${SERVICE_WEB}" \
     --image "${IMAGE_URI}" \
     --region "${REGION}" \
@@ -66,6 +101,12 @@ set_app_url() {
 }
 
 deploy_worker() {
+  local secrets="APP_KEY=venturelens-app-key:latest,GEMINI_API_KEY=gemini-api-key:latest,DB_PASSWORD=venturelens-db-password:latest,STRIPE_SECRET=stripe-secret:latest"
+  local rag_secret
+  rag_secret="$(rag_secrets)"
+  if [[ -n "$rag_secret" ]]; then
+    secrets+=",${rag_secret}"
+  fi
   gcloud run deploy "${SERVICE_WORKER}" \
     --image "${IMAGE_URI}" \
     --region "${REGION}" \
@@ -78,7 +119,7 @@ deploy_worker() {
     --max-instances 3 \
     --add-cloudsql-instances "${SQL_INSTANCE}" \
     --set-env-vars "$(base_env_vars),CONTAINER_ROLE=worker" \
-    --set-secrets "APP_KEY=venturelens-app-key:latest,GEMINI_API_KEY=gemini-api-key:latest,DB_PASSWORD=venturelens-db-password:latest,STRIPE_SECRET=stripe-secret:latest"
+    --set-secrets "${secrets}"
 }
 
 case "${cmd}" in
@@ -90,7 +131,7 @@ case "${cmd}" in
     if [[ -f .env ]]; then
       set -a
       # shellcheck disable=SC1091
-      source <(grep -E '^(STRIPE_|DEMO_|GEMINI_MAX|DB_PASSWORD|GCP_)' .env | sed 's/\r$//')
+      source <(grep -E '^(STRIPE_|DEMO_|GEMINI_MAX|DB_PASSWORD|GCP_|RAG_|QDRANT_)' .env | sed 's/\r$//')
       set +a
     fi
     if [[ -x scripts/setup-gcp-infra.sh ]]; then

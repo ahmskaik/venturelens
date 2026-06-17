@@ -8,7 +8,7 @@ cd "$ROOT"
 if [[ -f .env ]]; then
   set -a
   # shellcheck disable=SC1091
-  source <(grep -E '^(APP_KEY|GEMINI_API_KEY|STRIPE_|DB_PASSWORD=|GCP_DB_PASSWORD=|GCP_|GOOGLE_CLOUD_)' .env | sed 's/\r$//')
+  source <(grep -E '^(APP_KEY|GEMINI_API_KEY|STRIPE_|DB_PASSWORD=|GCP_DB_PASSWORD=|GCP_|GOOGLE_CLOUD_|QDRANT_)' .env | sed 's/\r$//')
   set +a
 fi
 
@@ -58,5 +58,10 @@ else
   echo "STRIPE_KEY is not pk_* — set pk_test_ in .env for Stripe.js" >&2
 fi
 
+if [[ -n "${QDRANT_API_KEY:-}" ]]; then
+  set_gcp_secret "qdrant-api-key" "$QDRANT_API_KEY"
+fi
+
 echo ""
 echo "Done. Price IDs passed at deploy: STRIPE_PRICE_COHORT=${STRIPE_PRICE_COHORT:-} STRIPE_PRICE_STARTER=${STRIPE_PRICE_STARTER:-}"
+echo "  RAG_VECTOR_STORE=${RAG_VECTOR_STORE:-mysql}"

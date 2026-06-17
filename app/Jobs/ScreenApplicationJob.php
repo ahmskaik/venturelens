@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\IndexKnowledgeChunksJob;
 use App\Models\Application;
 use App\Services\AgentExecutionLogger;
 use App\Services\DocumentExtractor;
@@ -153,6 +154,8 @@ class ScreenApplicationJob implements ShouldQueue
             'score' => $result->overall_score,
             'model' => $result->model,
         ]);
+
+        IndexKnowledgeChunksJob::dispatch($application->id);
     }
 
     public function failed(?Throwable $exception): void

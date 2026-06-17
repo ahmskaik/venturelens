@@ -39,6 +39,8 @@ return [
         'api_key' => env('GEMINI_API_KEY'),
         'timeout' => env('GEMINI_TIMEOUT', 60),
         'max_retries' => env('GEMINI_MAX_RETRIES', 5),
+        'chat_timeout' => env('GEMINI_CHAT_TIMEOUT', 30),
+        'chat_max_retries' => env('GEMINI_CHAT_MAX_RETRIES', 2),
         'models' => [
             'flash' => env('GEMINI_MODEL_FLASH', 'gemini-2.5-flash'),
             'pro' => env('GEMINI_MODEL_PRO', 'gemini-2.5-pro'),
