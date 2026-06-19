@@ -96,7 +96,9 @@ Build a **complete, deployable deliverable** for the task you choose. Include te
 
 ---
 
-### TASK A — Cloud Function: nightly impact archive → GCS (recommended next)
+### TASK A — Cloud Function: nightly impact archive → GCS ✅ **Deployed**
+
+**Status:** Live on GCP `venturelens-499513` — Cloud Run `impact-archiver`, Scheduler `nightly-impact-archival` (02:00 UTC), GCS `evidence/impact-*.json`. Code in `gcp-impact-archiver/`.
 
 **Goal:** Extra **Google Cloud** product + automated evidence trail for judges.
 
@@ -161,9 +163,13 @@ Build a **complete, deployable deliverable** for the task you choose. Include te
 
 ---
 
-### TASK D — Evidence Explorer SPA (static)
+### TASK D — Evidence Explorer SPA (static) ✅ **Shipped**
 
 **Goal:** Judge-visible transparency for AI operations.
+
+**Status:** `evidence-explorer/` · built to `public/evidence-explorer/` · live at `/evidence-explorer/`
+
+**Full spec (historical):** [`ANTIGRAVITY_TASK_D_PROMPT.md`](ANTIGRAVITY_TASK_D_PROMPT.md)
 
 **Build:**
 - **Vue 3 + Vite** SPA (no Inertia), build to static `dist/`.
@@ -242,15 +248,19 @@ your-repo/
 
 ## Recommended order
 
-1. **Task A** — Cloud Function archive (GCP story, evidence automation)
-2. **Task B** — PDF microservice (product depth)
-3. **Task D** — Evidence Explorer (judge UX)
-4. **Task C** — OpenAPI (quick win, docs only)
+1. ~~**Task A** — Cloud Function archive~~ ✅ deployed (`impact-archiver` + Scheduler + GCS)
+2. ~~**Task D** — Evidence Explorer~~ ✅ `public/evidence-explorer/`
+3. **Task C** — OpenAPI (quick win, docs only)
+4. **Task B** — PDF microservice (product depth; defer until demo video shipped)
 5. **Task E** or **F** — if time remains
 
 ---
 
 ## Session kickoff (paste with your chosen task)
+
+**Task D (recommended):** use the dedicated prompt in [`ANTIGRAVITY_TASK_D_PROMPT.md`](ANTIGRAVITY_TASK_D_PROMPT.md) — self-contained, no need to paste this whole file.
+
+**Other tasks:**
 
 ```
 I am working on VentureLens satellite tooling for the Build with Gemini XPRIZE hackathon.

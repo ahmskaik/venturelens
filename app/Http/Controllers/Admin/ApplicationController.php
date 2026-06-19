@@ -9,6 +9,7 @@ use App\Models\FounderCommunication;
 use App\Models\Program;
 use App\Services\ApplicationDecisionService;
 use App\Services\FounderCommunicationService;
+use App\Support\ApplicationListQuery;
 use App\Support\ApplicationProfile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,29 +25,24 @@ class ApplicationController extends Controller
 
         abort_unless($organization, 404, 'No organization found for this user.');
 
-        $programIds = $organization->programs()->pluck('id');
+        $programIds = $organization->programs()->pluck('id')->all();
+        $listQuery = ApplicationListQuery::forOrganization($programIds, $request);
 
-        $applications = Application::query()
-            ->whereIn('program_id', $programIds)
-            ->with(['program', 'latestScreeningResult'])
-            ->latest('submitted_at')
-            ->get()
-            ->map(fn (Application $app) => [
-                'id' => $app->id,
-                'startup_name' => $app->startup_name,
-                'founder_name' => $app->founder_name,
-                'status' => $app->status,
-                'ai_overall_score' => $app->ai_overall_score,
-                'submitted_at' => $app->submitted_at?->toIso8601String(),
-                'recommendation' => $app->latestScreeningResult?->recommendation,
-                'program' => [
-                    'id' => $app->program->id,
-                    'name' => $app->program->name,
-                ],
-            ]);
+        $applications = $listQuery
+            ->applyFilters()
+            ->applySort()
+            ->paginate()
+            ->through(fn (Application $app) => ApplicationListQuery::mapApplication($app));
 
         return Inertia::render('Applications/OrganizationIndex', [
             'applications' => $applications,
+            'filters' => $listQuery->filters(),
+            'filterOptions' => array_merge(
+                ApplicationListQuery::filterOptionsForPrograms($programIds),
+                [
+                    'programs' => $organization->programs()->select('id', 'name')->orderBy('name')->get(),
+                ],
+            ),
         ]);
     }
 
@@ -54,19 +50,13 @@ class ApplicationController extends Controller
     {
         $this->authorizeProgramAccess($request, $program);
 
-        $applications = $program->applications()
-            ->with('latestScreeningResult')
-            ->latest('submitted_at')
-            ->get()
-            ->map(fn (Application $app) => [
-                'id' => $app->id,
-                'startup_name' => $app->startup_name,
-                'founder_name' => $app->founder_name,
-                'status' => $app->status,
-                'ai_overall_score' => $app->ai_overall_score,
-                'submitted_at' => $app->submitted_at?->toIso8601String(),
-                'recommendation' => $app->latestScreeningResult?->recommendation,
-            ]);
+        $listQuery = ApplicationListQuery::forProgram($program->id, $request);
+
+        $applications = $listQuery
+            ->applyFilters()
+            ->applySort()
+            ->paginate()
+            ->through(fn (Application $app) => ApplicationListQuery::mapApplication($app, false));
 
         return Inertia::render('Applications/Index', [
             'program' => [
@@ -75,6 +65,8 @@ class ApplicationController extends Controller
                 'slug' => $program->slug,
             ],
             'applications' => $applications,
+            'filters' => $listQuery->filters(),
+            'filterOptions' => ApplicationListQuery::filterOptionsForPrograms([$program->id]),
         ]);
     }
 

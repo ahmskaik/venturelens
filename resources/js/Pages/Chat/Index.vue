@@ -3,6 +3,7 @@ import { ref, computed, nextTick, onMounted, onUnmounted, watch } from 'vue';
 import { Link, router, useForm } from '@inertiajs/vue3';
 import AppShell from '../../Components/Layout/AppShell.vue';
 import MarkdownContent from '../../Components/Chat/MarkdownContent.vue';
+import { resolveTextDirection, textDirectionClasses } from '../../utils/textDirection';
 
 const props = defineProps({
     session: Object,
@@ -112,6 +113,14 @@ function clearChat() {
     router.post('/ask/clear');
 }
 
+function messageDirection(text) {
+    return resolveTextDirection(text);
+}
+
+function messageDirectionClass(text) {
+    return textDirectionClasses(text);
+}
+
 function latencyLabel(msg) {
     const totalMs = Number(msg.latency_ms)
         || (Number(msg.retrieval_ms || 0) + Number(msg.generation_ms || 0));
@@ -204,7 +213,11 @@ const suggestions = computed(() => {
 
                 <template v-for="msg in messages" :key="msg.id">
                     <div v-if="msg.role === 'user'" class="flex justify-end">
-                        <div class="max-w-[85%] rounded-2xl rounded-br-md bg-slate-900 px-4 py-2.5 text-sm leading-relaxed text-white">
+                        <div
+                            class="max-w-[85%] rounded-2xl rounded-br-md bg-slate-900 px-4 py-2.5 text-sm leading-relaxed text-white"
+                            :class="messageDirectionClass(msg.content)"
+                            :dir="messageDirection(msg.content)"
+                        >
                             {{ msg.content }}
                         </div>
                     </div>
@@ -238,7 +251,11 @@ const suggestions = computed(() => {
                 </template>
 
                 <div v-if="pendingUserMessage" class="flex justify-end">
-                    <div class="max-w-[85%] rounded-2xl rounded-br-md bg-slate-900 px-4 py-2.5 text-sm leading-relaxed text-white">
+                    <div
+                        class="max-w-[85%] rounded-2xl rounded-br-md bg-slate-900 px-4 py-2.5 text-sm leading-relaxed text-white"
+                        :class="messageDirectionClass(pendingUserMessage)"
+                        :dir="messageDirection(pendingUserMessage)"
+                    >
                         {{ pendingUserMessage }}
                     </div>
                 </div>
@@ -279,8 +296,9 @@ const suggestions = computed(() => {
                             rows="3"
                             required
                             :disabled="form.processing"
+                            :dir="messageDirection(form.message)"
                             :placeholder="form.processing ? 'Waiting for answer…' : (scope ? `Ask about ${scopeLabel}…` : 'Ask about screening, applications, or cohorts…')"
-                            class="w-full resize-none border-0 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-0 disabled:opacity-60"
+                            class="w-full resize-none border-0 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-0 disabled:opacity-60 text-start [unicode-bidi:plaintext]"
                             @keydown.enter.exact.prevent="submit"
                         />
                         <div class="flex items-center justify-between border-t border-slate-100 px-3 py-2">

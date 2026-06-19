@@ -1,5 +1,5 @@
 <script setup>
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import AppShell from '../../Components/Layout/AppShell.vue';
 import StatCard from '../../Components/Ui/StatCard.vue';
 
@@ -16,19 +16,7 @@ defineProps({
 const page = usePage();
 
 function checkout(plan) {
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = `/billing/checkout/${plan}`;
-    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    if (token) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = '_token';
-        input.value = token;
-        form.appendChild(input);
-    }
-    document.body.appendChild(form);
-    form.submit();
+    router.post(`/billing/checkout/${plan}`);
 }
 </script>
 

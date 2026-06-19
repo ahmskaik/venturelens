@@ -28,6 +28,7 @@ const pinnedNav = [
     { href: '/ask', label: 'Ask', icon: 'chat' },
     { href: '/ai-operations', label: 'AI Operations', icon: 'ai' },
     { href: '/impact', label: 'Impact', icon: 'impact', external: true },
+    { href: '/evidence-explorer/', label: 'Evidence', icon: 'evidence', external: true },
 ];
 
 const currentPath = computed(() => page.url.split('?')[0]);
@@ -108,17 +109,27 @@ function isActive(href) {
                 </Link>
 
                 <p class="vl-sidebar-section">Shortcuts</p>
-                <Link
-                    v-for="item in pinnedNav"
-                    :key="item.href"
-                    :href="item.href"
-                    :target="item.external ? '_blank' : undefined"
-                    class="vl-sidebar-link"
-                    :class="{ 'vl-sidebar-link-active': !item.external && isActive(item.href) }"
-                >
-                    <NavIcon :name="item.icon" />
-                    {{ item.label }}
-                </Link>
+                <template v-for="item in pinnedNav" :key="item.href">
+                    <a
+                        v-if="item.external"
+                        :href="item.href"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="vl-sidebar-link"
+                    >
+                        <NavIcon :name="item.icon" />
+                        {{ item.label }}
+                    </a>
+                    <Link
+                        v-else
+                        :href="item.href"
+                        class="vl-sidebar-link"
+                        :class="{ 'vl-sidebar-link-active': isActive(item.href) }"
+                    >
+                        <NavIcon :name="item.icon" />
+                        {{ item.label }}
+                    </Link>
+                </template>
             </nav>
 
             <div class="space-y-3 border-t border-slate-100 p-4">

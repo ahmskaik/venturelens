@@ -97,7 +97,7 @@ class ScreenApplicationJob implements ShouldQueue
                 step: 'gemini_screen_failed',
                 application: $application,
                 decision: 'screening_error',
-                actionTaken: $result->error,
+                actionTaken: mb_substr($result->error, 0, 500),
                 status: 'failed',
             );
 

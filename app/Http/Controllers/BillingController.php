@@ -8,6 +8,7 @@ use App\Services\RevenueClassifier;
 use App\Services\StripePriceResolver;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Cashier\Cashier;
@@ -57,7 +58,7 @@ class BillingController extends Controller
         ]);
     }
 
-    public function checkout(Request $request, string $plan, RevenueClassifier $classifier, StripePriceResolver $priceResolver): RedirectResponse|\Laravel\Cashier\Checkout
+    public function checkout(Request $request, string $plan, RevenueClassifier $classifier, StripePriceResolver $priceResolver): RedirectResponse|\Laravel\Cashier\Checkout|HttpResponse
     {
         abort_unless(in_array($plan, ['cohort', 'starter'], true), 404);
 

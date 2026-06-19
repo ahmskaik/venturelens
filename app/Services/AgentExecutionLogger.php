@@ -30,7 +30,7 @@ class AgentExecutionLogger
             'agent_name' => $agentName,
             'step' => $step,
             'decision' => $decision,
-            'action_taken' => $actionTaken,
+            'action_taken' => $actionTaken !== null ? mb_substr($actionTaken, 0, 2000) : null,
             'autonomy_level' => $autonomyLevel,
             'confidence' => $confidence,
             'human_minutes_saved' => $humanMinutesSaved,

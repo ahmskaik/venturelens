@@ -82,18 +82,35 @@ class KnowledgeChunkBuilder
         ];
 
         if ($screening) {
+            $riskFlagsText = $screening->risk_flags
+                ? 'Risk flags: '.$this->formatRiskFlags($screening->risk_flags)
+                : null;
+
             $screeningText = implode("\n", array_filter([
                 "AI overall score: {$screening->overall_score}",
                 "Recommendation: {$screening->recommendation}",
-                $screening->summary ? "Summary: {$screening->summary}" : null,
+                $riskFlagsText,
                 $screening->strengths ? 'Strengths: '.implode('; ', $screening->strengths) : null,
                 $screening->weaknesses ? 'Weaknesses: '.implode('; ', $screening->weaknesses) : null,
-                $screening->risk_flags ? 'Risk flags: '.$this->formatRiskFlags($screening->risk_flags) : null,
+                $screening->summary ? "Summary: {$screening->summary}" : null,
             ]));
 
             $chunks[] = $this->doc($orgId, $programId, 'application', $appId, "application:{$appId}:screening",
                 $application->startup_name.' — screening', $screeningText,
                 ['url' => "/applications/{$appId}", 'section' => 'screening']);
+
+            if ($screening->risk_flags) {
+                $chunks[] = $this->doc(
+                    $orgId,
+                    $programId,
+                    'application',
+                    $appId,
+                    "application:{$appId}:risk-flags",
+                    $application->startup_name.' — risk flags',
+                    "Startup: {$application->startup_name}\n".$riskFlagsText,
+                    ['url' => "/applications/{$appId}", 'section' => 'risk_flags'],
+                );
+            }
         }
 
         $narrative = implode("\n", array_filter([
@@ -208,9 +225,14 @@ class KnowledgeChunkBuilder
      */
     private function formatRiskFlags(array $flags): string
     {
-        return implode('; ', array_map(
-            fn ($f) => is_array($f) ? ($f['message'] ?? json_encode($f)) : (string) $f,
-            $flags
-        ));
+        return implode('; ', array_map(function ($f) {
+            if (! is_array($f)) {
+                return (string) $f;
+            }
+            $severity = isset($f['severity']) ? '['.$f['severity'].'] ' : '';
+            $message = $f['message'] ?? json_encode($f);
+
+            return $severity.$message;
+        }, $flags));
     }
 }

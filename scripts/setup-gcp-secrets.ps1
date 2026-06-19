@@ -71,8 +71,13 @@ if ($env:QDRANT_API_KEY) {
     Set-GcpSecret "qdrant-api-key" $env:QDRANT_API_KEY
 }
 
+if ($env:GEMINI_API_KEYS) {
+    Set-GcpSecret "gemini-api-keys-pool" $env:GEMINI_API_KEYS
+}
+
 Write-Host ""
 Write-Host "Done. Non-secret Stripe vars passed at deploy time:"
 Write-Host "  STRIPE_PRICE_COHORT=$($env:STRIPE_PRICE_COHORT)"
 Write-Host "  STRIPE_PRICE_STARTER=$($env:STRIPE_PRICE_STARTER)"
 Write-Host "  RAG_VECTOR_STORE=$($env:RAG_VECTOR_STORE)"
+Write-Host "  GEMINI_KEY_POOL_ENABLED=$($env:GEMINI_KEY_POOL_ENABLED)"

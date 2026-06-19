@@ -37,6 +37,10 @@ return [
 
     'gemini' => [
         'api_key' => env('GEMINI_API_KEY'),
+        // Comma- or newline-separated extra keys (used when key_pool_enabled=true)
+        'api_keys' => env('GEMINI_API_KEYS'),
+        'key_pool_enabled' => filter_var(env('GEMINI_KEY_POOL_ENABLED', false), FILTER_VALIDATE_BOOL),
+        'key_pool_quota_cooldown' => env('GEMINI_KEY_POOL_QUOTA_COOLDOWN', 60),
         'timeout' => env('GEMINI_TIMEOUT', 60),
         'max_retries' => env('GEMINI_MAX_RETRIES', 5),
         'chat_timeout' => env('GEMINI_CHAT_TIMEOUT', 30),

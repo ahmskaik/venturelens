@@ -7,6 +7,14 @@ import { buildImpactJsonLd, seoDefaults } from '../../seo/defaults.js';
 
 const props = defineProps({
     metrics: Object,
+    archivedSnapshots: {
+        type: Array,
+        default: () => [],
+    },
+    gcsBucket: {
+        type: String,
+        default: null,
+    },
 });
 
 const page = usePage();
@@ -52,6 +60,7 @@ function barWidth(count, max) {
                     <Link href="/dashboard" class="vl-btn-ghost">Dashboard</Link>
                     <a href="/api/v1/impact.json" class="text-sm font-medium text-brand-600 hover:text-brand-700" target="_blank">JSON API</a>
                     <a href="/widgets/impact/" class="text-sm font-medium text-brand-600 hover:text-brand-700" target="_blank">Embed widget</a>
+                    <a href="/evidence-explorer/" class="text-sm font-medium text-brand-600 hover:text-brand-700" target="_blank">Evidence explorer</a>
                 </nav>
             </div>
         </header>
@@ -205,6 +214,39 @@ function barWidth(count, max) {
                         </tbody>
                     </table>
                 </div>
+            </section>
+
+            <section v-if="archivedSnapshots.length" class="border-t border-slate-200 pt-8">
+                <h2 class="text-base font-semibold text-slate-900">Archived snapshots</h2>
+                <p class="mt-1 text-sm text-slate-600">
+                    Nightly JSON evidence from the repository and Google Cloud Storage
+                    <span v-if="gcsBucket">(<code class="text-xs">{{ gcsBucket }}/evidence/</code>)</span>.
+                </p>
+                <ul class="mt-4 divide-y divide-slate-100 rounded-xl border border-slate-200 bg-white">
+                    <li
+                        v-for="snapshot in archivedSnapshots"
+                        :key="snapshot.name"
+                        class="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm"
+                    >
+                        <div>
+                            <a
+                                :href="snapshot.url"
+                                class="font-medium text-brand-600 hover:text-brand-700"
+                                target="_blank"
+                                rel="noopener"
+                            >
+                                {{ snapshot.name }}
+                            </a>
+                            <span class="ml-2 text-xs text-slate-400">{{ snapshot.date }}</span>
+                        </div>
+                        <span
+                            class="rounded-full px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide"
+                            :class="snapshot.source === 'gcs' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'"
+                        >
+                            {{ snapshot.source }}
+                        </span>
+                    </li>
+                </ul>
             </section>
         </main>
 

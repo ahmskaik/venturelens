@@ -1,0 +1,14 @@
+.git
+.gitignore
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+test_main.py
+README.md
+INTEGRATION.md
+LICENSE
+deploy.ps1
+deploy.sh
+.gcloudignore

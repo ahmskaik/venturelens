@@ -12,7 +12,7 @@ fi
 if [ "$CONTAINER_ROLE" = "worker" ]; then
   php artisan migrate --force
   php artisan schedule:work &
-  php artisan queue:work --sleep=3 --tries=3 --timeout=120 &
+  php artisan queue:work --sleep=5 --tries=3 --timeout=330 &
   exec php artisan serve --host=0.0.0.0 --port="${PORT:-8080}"
 fi
 

@@ -50,6 +50,29 @@ Use this before demo video, judge testing, or heavy `/ask` usage. The hackathon 
 3. Avoid burst demos: space out Replay screening + multiple `/ask` questions.
 4. VentureLens chat already **fails fast** on quota (no 60s retry loops) — errors in &lt;1s mean billing/quota, not vector store.
 
+### Optional: multi-key pool (free tier, no billing)
+
+When you are not ready to link AI Studio billing, you can spread load across multiple free-tier keys from different accounts:
+
+```env
+GEMINI_API_KEY=your_primary_key
+GEMINI_KEY_POOL_ENABLED=true
+GEMINI_API_KEYS=key_from_account_2,key_from_account_3,key_from_account_4
+GEMINI_KEY_POOL_QUOTA_COOLDOWN=60
+```
+
+- **`GEMINI_KEY_POOL_ENABLED=true`** — round-robin keys; on free-tier 429, cooldown that key and try the next.
+- **`GEMINI_KEY_POOL_ENABLED=false`** — normal single-key mode (use after you link billing on `GEMINI_API_KEY`).
+
+Upload pool keys to production:
+
+```powershell
+.\scripts\setup-gcp-secrets.ps1   # stores gemini-api-keys-pool when GEMINI_API_KEYS is set
+.\scripts\deploy-cloud-run.ps1 worker
+```
+
+Logs show `gemini.key_rotated` with `key_index` (never the raw key). **Policy note:** circumventing per-account limits may violate Google terms — prefer billing for the final submission.
+
 ### Google Antigravity IDE (optional — does not replace production billing)
 
 [Google Antigravity](https://antigravity.google/) is an agent-first IDE in the Gemini hackathon ecosystem. It can speed up **your** development (prototyping, scripts, side experiments) and may offer separate **Ultra / builder perks** — but it is **not** how `venturelens.app` calls Gemini in production.

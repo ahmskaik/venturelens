@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Applicant;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreApplicationRequest;
+use App\Jobs\IndexKnowledgeChunksJob;
 use App\Jobs\ScreenApplicationJob;
 use App\Models\Application;
 use App\Models\ApplicationFile;
@@ -96,6 +97,7 @@ class ApplicationController extends Controller
             actionTaken: 'Application submitted — dispatching ScreenApplicationJob',
         );
 
+        IndexKnowledgeChunksJob::dispatch($application->id)->afterResponse();
         ScreenApplicationJob::dispatch($application->id)->afterResponse();
 
         return redirect()->route('apply.status', [

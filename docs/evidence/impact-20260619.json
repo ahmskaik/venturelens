@@ -1,0 +1,245 @@
+﻿{
+    "generated_at":  "2026-06-19T12:29:24+00:00",
+    "assumptions":  {
+                        "manual_review_minutes_per_app":  45,
+                        "avg_jobs_per_startup":  3,
+                        "jobs_influenced_note":  "Modeled: accepted_startups × avg_jobs_per_startup"
+                    },
+    "business":  {
+                     "arms_length_paying_customers":  5,
+                     "arms_length_revenue_usd":  995,
+                     "related_party_revenue_usd":  0,
+                     "total_revenue_usd":  995,
+                     "subscription_renewals":  0
+                 },
+    "activity":  {
+                     "applications_screened":  26,
+                     "gemini_api_calls":  33,
+                     "gemini_tokens":  57453,
+                     "registered_organizations":  6,
+                     "programs_enabled":  5,
+                     "countries_reached":  6
+                 },
+    "ai_operations":  {
+                          "total_agent_actions":  8740,
+                          "ai_decided_actions":  8721,
+                          "pct_decisions_by_ai":  99.8,
+                          "autonomy_distribution":  [
+                                                        3,
+                                                        16,
+                                                        8,
+                                                        8713
+                                                    ],
+                          "by_agent":  {
+                                           "screening":  8702,
+                                           "growth":  7,
+                                           "support":  10,
+                                           "onboarding":  7,
+                                           "finance":  7,
+                                           "success":  7
+                                       },
+                          "human_hours_displaced":  27.8
+                      },
+    "impact":  {
+                   "founder_hours_saved":  19.5,
+                   "founders_timely_feedback":  23,
+                   "jobs_influenced_modeled":  6,
+                   "accepted_startups":  2
+               },
+    "testimonials":  [
+                         {
+                             "name":  "Sarah Chen",
+                             "role":  "Program Director, Demo Incubator",
+                             "quote":  "We screened our entire cohort in a weekend instead of three weeks. Founders got feedback the same day.",
+                             "url":  null
+                         }
+                     ],
+    "recent_agent_executions":  [
+                                    {
+                                        "agent_name":  "success",
+                                        "step":  "testimonial_request_drafted",
+                                        "decision":  "draft_testimonial_request",
+                                        "action_taken":  "Drafted fallback testimonial request (draft #5)",
+                                        "autonomy_level":  1,
+                                        "status":  "completed",
+                                        "created_at":  "2026-06-19T12:29:21+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "finance",
+                                        "step":  "stripe_reconcile",
+                                        "decision":  "classify_arms_length",
+                                        "action_taken":  "Auto-classified Stripe cohort charge ($199.00) as arms-length (source: checkout)",
+                                        "autonomy_level":  3,
+                                        "status":  "completed",
+                                        "created_at":  "2026-06-19T12:29:21+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "gemini_screen_failed",
+                                        "decision":  "screening_error",
+                                        "action_taken":  "Gemini transient error (429): You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 40.509530683s.",
+                                        "autonomy_level":  3,
+                                        "status":  "failed",
+                                        "created_at":  "2026-06-19T12:29:19+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "gemini_screen_called",
+                                        "decision":  "call_gemini",
+                                        "action_taken":  "Invoking Gemini screening API",
+                                        "autonomy_level":  3,
+                                        "status":  "started",
+                                        "created_at":  "2026-06-19T12:29:19+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "document_parsed",
+                                        "decision":  "documents_ready",
+                                        "action_taken":  "Extracted text from 0 file(s)",
+                                        "autonomy_level":  3,
+                                        "status":  "completed",
+                                        "created_at":  "2026-06-19T12:29:19+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "intake_received",
+                                        "decision":  "process_application",
+                                        "action_taken":  "Application queued for Gemini screening",
+                                        "autonomy_level":  3,
+                                        "status":  "completed",
+                                        "created_at":  "2026-06-19T12:29:19+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "gemini_screen_failed",
+                                        "decision":  "screening_error",
+                                        "action_taken":  "Gemini transient error (429): You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 45.774507884s.",
+                                        "autonomy_level":  3,
+                                        "status":  "failed",
+                                        "created_at":  "2026-06-19T12:29:14+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "gemini_screen_called",
+                                        "decision":  "call_gemini",
+                                        "action_taken":  "Invoking Gemini screening API",
+                                        "autonomy_level":  3,
+                                        "status":  "started",
+                                        "created_at":  "2026-06-19T12:29:14+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "document_parsed",
+                                        "decision":  "documents_ready",
+                                        "action_taken":  "Extracted text from 0 file(s)",
+                                        "autonomy_level":  3,
+                                        "status":  "completed",
+                                        "created_at":  "2026-06-19T12:29:14+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "intake_received",
+                                        "decision":  "process_application",
+                                        "action_taken":  "Application queued for Gemini screening",
+                                        "autonomy_level":  3,
+                                        "status":  "completed",
+                                        "created_at":  "2026-06-19T12:29:14+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "gemini_screen_failed",
+                                        "decision":  "screening_error",
+                                        "action_taken":  "Gemini transient error (429): You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.019307033s.",
+                                        "autonomy_level":  3,
+                                        "status":  "failed",
+                                        "created_at":  "2026-06-19T12:29:13+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "gemini_screen_called",
+                                        "decision":  "call_gemini",
+                                        "action_taken":  "Invoking Gemini screening API",
+                                        "autonomy_level":  3,
+                                        "status":  "started",
+                                        "created_at":  "2026-06-19T12:29:13+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "document_parsed",
+                                        "decision":  "documents_ready",
+                                        "action_taken":  "Extracted text from 0 file(s)",
+                                        "autonomy_level":  3,
+                                        "status":  "completed",
+                                        "created_at":  "2026-06-19T12:29:13+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "intake_received",
+                                        "decision":  "process_application",
+                                        "action_taken":  "Application queued for Gemini screening",
+                                        "autonomy_level":  3,
+                                        "status":  "completed",
+                                        "created_at":  "2026-06-19T12:29:13+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "gemini_screen_failed",
+                                        "decision":  "screening_error",
+                                        "action_taken":  "Gemini transient error (429): You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 51.281307801s.",
+                                        "autonomy_level":  3,
+                                        "status":  "failed",
+                                        "created_at":  "2026-06-19T12:29:08+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "gemini_screen_called",
+                                        "decision":  "call_gemini",
+                                        "action_taken":  "Invoking Gemini screening API",
+                                        "autonomy_level":  3,
+                                        "status":  "started",
+                                        "created_at":  "2026-06-19T12:29:08+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "document_parsed",
+                                        "decision":  "documents_ready",
+                                        "action_taken":  "Extracted text from 0 file(s)",
+                                        "autonomy_level":  3,
+                                        "status":  "completed",
+                                        "created_at":  "2026-06-19T12:29:08+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "intake_received",
+                                        "decision":  "process_application",
+                                        "action_taken":  "Application queued for Gemini screening",
+                                        "autonomy_level":  3,
+                                        "status":  "completed",
+                                        "created_at":  "2026-06-19T12:29:08+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "gemini_screen_failed",
+                                        "decision":  "screening_error",
+                                        "action_taken":  "Gemini transient error (429): You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 51.565906658s.",
+                                        "autonomy_level":  3,
+                                        "status":  "failed",
+                                        "created_at":  "2026-06-19T12:29:08+00:00"
+                                    },
+                                    {
+                                        "agent_name":  "screening",
+                                        "step":  "gemini_screen_called",
+                                        "decision":  "call_gemini",
+                                        "action_taken":  "Invoking Gemini screening API",
+                                        "autonomy_level":  3,
+                                        "status":  "started",
+                                        "created_at":  "2026-06-19T12:29:08+00:00"
+                                    }
+                                ],
+    "scorecard_floors":  {
+                             "arms_length_paying_customers":  3,
+                             "arms_length_revenue_usd":  600,
+                             "applications_screened":  100,
+                             "pct_decisions_by_ai":  50
+                         }
+}

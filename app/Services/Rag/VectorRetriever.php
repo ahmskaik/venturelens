@@ -9,12 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class VectorRetriever
 {
-    /** @var list<string> */
-    private const STOP_WORDS = [
-        'the', 'and', 'for', 'what', 'how', 'does', 'are', 'can', 'you', 'our', 'this', 'that', 'with',
-        'do', 'know', 'who', 'tell', 'about', 'have', 'any', 'there', 'from', 'your',
-    ];
-
     public function __construct(
         private readonly GeminiEmbeddingService $embeddings,
         private readonly Contracts\VectorStoreInterface $vectorStore,
@@ -27,10 +21,8 @@ class VectorRetriever
     public function retrieve(Organization $organization, ?int $programId, string $question, int $limit = 8): array
     {
         $limit = $limit > 0 ? $limit : (int) config('rag.retrieval.top_k', 8);
-        $tokens = $this->extractSearchTokens($question);
-        $nameHits = $tokens !== []
-            ? $this->retrieveByNameTokens($organization, $programId, $tokens, min(4, $limit))
-            : [];
+        $nameHits = $this->retrieveByName($organization, $programId, $question, min(4, $limit));
+        $nameTokens = RagQueryTokenizer::latinWordTokens($question);
 
         if (! $this->isIndexed($organization->id)) {
             $this->queueIndex($organization, $programId);
@@ -40,11 +32,15 @@ class VectorRetriever
                 : $this->coldStartChunks($organization, $question, $limit);
         }
 
-        if ($nameHits !== [] && $this->isStrongNameMatch($tokens, $nameHits)) {
-            return $this->mergeChunks($nameHits, [], $limit);
+        if ($nameHits !== [] && $this->isStrongNameMatch($nameTokens, $nameHits)) {
+            return $this->mergeChunks(
+                $this->expandApplicationChunks($organization, $programId, $nameHits, $question),
+                [],
+                $limit,
+            );
         }
 
-        if (! $this->looksLikeDataQuery($question, $tokens)) {
+        if (! RagQueryTokenizer::looksLikeDataQuery($question)) {
             $platformHits = $this->coldStartChunks($organization, $question, min($limit, 5));
             $topScore = $platformHits[0]['meta']['score'] ?? 0.0;
             if ($topScore >= (float) config('rag.retrieval.platform_fast_path_score', 2.0)) {
@@ -114,30 +110,66 @@ class VectorRetriever
     }
 
     /**
-     * @param  list<string>  $tokens
-     * @param  list<array{id: string, title: string, text: string, meta: array<string, mixed>}>  $hits
+     * @return list<array{id: string, title: string, text: string, meta: array<string, mixed>}>
      */
-    private function isStrongNameMatch(array $tokens, array $hits): bool
+    private function retrieveByName(Organization $organization, ?int $programId, string $question, int $limit): array
     {
-        if ($hits === [] || $tokens === []) {
-            return false;
-        }
-
-        $haystack = mb_strtolower($hits[0]['title'].' '.$hits[0]['text']);
-        foreach ($tokens as $token) {
-            if (! str_contains($haystack, mb_strtolower($token))) {
-                return false;
+        $phrases = RagQueryTokenizer::latinNamePhrases($question);
+        if ($phrases !== []) {
+            $byPhrase = $this->retrieveByNamePhrases($organization, $programId, $phrases, $question, $limit);
+            if ($byPhrase !== []) {
+                return $byPhrase;
             }
         }
 
-        return true;
+        $latinTokens = RagQueryTokenizer::latinWordTokens($question);
+        if ($latinTokens !== []) {
+            return $this->retrieveByNameTokens($organization, $programId, $latinTokens, $question, $limit);
+        }
+
+        return [];
+    }
+
+    /**
+     * @param  list<string>  $phrases
+     * @return list<array{id: string, title: string, text: string, meta: array<string, mixed>}>
+     */
+    private function retrieveByNamePhrases(
+        Organization $organization,
+        ?int $programId,
+        array $phrases,
+        string $question,
+        int $limit,
+    ): array {
+        $query = KnowledgeChunk::where('organization_id', $organization->id);
+
+        if ($programId) {
+            $query->where(function ($q) use ($programId) {
+                $q->whereNull('program_id')->orWhere('program_id', $programId);
+            });
+        }
+
+        $query->where(function ($q) use ($phrases) {
+            foreach ($phrases as $phrase) {
+                $q->orWhere('title', 'like', '%'.$phrase.'%')
+                    ->orWhere('content', 'like', '%'.$phrase.'%');
+            }
+        });
+
+        return $this->mapChunkResults(
+            $query->orderByRaw($this->chunkSectionOrderSql($question))
+                ->orderByRaw("CASE WHEN source_type = 'application' THEN 0 ELSE 1 END")
+                ->orderByDesc('embedded_at')
+                ->limit($limit)
+                ->get()
+        );
     }
 
     /**
      * @param  list<string>  $tokens
      * @return list<array{id: string, title: string, text: string, meta: array<string, mixed>}>
      */
-    private function retrieveByNameTokens(Organization $organization, ?int $programId, array $tokens, int $limit): array
+    private function retrieveByNameTokens(Organization $organization, ?int $programId, array $tokens, string $question, int $limit): array
     {
         $query = KnowledgeChunk::where('organization_id', $organization->id);
 
@@ -154,22 +186,56 @@ class VectorRetriever
             });
         }
 
-        return $query->orderByRaw("CASE WHEN source_type = 'application' THEN 0 ELSE 1 END")
-            ->orderByDesc('embedded_at')
-            ->limit($limit)
-            ->get()
-            ->map(fn (KnowledgeChunk $chunk) => [
-                'id' => $chunk->chunk_key,
-                'title' => $chunk->title,
-                'text' => $chunk->content,
-                'meta' => array_merge($chunk->metadata ?? [], [
-                    'type' => $chunk->source_type,
-                    'score' => 1.0,
-                    'name_match' => true,
-                    'url' => $chunk->metadata['url'] ?? null,
-                ]),
-            ])
-            ->all();
+        return $this->mapChunkResults(
+            $query->orderByRaw($this->chunkSectionOrderSql($question))
+                ->orderByRaw("CASE WHEN source_type = 'application' THEN 0 ELSE 1 END")
+                ->orderByDesc('embedded_at')
+                ->limit($limit)
+                ->get()
+        );
+    }
+
+    /**
+     * @param  \Illuminate\Support\Collection<int, KnowledgeChunk>  $chunks
+     * @return list<array{id: string, title: string, text: string, meta: array<string, mixed>}>
+     */
+    private function mapChunkResults($chunks): array
+    {
+        return $chunks->map(fn (KnowledgeChunk $chunk) => [
+            'id' => $chunk->chunk_key,
+            'title' => $chunk->title,
+            'text' => $chunk->content,
+            'meta' => array_merge($chunk->metadata ?? [], [
+                'type' => $chunk->source_type,
+                'score' => 1.0,
+                'name_match' => true,
+                'url' => $chunk->metadata['url'] ?? null,
+            ]),
+        ])->all();
+    }
+
+    /**
+     * @param  list<string>  $tokens
+     * @param  list<array{id: string, title: string, text: string, meta: array<string, mixed>}>  $hits
+     */
+    private function isStrongNameMatch(array $tokens, array $hits): bool
+    {
+        if ($hits === []) {
+            return false;
+        }
+
+        if ($tokens === []) {
+            return true;
+        }
+
+        $haystack = mb_strtolower($hits[0]['title'].' '.$hits[0]['text']);
+        foreach ($tokens as $token) {
+            if (! str_contains($haystack, mb_strtolower($token))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -194,43 +260,6 @@ class VectorRetriever
         }
 
         return $merged;
-    }
-
-    /**
-     * @return list<string>
-     */
-    private function extractSearchTokens(string $question): array
-    {
-        $words = preg_split('/\W+/u', $question) ?: [];
-        $tokens = [];
-
-        foreach ($words as $word) {
-            $word = trim($word);
-            if (mb_strlen($word) < 3) {
-                continue;
-            }
-            if (in_array(mb_strtolower($word), self::STOP_WORDS, true)) {
-                continue;
-            }
-            $tokens[] = $word;
-        }
-
-        return array_slice(array_values(array_unique($tokens)), 0, 4);
-    }
-
-    /**
-     * @param  list<string>  $tokens
-     */
-    private function looksLikeDataQuery(string $question, array $tokens): bool
-    {
-        $q = mb_strtolower($question);
-        foreach (['startup', 'application', 'founder', 'portfolio', 'applied', 'submitted', 'company', 'pitch', 'know', 'who'] as $needle) {
-            if (str_contains($q, $needle)) {
-                return true;
-            }
-        }
-
-        return count($tokens) >= 2;
     }
 
     /**
@@ -278,14 +307,12 @@ class VectorRetriever
      */
     private function fallbackKeywordRetrieve(Organization $organization, ?int $programId, string $question, int $limit): array
     {
-        $tokens = $this->extractSearchTokens($question);
-        if ($tokens !== []) {
-            $byName = $this->retrieveByNameTokens($organization, $programId, $tokens, $limit);
-            if ($byName !== []) {
-                return $byName;
-            }
+        $byName = $this->retrieveByName($organization, $programId, $question, $limit);
+        if ($byName !== []) {
+            return $byName;
         }
 
+        $tokens = RagQueryTokenizer::searchTokens($question);
         $query = KnowledgeChunk::where('organization_id', $organization->id);
         if ($programId) {
             $query->where(function ($q) use ($programId) {
@@ -365,5 +392,88 @@ class VectorRetriever
         }
 
         return $score;
+    }
+
+    /**
+     * When a startup name matches, pull all indexed chunks for that application
+     * (screening, risk flags, overview) instead of only the first SQL hit.
+     *
+     * @param  list<array{id: string, title: string, text: string, meta: array<string, mixed>}>  $nameHits
+     * @return list<array{id: string, title: string, text: string, meta: array<string, mixed>}>
+     */
+    private function expandApplicationChunks(
+        Organization $organization,
+        ?int $programId,
+        array $nameHits,
+        string $question,
+    ): array {
+        $appIds = [];
+        foreach ($nameHits as $hit) {
+            if (preg_match('/application:(\d+):/', $hit['id'], $m)) {
+                $appIds[] = (int) $m[1];
+            }
+        }
+
+        $appIds = array_values(array_unique($appIds));
+        if ($appIds === []) {
+            return $nameHits;
+        }
+
+        $query = KnowledgeChunk::where('organization_id', $organization->id)
+            ->where('source_type', 'application')
+            ->whereIn('source_id', $appIds);
+
+        if ($programId) {
+            $query->where(function ($q) use ($programId) {
+                $q->whereNull('program_id')->orWhere('program_id', $programId);
+            });
+        }
+
+        return $query->orderByRaw($this->chunkSectionOrderSql($question))
+            ->get()
+            ->map(fn (KnowledgeChunk $chunk) => [
+                'id' => $chunk->chunk_key,
+                'title' => $chunk->title,
+                'text' => $chunk->content,
+                'meta' => array_merge($chunk->metadata ?? [], [
+                    'type' => $chunk->source_type,
+                    'score' => 1.0,
+                    'name_match' => true,
+                    'url' => $chunk->metadata['url'] ?? null,
+                    'section' => $chunk->metadata['section'] ?? null,
+                ]),
+            ])
+            ->all();
+    }
+
+    private function chunkSectionOrderSql(string $question): string
+    {
+        $q = mb_strtolower($question);
+
+        if (str_contains($q, 'risk') || str_contains($q, 'flag') || str_contains($q, 'مخاطر')) {
+            return "CASE JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.section'))
+                WHEN 'risk_flags' THEN 0
+                WHEN 'screening' THEN 1
+                WHEN 'overview' THEN 2
+                ELSE 3 END";
+        }
+
+        if (
+            str_contains($q, 'strength') || str_contains($q, 'weakness') || str_contains($q, 'score')
+            || str_contains($q, 'screen') || str_contains($q, 'نقاط') || str_contains($q, 'قوة')
+            || str_contains($q, 'ضعف') || str_contains($q, 'تقييم')
+        ) {
+            return "CASE JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.section'))
+                WHEN 'screening' THEN 0
+                WHEN 'risk_flags' THEN 1
+                WHEN 'overview' THEN 2
+                ELSE 3 END";
+        }
+
+        return "CASE JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.section'))
+            WHEN 'overview' THEN 0
+            WHEN 'screening' THEN 1
+            WHEN 'risk_flags' THEN 2
+            ELSE 3 END";
     }
 }

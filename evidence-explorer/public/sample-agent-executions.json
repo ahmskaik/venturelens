@@ -1,0 +1,137 @@
+[
+  {
+    "agent_name": "screening",
+    "step": "gemini_screen",
+    "decision": "score_78",
+    "action_taken": "Screened application with Gemini",
+    "autonomy_level": 3,
+    "status": "completed",
+    "created_at": "2026-06-10T14:00:00+00:00"
+  },
+  {
+    "agent_name": "screening",
+    "step": "quota_check",
+    "decision": "allow",
+    "action_taken": "Quota available — proceeding with screening",
+    "autonomy_level": 3,
+    "status": "completed",
+    "created_at": "2026-06-10T13:58:00+00:00"
+  },
+  {
+    "agent_name": "growth",
+    "step": "growth_outreach_drafted",
+    "decision": "draft_outreach",
+    "action_taken": "Drafted outreach to Istanbul University Innovation Hub (not sent — human review required)",
+    "autonomy_level": 1,
+    "status": "completed",
+    "created_at": "2026-06-10T13:45:00+00:00"
+  },
+  {
+    "agent_name": "growth",
+    "step": "content_draft",
+    "decision": "draft_blog",
+    "action_taken": "Drafted blog post on fair startup selection",
+    "autonomy_level": 1,
+    "status": "completed",
+    "created_at": "2026-06-10T12:30:00+00:00"
+  },
+  {
+    "agent_name": "support",
+    "step": "support_ticket_handled",
+    "decision": "auto_resolve",
+    "action_taken": "Auto-answered billing FAQ via RAG",
+    "autonomy_level": 3,
+    "status": "completed",
+    "created_at": "2026-06-10T11:20:00+00:00"
+  },
+  {
+    "agent_name": "support",
+    "step": "support_ticket_handled",
+    "decision": "escalate_to_human",
+    "action_taken": "Escalated custom integration question to owner",
+    "autonomy_level": 1,
+    "status": "completed",
+    "created_at": "2026-06-10T10:15:00+00:00"
+  },
+  {
+    "agent_name": "onboarding",
+    "step": "welcome_sequence",
+    "decision": "send_welcome",
+    "action_taken": "Sent onboarding checklist (approved by owner)",
+    "autonomy_level": 2,
+    "status": "completed",
+    "created_at": "2026-06-10T09:40:00+00:00"
+  },
+  {
+    "agent_name": "onboarding",
+    "step": "program_setup",
+    "decision": "suggest_rubric",
+    "action_taken": "Suggested default rubric template for new program",
+    "autonomy_level": 1,
+    "status": "completed",
+    "created_at": "2026-06-10T09:10:00+00:00"
+  },
+  {
+    "agent_name": "finance",
+    "step": "stripe_reconcile",
+    "decision": "classify_arms_length",
+    "action_taken": "Auto-classified Stripe charge as arms-length",
+    "autonomy_level": 3,
+    "status": "completed",
+    "created_at": "2026-06-10T08:55:00+00:00"
+  },
+  {
+    "agent_name": "finance",
+    "step": "stripe_reconcile",
+    "decision": "classify_related_party",
+    "action_taken": "Flagged demo org charge as related-party",
+    "autonomy_level": 3,
+    "status": "completed",
+    "created_at": "2026-06-10T08:50:00+00:00"
+  },
+  {
+    "agent_name": "success",
+    "step": "health_check",
+    "decision": "nudge_low_usage",
+    "action_taken": "Suggested screening 3 pending applications",
+    "autonomy_level": 2,
+    "status": "completed",
+    "created_at": "2026-06-10T08:30:00+00:00"
+  },
+  {
+    "agent_name": "success",
+    "step": "renewal_reminder",
+    "decision": "draft_renewal",
+    "action_taken": "Drafted renewal email for Starter plan",
+    "autonomy_level": 1,
+    "status": "completed",
+    "created_at": "2026-06-10T08:00:00+00:00"
+  },
+  {
+    "agent_name": "screening",
+    "step": "pdf_extract",
+    "decision": "extract_ok",
+    "action_taken": "Extracted pitch deck text from uploaded PDF",
+    "autonomy_level": 3,
+    "status": "completed",
+    "created_at": "2026-06-09T18:00:00+00:00"
+  },
+  {
+    "agent_name": "screening",
+    "step": "committee_decision",
+    "decision": "accept",
+    "action_taken": "Program manager recorded accepted decision (AI score: 75, recommendation: shortlist)",
+    "autonomy_level": 2,
+    "status": "completed",
+    "created_at": "2026-06-09T16:30:00+00:00"
+  },
+  {
+    "agent_name": "growth",
+    "step": "growth_outreach_drafted",
+    "decision": "draft_outreach",
+    "action_taken": "Drafted outreach to MENA Startup Accelerator",
+    "autonomy_level": 1,
+    "status": "completed",
+    "created_at": "2026-06-09T14:00:00+00:00"
+  }
+]

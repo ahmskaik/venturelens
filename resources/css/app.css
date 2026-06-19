@@ -221,7 +221,7 @@
 
     .vl-markdown ul,
     .vl-markdown ol {
-        @apply my-2 space-y-1 pl-5;
+        @apply my-2 space-y-1 ps-5;
     }
 
     .vl-markdown ul {
@@ -233,7 +233,7 @@
     }
 
     .vl-markdown li {
-        @apply pl-0.5;
+        @apply ps-0.5;
     }
 
     .vl-markdown li > p {
@@ -253,7 +253,7 @@
     }
 
     .vl-markdown blockquote {
-        @apply my-2 border-l-2 border-slate-200 pl-3 text-slate-600;
+        @apply my-2 border-s-2 border-slate-200 ps-3 text-slate-600;
     }
 
     .vl-markdown a {

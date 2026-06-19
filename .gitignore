@@ -23,3 +23,7 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 judge-smoke-report.json
+**/__pycache__/
+gcp-impact-archiver/.venv/
+gcp-impact-archiver/venv/
+evidence-explorer/node_modules/

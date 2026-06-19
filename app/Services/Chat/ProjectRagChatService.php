@@ -182,9 +182,14 @@ class ProjectRagChatService
                 model: config('services.gemini.models.flash', 'gemini-2.5-flash'),
                 systemPrompt: 'You are VentureLens Ask — a professional assistant for incubator staff. '
                     .'Answer using ONLY the retrieved context below. Be concise, accurate, and helpful. '
+                    .'Respond in the same language as the user question (Arabic or English). '
                     .'Format the answer field as Markdown (bold for names, numbered or bullet lists where helpful). '
-                    .'For founder or person questions, use founder lines and startup overview in context. '
-                    .'If the person is not in context, say you have no record of them in this workspace. '
+                    .'For startup, company, or founder questions, use overview and narrative sections in context. '
+                    .'When asked about risk flags, strengths, weaknesses, or scores, use screening sections when present. '
+                    .'If the startup IS in context but has status submitted/processing and no screening section, '
+                    .'say Gemini screening is still pending and summarize what is available from the profile — '
+                    .'do NOT claim the startup is unknown. '
+                    .'Only say you have no record when the startup name does not appear anywhere in retrieved context. '
                     .'Set escalate to true only for legal, contract, or account-deletion requests. '
                     .'Return valid JSON only with keys: answer, confidence, escalate.',
                 userPrompt: json_encode([
@@ -265,7 +270,9 @@ class ProjectRagChatService
         $trimmed = [];
 
         foreach ($chunks as $chunk) {
-            $text = mb_substr($chunk['text'], 0, self::CHUNK_CHAR_LIMIT);
+            $section = $chunk['meta']['section'] ?? null;
+            $charLimit = in_array($section, ['risk_flags', 'screening'], true) ? 2000 : self::CHUNK_CHAR_LIMIT;
+            $text = mb_substr($chunk['text'], 0, $charLimit);
             $block = $chunk;
             $block['text'] = $text;
             $total += mb_strlen($text) + mb_strlen($chunk['title']);

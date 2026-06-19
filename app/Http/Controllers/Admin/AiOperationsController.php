@@ -8,6 +8,7 @@ use App\Models\AgentExecution;
 use App\Models\BusinessAgent;
 use App\Models\GrowthOutreachDraft;
 use App\Models\SupportRequest;
+use App\Services\Agents\AgentRegistry;
 use App\Services\CompetitionMetrics;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ use Inertia\Response;
 
 class AiOperationsController extends Controller
 {
-    public function index(Request $request, CompetitionMetrics $metrics): Response
+    public function index(Request $request, CompetitionMetrics $metrics, AgentRegistry $registry): Response
     {
         $organization = $request->user()->primaryOrganization();
         abort_unless($organization, 404);
@@ -36,16 +37,21 @@ class AiOperationsController extends Controller
         return Inertia::render('AiOperations/Index', [
             'stats' => [
                 'total_actions' => $aiOps['total_agent_actions'],
+                'ai_decided_actions' => $aiOps['ai_decided_actions'],
                 'ai_decision_percent' => $aiOps['pct_decisions_by_ai'],
                 'human_hours_displaced' => $aiOps['human_hours_displaced'],
+                'gemini_api_calls' => $platform['activity']['gemini_api_calls'],
+                'applications_screened' => $platform['activity']['applications_screened'],
                 'by_agent' => $aiOps['by_agent'],
                 'autonomy_distribution' => $aiOps['autonomy_distribution'],
+                'generated_at' => $platform['generated_at'],
             ],
             'agents' => BusinessAgent::orderBy('name')->get()->map(fn ($a) => [
                 'name' => $a->name,
                 'enabled' => $a->enabled,
                 'autonomy_level' => $a->autonomy_level,
                 'daily_action_cap' => $a->daily_action_cap,
+                'actions_today' => $registry->actionsToday($a->name),
             ]),
             'executions' => $executions->map(fn ($e) => [
                 'agent_name' => $e->agent_name,

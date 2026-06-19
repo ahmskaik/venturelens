@@ -28,16 +28,21 @@ class KnowledgeIndexer
         $program->loadMissing('organization');
         $count = $this->indexDocuments($this->builder->programChunk($program));
 
-        $applications = Application::query()
+        $maxApps = (int) config('rag.chunking.max_applications_per_program', 0);
+        $query = Application::query()
             ->where('program_id', $program->id)
             ->with(['program.organization', 'latestScreeningResult'])
-            ->orderByDesc('submitted_at')
-            ->limit((int) config('rag.chunking.max_application_chunks', 200))
-            ->get();
+            ->orderByDesc('submitted_at');
 
-        foreach ($applications as $application) {
-            $count += $this->indexApplication($application);
+        if ($maxApps > 0) {
+            $query->limit($maxApps);
         }
+
+        $query->chunkById(100, function ($applications) use (&$count) {
+            foreach ($applications as $application) {
+                $count += $this->indexApplication($application);
+            }
+        });
 
         return $count;
     }
@@ -56,6 +61,35 @@ class KnowledgeIndexer
         ]);
 
         return $this->indexDocuments($this->builder->applicationChunks($application));
+    }
+
+    /** Queue embedding jobs for cohort applications not yet in the vector store. */
+    public function queueUnindexedApplications(Program $program, int $delaySeconds = 2): int
+    {
+        $program->loadMissing('organization');
+        $orgId = $program->organization_id;
+
+        $indexedIds = \App\Models\KnowledgeChunk::query()
+            ->where('organization_id', $orgId)
+            ->where('source_type', 'application')
+            ->whereNotNull('embedded_at')
+            ->distinct()
+            ->pluck('source_id');
+
+        $pending = Application::query()
+            ->where('program_id', $program->id)
+            ->when($indexedIds->isNotEmpty(), fn ($q) => $q->whereNotIn('id', $indexedIds))
+            ->orderBy('id')
+            ->pluck('id');
+
+        foreach ($pending as $i => $applicationId) {
+            $job = \App\Jobs\IndexKnowledgeChunksJob::dispatch($applicationId);
+            if ($delaySeconds > 0 && $i > 0) {
+                $job->delay(now()->addSeconds($delaySeconds * $i));
+            }
+        }
+
+        return $pending->count();
     }
 
     public function reindexOrganization(Organization $organization, ?int $programId = null): int

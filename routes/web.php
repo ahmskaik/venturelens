@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EvidenceSnapshotController;
 use App\Http\Controllers\ImpactController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Admin\AiOperationsController;
@@ -29,6 +30,10 @@ Route::get('/health', HealthController::class)->name('health');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::get('/impact', ImpactController::class)->name('impact');
+
+Route::get('/evidence/snapshots/{filename}', [EvidenceSnapshotController::class, 'show'])
+    ->where('filename', 'impact-\d{8}\.json')
+    ->name('evidence.snapshot');
 
 Route::get('/', function () {
     return Inertia::render('Welcome');

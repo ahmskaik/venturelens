@@ -39,6 +39,7 @@ return [
     ],
 
     'chunking' => [
-        'max_application_chunks' => 200,
+        // 0 = index every application in a cohort during rag:reindex (no cap).
+        'max_applications_per_program' => (int) env('RAG_MAX_APPLICATIONS_PER_PROGRAM', 0),
     ],
 ];

@@ -27,7 +27,7 @@ $SqlInstance = "${ProjectId}:${Region}:venturelens"
 function Get-RagEnvVars {
     $store = if ($env:RAG_VECTOR_STORE) { $env:RAG_VECTOR_STORE.ToLower() } else { 'mysql' }
     if ($store -notin @('mysql', 'qdrant')) {
-        Write-Warning "Invalid RAG_VECTOR_STORE=$store — using mysql"
+        Write-Warning "Invalid RAG_VECTOR_STORE=$store - using mysql"
         $store = 'mysql'
     }
 
@@ -61,6 +61,32 @@ function Get-RagSecrets {
     return ""
 }
 
+function Get-GeminiEnvVars {
+    $poolEnabled = if ($env:GEMINI_KEY_POOL_ENABLED) { $env:GEMINI_KEY_POOL_ENABLED.ToLower() } else { 'false' }
+    $cooldown = if ($env:GEMINI_KEY_POOL_QUOTA_COOLDOWN) { $env:GEMINI_KEY_POOL_QUOTA_COOLDOWN } else { '60' }
+    return "GEMINI_KEY_POOL_ENABLED=$poolEnabled,GEMINI_KEY_POOL_QUOTA_COOLDOWN=$cooldown"
+}
+
+function Get-GeminiSecrets {
+    $poolEnabled = ($env:GEMINI_KEY_POOL_ENABLED -eq 'true')
+    if ($poolEnabled -and $env:GEMINI_API_KEYS) {
+        return "GEMINI_API_KEYS=gemini-api-keys-pool:latest"
+    }
+    return ""
+}
+
+function Get-CoreSecrets([bool]$IncludeStripeWebhook = $true) {
+    $secrets = "APP_KEY=venturelens-app-key:latest,GEMINI_API_KEY=gemini-api-key:latest,DB_PASSWORD=venturelens-db-password:latest,STRIPE_SECRET=stripe-secret:latest"
+    if ($IncludeStripeWebhook) {
+        $secrets += ",STRIPE_WEBHOOK_SECRET=stripe-webhook-secret:latest"
+    }
+    $geminiSecrets = Get-GeminiSecrets
+    if ($geminiSecrets) { $secrets += ",$geminiSecrets" }
+    $ragSecrets = Get-RagSecrets
+    if ($ragSecrets) { $secrets += ",$ragSecrets" }
+    return $secrets
+}
+
 function Get-StripeEnvVars {
     $pairs = @(
         "STRIPE_PRICE_COHORT=$($env:STRIPE_PRICE_COHORT)",
@@ -69,8 +95,10 @@ function Get-StripeEnvVars {
         "DEMO_USER_PASSWORD=$($env:DEMO_USER_PASSWORD)",
         "GEMINI_MODEL_FLASH=$($env:GEMINI_MODEL_FLASH)",
         "GEMINI_MAX_RETRIES=$($env:GEMINI_MAX_RETRIES)",
+        (Get-GeminiEnvVars),
         (Get-RagEnvVars),
         "SESSION_DRIVER=database",
+        "SESSION_SECURE_COOKIE=true",
         "CACHE_STORE=database"
     )
     if ($env:STRIPE_KEY -and $env:STRIPE_KEY.StartsWith("pk_")) {
@@ -115,9 +143,7 @@ function Build-Image {
 
 function Deploy-Web {
     $envVars = "$(Get-BaseEnvVars),RUN_MIGRATIONS=true,RUN_SEED=true"
-    $secrets = "APP_KEY=venturelens-app-key:latest,GEMINI_API_KEY=gemini-api-key:latest,DB_PASSWORD=venturelens-db-password:latest,STRIPE_SECRET=stripe-secret:latest,STRIPE_WEBHOOK_SECRET=stripe-webhook-secret:latest"
-    $ragSecrets = Get-RagSecrets
-    if ($ragSecrets) { $secrets += ",$ragSecrets" }
+    $secrets = Get-CoreSecrets -IncludeStripeWebhook $true
     gcloud run deploy $ServiceWeb `
         --image $ImageUri `
         --region $Region `
@@ -135,9 +161,7 @@ function Deploy-Web {
 
 function Deploy-Worker {
     $envVars = "$(Get-BaseEnvVars),CONTAINER_ROLE=worker"
-    $secrets = "APP_KEY=venturelens-app-key:latest,GEMINI_API_KEY=gemini-api-key:latest,DB_PASSWORD=venturelens-db-password:latest,STRIPE_SECRET=stripe-secret:latest"
-    $ragSecrets = Get-RagSecrets
-    if ($ragSecrets) { $secrets += ",$ragSecrets" }
+    $secrets = Get-CoreSecrets -IncludeStripeWebhook $false
     gcloud run deploy $ServiceWorker `
         --image $ImageUri `
         --region $Region `
@@ -165,11 +189,13 @@ switch ($Command) {
         Build-Image
         Deploy-Web
         Deploy-Worker
-        $customUrl = $env:APP_URL
-        if ($customUrl -match '^https?://[^#/\s]+') {
-            $customUrl = $Matches[0].TrimEnd('/')
-        } elseif ($env:CUSTOM_DOMAIN) {
+        $customUrl = $null
+        if ($env:CUSTOM_DOMAIN) {
             $customUrl = "https://$($env:CUSTOM_DOMAIN.TrimEnd('/'))"
+        } elseif ($env:APP_URL -and $env:APP_URL -match '^https?://' -and $env:APP_URL -notmatch 'localhost|127\.0\.0\.1') {
+            $customUrl = $env:APP_URL.TrimEnd('/')
+        } elseif ($ProjectId -eq 'venturelens-499513') {
+            $customUrl = 'https://venturelens.app'
         } else {
             $customUrl = gcloud run services describe $ServiceWeb --region $Region --format="value(status.url)"
         }

@@ -73,6 +73,12 @@ class DocumentExtractor
             }
         }
 
+        $application = \App\Models\Application::query()->find($applicationId);
+        $gohortoText = $application?->form_data['integration']['gohorto_document_text'] ?? null;
+        if (is_string($gohortoText) && trim($gohortoText) !== '') {
+            $parts[] = "[gohorto_import]\n".trim($gohortoText);
+        }
+
         return implode("\n\n", $parts);
     }
 }

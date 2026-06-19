@@ -21,21 +21,15 @@ class GeminiClient
     private const RETRYABLE_STATUS_CODES = [429, 500, 502, 503, 504];
 
     public function __construct(
-        private readonly string $apiKey,
+        private readonly GeminiKeyPool $keyPool,
         private readonly int $timeoutSeconds = 60,
         private readonly int $maxRetries = 5,
     ) {}
 
     public static function fromConfig(): self
     {
-        $apiKey = config('services.gemini.api_key');
-
-        if (empty($apiKey)) {
-            throw new RuntimeException('GEMINI_API_KEY is not configured.');
-        }
-
         return new self(
-            apiKey: $apiKey,
+            keyPool: GeminiKeyPool::fromConfig(),
             timeoutSeconds: (int) config('services.gemini.timeout', 60),
             maxRetries: (int) config('services.gemini.max_retries', 5),
         );
@@ -59,8 +53,6 @@ class GeminiClient
             );
         }
 
-        $url = sprintf('%s/%s:generateContent?key=%s', self::BASE_URL, $model, $this->apiKey);
-
         $payload = [
             'systemInstruction' => [
                 'parts' => [['text' => $systemPrompt]],
@@ -82,9 +74,13 @@ class GeminiClient
         $lastStatus = null;
         $timeout = $timeoutSeconds ?? $this->timeoutSeconds;
         $retries = $maxRetries ?? $this->maxRetries;
+        $httpAttempts = 0;
+        $maxHttpAttempts = $retries * max(1, $this->keyPool->keyCount());
 
-        while ($attempt < $retries) {
-            $attempt++;
+        while ($httpAttempts < $maxHttpAttempts) {
+            $httpAttempts++;
+            ['index' => $keyIndex, 'key' => $apiKey] = $this->keyPool->nextKey();
+            $url = sprintf('%s/%s:generateContent?key=%s', self::BASE_URL, $model, $apiKey);
             $started = microtime(true);
 
             try {
@@ -109,11 +105,13 @@ class GeminiClient
                 $promptTokens = (int) data_get($body, 'usageMetadata.promptTokenCount', 0);
                 $completionTokens = (int) data_get($body, 'usageMetadata.candidatesTokenCount', 0);
 
-                if ($attempt > 1) {
+                if ($httpAttempts > 1) {
                     Log::info('gemini.api_call_recovered', [
                         'model' => $model,
-                        'attempt' => $attempt,
+                        'http_attempt' => $httpAttempts,
                         'latency_ms' => $latencyMs,
+                        'key_index' => $keyIndex,
+                        'key_pool' => $this->keyPool->isRotationEnabled(),
                     ]);
                 }
 
@@ -122,7 +120,9 @@ class GeminiClient
                     'prompt_tokens' => $promptTokens,
                     'completion_tokens' => $completionTokens,
                     'latency_ms' => $latencyMs,
-                    'attempt' => $attempt,
+                    'http_attempt' => $httpAttempts,
+                    'key_index' => $keyIndex,
+                    'key_pool' => $this->keyPool->isRotationEnabled(),
                 ]);
 
                 return [
@@ -134,11 +134,32 @@ class GeminiClient
                 ];
             } catch (RuntimeException $e) {
                 $lastException = $e;
+                $message = $e->getMessage();
 
-                if ($attempt >= $retries || ! $this->shouldRetry($e, $lastStatus)) {
+                if ($this->isLimitZeroQuota($message)) {
                     break;
                 }
 
+                if ($this->isFreeTierQuotaExceeded($message) && $this->keyPool->isRotationEnabled()) {
+                    $this->keyPool->markQuotaExceeded($keyIndex);
+
+                    Log::warning('gemini.key_rotated', [
+                        'model' => $model,
+                        'key_index' => $keyIndex,
+                        'key_count' => $this->keyPool->keyCount(),
+                        'error' => mb_substr($message, 0, 200),
+                    ]);
+
+                    if ($this->keyPool->hasAvailableKey()) {
+                        continue;
+                    }
+                }
+
+                if (! $this->shouldRetry($e, $lastStatus)) {
+                    break;
+                }
+
+                $attempt++;
                 $delayMs = $this->retryDelayMilliseconds($e, $attempt, $lastStatus);
 
                 Log::warning('gemini.api_retry', [
@@ -147,7 +168,8 @@ class GeminiClient
                     'max_retries' => $retries,
                     'delay_ms' => $delayMs,
                     'status' => $lastStatus,
-                    'error' => $e->getMessage(),
+                    'key_index' => $keyIndex,
+                    'error' => $message,
                 ]);
 
                 usleep($delayMs * 1000);
@@ -184,13 +206,26 @@ class GeminiClient
         return new RuntimeException("Gemini API error ({$status}): {$message}");
     }
 
+    private function isLimitZeroQuota(string $message): bool
+    {
+        return str_contains($message, 'limit: 0');
+    }
+
+    private function isFreeTierQuotaExceeded(string $message): bool
+    {
+        return str_contains($message, 'exceeded your current quota')
+            || str_contains($message, 'Quota exceeded for metric');
+    }
+
     private function shouldRetry(RuntimeException $e, ?int $status): bool
     {
         $message = $e->getMessage();
 
-        if (str_contains($message, 'limit: 0')
-            || str_contains($message, 'exceeded your current quota')
-            || str_contains($message, 'Quota exceeded')) {
+        if ($this->isLimitZeroQuota($message)) {
+            return false;
+        }
+
+        if ($this->isFreeTierQuotaExceeded($message)) {
             return false;
         }
 
@@ -218,7 +253,6 @@ class GeminiClient
             $delayMs = (int) (pow(2, $attempt - 1) * $base) + random_int(0, 500);
         }
 
-        // Never block chat/screening requests for a minute on quota backoff hints.
         return min($delayMs, 8000);
     }
 }
