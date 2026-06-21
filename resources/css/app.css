@@ -26,6 +26,10 @@
     --shadow-card: 0 1px 2px 0 rgb(15 23 42 / 0.04);
     --shadow-card-lg: 0 4px 24px -6px rgb(15 23 42 / 0.08);
     --shadow-feature: 0 1px 3px 0 rgb(15 23 42 / 0.06), 0 1px 2px -1px rgb(15 23 42 / 0.04);
+    --shadow-showcase: 0 8px 40px -12px rgb(15 23 42 / 0.12), 0 2px 8px -2px rgb(15 23 42 / 0.06);
+
+    --color-surface: #fafafa;
+    --color-surface-elevated: #f4f4f5;
 }
 
 @layer base {
@@ -48,11 +52,11 @@
     }
 
     .vl-btn-primary {
-        @apply inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50;
+        @apply inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50;
     }
 
     .vl-btn-secondary {
-        @apply inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2;
+        @apply inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2;
     }
 
     .vl-btn-ghost {
@@ -154,6 +158,21 @@
             radial-gradient(ellipse 60% 40% at 80% 50%, rgb(13 148 136 / 0.12), transparent);
     }
 
+    .vl-hero-glow-light {
+        background:
+            radial-gradient(ellipse 70% 50% at 20% 0%, rgb(99 102 241 / 0.08), transparent),
+            radial-gradient(ellipse 50% 40% at 90% 20%, rgb(236 72 153 / 0.06), transparent),
+            radial-gradient(ellipse 60% 50% at 50% 100%, rgb(13 148 136 / 0.05), transparent);
+    }
+
+    .vl-gradient-orb {
+        @apply pointer-events-none absolute rounded-full blur-3xl;
+    }
+
+    .vl-landing-surface {
+        background-color: var(--color-surface);
+    }
+
     .vl-reveal {
         opacity: 0;
         transform: translateY(28px);
@@ -170,11 +189,67 @@
     .vl-reveal-delay-3 { transition-delay: 0.3s; }
 
     .vl-screenshot-frame {
-        @apply overflow-hidden rounded-xl border border-slate-200/80 bg-slate-900 shadow-2xl shadow-slate-900/20;
+        @apply overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-900;
+        box-shadow: var(--shadow-showcase);
     }
 
     .vl-screenshot-chrome {
         @apply flex items-center gap-1.5 border-b border-white/10 bg-slate-800/90 px-4 py-2.5;
+    }
+
+    /* ElevenLabs-style padded showcase card with cropped viewport */
+    .vl-showcase-card {
+        @apply rounded-3xl border border-slate-200/70 bg-[var(--color-surface-elevated)] p-2 sm:p-3;
+        box-shadow: var(--shadow-showcase);
+    }
+
+    .vl-showcase-card-dark {
+        @apply rounded-3xl border border-white/10 bg-white/5 p-2 sm:p-3 backdrop-blur-sm;
+        box-shadow: 0 8px 40px -12px rgb(0 0 0 / 0.4);
+    }
+
+    .vl-showcase-viewport {
+        @apply overflow-hidden rounded-2xl bg-white;
+    }
+
+    .vl-showcase-viewport-hero {
+        aspect-ratio: 16 / 10;
+    }
+
+    .vl-showcase-viewport-tab {
+        aspect-ratio: 16 / 11;
+    }
+
+    .vl-showcase-viewport-compact {
+        aspect-ratio: 16 / 10;
+    }
+
+    .vl-showcase-img {
+        @apply block h-full w-full object-contain object-top;
+    }
+
+    .vl-glass-card {
+        @apply rounded-2xl border border-slate-200/60 bg-white/80 p-6 shadow-card backdrop-blur-sm sm:p-8;
+    }
+
+    .vl-glass-card-dark {
+        @apply rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-8;
+    }
+
+    .vl-tab-pill {
+        @apply rounded-full border px-4 py-2 text-sm font-medium transition;
+    }
+
+    .vl-tab-pill-active {
+        @apply border-slate-900 bg-slate-900 text-white shadow-sm;
+    }
+
+    .vl-tab-pill-inactive {
+        @apply border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50;
+    }
+
+    .vl-trust-logo {
+        @apply flex items-center gap-2 text-sm font-medium text-slate-400 transition hover:text-slate-600;
     }
 
     .vl-markdown {

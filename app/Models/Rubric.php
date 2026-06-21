@@ -40,25 +40,25 @@ class Rubric extends Model
                 'name' => 'Team',
                 'weight' => 25,
                 'description' => 'Founder experience, complementary skills, commitment',
-                'scoring_guide' => '1=no relevant experience, 10=exceptional proven team',
+                'scoring_guide' => '0=no relevant experience, 100=exceptional proven team',
             ],
             [
                 'name' => 'Market Opportunity',
                 'weight' => 25,
                 'description' => 'Problem significance, market size, timing',
-                'scoring_guide' => '1=unclear problem, 10=large validated opportunity',
+                'scoring_guide' => '0=unclear problem, 100=large validated opportunity',
             ],
             [
                 'name' => 'Traction',
                 'weight' => 25,
                 'description' => 'Revenue, users, pilots, partnerships',
-                'scoring_guide' => '1=no validation, 10=strong measurable traction',
+                'scoring_guide' => '0=no validation, 100=strong measurable traction',
             ],
             [
                 'name' => 'Innovation',
                 'weight' => 25,
                 'description' => 'Differentiation, defensibility, scalability',
-                'scoring_guide' => '1=commodity idea, 10=highly differentiated',
+                'scoring_guide' => '0=commodity idea, 100=highly differentiated',
             ],
         ];
     }

@@ -1,13 +1,13 @@
 # VentureLens — Project Status
 
-**Last updated:** 2026-06-19  
+**Last updated:** 2026-06-21  
 **Competition:** [Build with Gemini XPRIZE](https://www.geminixprize.com/) · Category: **Entrepreneurship & Job Creation**  
 **Devpost:** Project **VentureLens** (draft in progress) · Submission deadline: **Aug 17, 2026, 1:00 PM PT**  
 **Phase:** **Advanced stage push** — see [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) for mandatory path  
-**Advanced gate:** A 🟡 · B 🟢 · C 🟢 · D 🟡 · E 🟡 · F 🟢 — **5/6 green or partial** (per [Manus afternoon review](MANUS_JUDGE_REVIEW.md), 2026-06-19)
+**Advanced gate:** A 🟡 · B 🟢 · C 🟢 · D 🟢 · E 🟡 · F 🟢 — **5/6 green or partial** (per [Manus second re-judge](MANUS_JUDGE_REVIEW.md), 2026-06-20)
 
 > **Living doc:** Agents and humans **must** update this file after every milestone (see protocol below). **Mandatory scope:** [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) — do not build outside it until gate is green. Spec: [`VENTURELENS_SYSTEM_REQUIREMENTS.md`](VENTURELENS_SYSTEM_REQUIREMENTS.md).  
-> **External review brief:** [`MANUS_COMPETITION_BRIEF.md`](MANUS_COMPETITION_BRIEF.md) — re-judge brief updated 2026-06-19 afternoon (500 Gohorto import, bulk screening, live KPIs).
+> **External review brief:** [`MANUS_COMPETITION_BRIEF.md`](MANUS_COMPETITION_BRIEF.md) — second re-judge brief + Manus **80%** verdict (2026-06-20).
 
 ---
 
@@ -51,15 +51,15 @@ VentureLens is an **AI-native B2B SaaS** that screens startup applications for i
 
 | Judging criterion | Status | Evidence |
 |-------------------|--------|----------|
-| **Business Viability** | 🟢 **8/10** (Manus) | **$995** arms-length, **5** customers on live `/impact` |
-| **AI-Native Operations** | 🟢 **10/10** (Manus) | **99.8%** AI decisions, **8,740** agent actions; fix Growth `gemini_error` |
-| **Category Impact** | 🟡 **6/10** (Manus) | **26** screened, **494** queued — drain queue before video |
+| **Business Viability** | 🟢 **9/10** (Manus) | **$2,489** arms-length, **11** customers on live `/impact` |
+| **AI-Native Operations** | 🟢 **10/10** (Manus) | **99.9%** AI decisions, **30,247** agent actions |
+| **Category Impact** | 🟢 **8/10** (Manus) | **143** screened, **107.3** founder-hours saved — 100-app floor ✅ |
 | **Google Cloud (rules)** | 🟢 Live | Cloud Run web + worker + impact archiver; GCS evidence |
-| **Devpost submission** | 🟡 In progress | Video missing (**fatal** per Manus); record after queue drains |
+| **Devpost submission** | 🟡 In progress | Video missing (**#1 risk** per Manus); **record NOW** |
 
-**Manus verdict (2026-06-19 afternoon):** **72% ready** · Advanced-stage **strongly on track** · Prize **high potential** · Full review: [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md)
+**Manus verdict (2026-06-20 evening):** **80% ready** · Advanced-stage **Complete** · Prize **High Tier / top 3 conversation** · Full review: [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md)
 
-**Advanced-ready checklist:** [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) — 6 gates (A–F). **5/6 green or partial** per Manus afternoon review.
+**Advanced-ready checklist:** [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) — 6 gates (A–F). **Gate D 🟢** (100-app floor passed); packaging (A, E) remains.
 
 ---
 
@@ -86,9 +86,9 @@ Full gate definitions: **[`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md)**
 
 ## Where we are now
 
-**Manus (2026-06-19 afternoon):** *"Live infrastructure under load"* — prod KPI sync resolved (**$995 / 5 customers**), **8,740 agent actions**, **99.8%** AI decisions. **Valley of death:** 494 screenings queued but only **26 completed**; judges will assume failure if the count stalls. **Gates D and E moved to 🟡**; video must show **completed** 500-app cohort, not a queue screen.
+**Manus (2026-06-20 evening):** *"You have crossed the rubicon."* **$2,489 / 11 customers**, **143 screened**, **30,247 agent actions**, **107 founder-hours saved**. **80% competition-ready** — playing for a **podium spot**. Gate D **🟢** (100-app floor passed). **429 in agent feed downgraded to minor** — no longer fatal.
 
-**Shift:** (1) Link AI Studio billing → drain queue, (2) **"The 500" case study** + Global Startup Map, (3) record **"The Loop" video** (Stripe → Finance Agent → Screening Agent), (4) testimonial URLs, (5) fix Growth agent errors in public feed.
+**Shift (packaging only):** (1) **Share GitHub** with judges — 2-minute task, prevents disqualification · (2) **Record video NOW** — "143 startups, 100+ hours saved, 30k actions" · (3) **Testimonial URLs** · (4) **Impact story blog** (12 countries) · (5) **Billing on primary key** for clean final 357-app drain.
 
 ---
 
@@ -104,19 +104,19 @@ Full gate definitions: **[`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md)**
 
 ---
 
-Source: live **`https://venturelens.app/impact`** (2026-06-19 12:29 UTC) · Refresh: `php artisan impact:snapshot` on prod
+Source: live **`https://venturelens.app/api/v1/impact.json`** (2026-06-20 ~18:28 UTC) · Refresh: `php artisan impact:snapshot` on prod
 
 | KPI | Current (prod) | Scorecard floor | Target (competitive) | Manus note |
 |-----|----------------|-----------------|----------------------|------------|
-| Arms-length revenue (USD) | **995** ✅ | 600 | 4,000 | Above floor |
-| Arms-length paying customers | **5** ✅ | 3 | 8 | |
-| Applications screened | **26** 🟡 | 100 | 1,000 | **494 queued** — free-tier 429 throttling |
-| Gemini API calls | **33** 🟡 | 500 | 5,000 | Climbing as worker drains queue |
-| % decisions by AI | **99.8%** ✅ | 50% | 75% | Winning number |
-| Jobs influenced (modeled) | **6** 🟡 | > 0 | — | |
-| Founder hours saved | **19.5** | — | — | Growing with screenings |
-| Agent actions (total) | **8,740** | — | — | |
-| Testimonial public URL | **null** 🔴 | 1 | 3+ | Sarah Chen placeholder |
+| Arms-length revenue (USD) | **2,489** ✅ | 600 | 4,000 | **9/10** viability |
+| Arms-length paying customers | **11** ✅ | 3 | 8 | Target nearly met |
+| Applications screened | **143** ✅ | 100 | 1,000 | **8/10** impact; ~357 remain |
+| Gemini API calls | **150** 🟡 | 500 | 5,000 | Climbing |
+| % decisions by AI | **99.9%** ✅ | 50% | 75% | Gold standard |
+| Jobs influenced (modeled) | **6** ✅ | > 0 | — | |
+| Founder hours saved | **107.3** | — | — | Winning metric |
+| Agent actions (total) | **30,247** | — | — | |
+| Testimonial public URL | **null** 🔴 | 1 | 3+ | Serious red flag |
 
 **Verify in browser:** `/impact` · `/ai-operations` (check Growth agent for `gemini_error`)
 
@@ -168,6 +168,7 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 | **Committee decision workflow** | `POST /applications/{id}/decision` · accept/reject/shortlist/waitlist · L2 audit log |
 | **Founder email (Gemini draft → approve → send)** | `FounderCommunicationService` · `POST .../communications/{id}/send` |
 | Dashboard (org stats, usage) | `/dashboard` |
+| **Cohort management (add / edit / delete)** | `/cohorts` · `ProgramController` store/update/destroy · owners/managers only |
 | Health check | `GET /health` |
 
 ### Billing & revenue (P0 🏆)
@@ -309,17 +310,17 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 
 ## Next actions (Manus priorities — next 14 days)
 
-Per [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md) (2026-06-19 afternoon). **No new product scope** until queue drains + video ships.
+Per [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md) (2026-06-20 evening). **Packaging only** — no new product scope until video + Devpost ship.
 
-1. **Link AI Studio billing** — **(Gate D, fatal if ignored)** Bypass 20 RPM free-tier; drain **494** queued screenings; 429 in `/impact` agent feed erodes AI-native story
-2. **Verify testimonial URLs** — Replace `null` links; judges will click to verify **5** paying customers behind **$995**
-3. **Fix Growth agent** — Remove `gemini_error` from public `/ai-operations` feed
-4. **"The 500" case study** — After queue drains: PDF/page with Global Startup Map of screened Gohorto cohort (Category Impact proof)
-5. **Record "The Loop" video** — **(Gate A)** <3 min: Stripe $995 → Finance Agent classify → Screening Agent on 500-app cohort — **after** screenings complete, not while queued
+1. **Invite GitHub judges** — **(Gate A/E, serious)** Add `testing@devpost.com` and `judging@hacker.fund` to repo — 2-minute task
+2. **Record "Breakthrough" video** — **(Gate A, #1 risk)** Record **NOW** — "143 startups, 100+ founder-hours, 30k agent actions"; do not wait for 500th app
+3. **Fix testimonial URLs** — Replace `null` links; **11 customers** — at least one public shout-out required
+4. **Impact story blog** — 500-word piece on 12 countries; use screened-app data (e.g. green-tech in MENA)
+5. **Billing on primary Gemini key** — Disable key pool; drain final ~357 apps without 429 in submission window
 
-**Also:** Share GitHub with `testing@devpost.com`, `judging@hacker.fund` · Devpost final submit by Aug 15.
+**Also:** Devpost final submit by Aug 15.
 
-**Narrative (Manus):** Lead with **"The High-Throughput AI Incubator"** · show **Agent Feed** (8,740 actions), not agent list · emphasize **earned arms-length revenue** near $1k threshold.
+**Narrative (Manus):** Lead with **"The $2,500/mo AI-Operated Incubator"** · emphasize **Autonomy at Scale** (30k actions) · frame **11 customers** as global validation, not BINA pilot.
 
 ---
 
@@ -387,6 +388,10 @@ php artisan test --filter=RevenueClassifierTest
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | **Manus second re-judge** — **80%** ready (↑ from 72%); Viability **9/10**, Impact **8/10**, Gate D 🟢; video **record NOW**; top 3 conversation → [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md) |
+| 2026-06-20 | **Production breakthroughs** — **$2,489 / 11 customers**, **143 screened**, **30,247** agent actions; 4-key Gemini pool; 100-app floor passed |
+| 2026-06-21 | **AI Operations UX** — command-center hero, tabbed layout (overview/fleet/log/tools), agent cards + side-panel log |
+| 2026-06-21 | **Cohort management** — add/edit/delete on `/cohorts` (owners & managers); delete blocked when applications exist |
 | 2026-06-19 | **Manus afternoon re-judge** — **72%** ready (↑ from 65%); Viability **8/10**, AI-Native **10/10**, Impact **6/10**; Gates D/E 🟡; video after queue drains → [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md) |
 | 2026-06-19 | **Prod Gemini key + bulk screening** — `gemini-api-key` v9 → Secret Manager; web `00036`, worker `00015`; flushed failed queue; **494** summer-2026 screenings re-queued at 10s spacing; `/impact` **26** screened / **33** Gemini calls |
 | 2026-06-19 | **500-profile Gohorto import** — `gohorto-project-profiles-2026-06-19-500.json` (450 new + 50 skipped) → local + prod demo-incubator/summer-2026; quota 650; screening queued at 10s spacing |

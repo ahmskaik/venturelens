@@ -72,9 +72,15 @@ class ApplicationController extends Controller
 
     public function show(Request $request, Application $application): Response
     {
-        $application->load(['program.organization', 'files', 'latestScreeningResult', 'agentExecutions']);
+        $application->load(['program.organization', 'program.rubric', 'files', 'latestScreeningResult', 'agentExecutions']);
 
         $this->authorizeProgramAccess($request, $application->program);
+
+        $rubric = $application->program->resolveRubric();
+        $screening = $application->latestScreeningResult;
+        $parsedScreening = is_array($screening?->raw_response['parsed'] ?? null)
+            ? $screening->raw_response['parsed']
+            : [];
 
         $latestDraft = FounderCommunication::where('application_id', $application->id)
             ->latest('id')
@@ -102,21 +108,22 @@ class ApplicationController extends Controller
                     'original_filename' => $f->original_filename,
                     'size_bytes' => $f->size_bytes,
                 ]),
-                'screening' => $application->latestScreeningResult ? [
-                    'id' => $application->latestScreeningResult->id,
-                    'model' => $application->latestScreeningResult->model,
-                    'overall_score' => $application->latestScreeningResult->overall_score,
-                    'criterion_scores' => $application->latestScreeningResult->criterion_scores,
-                    'strengths' => $application->latestScreeningResult->strengths,
-                    'weaknesses' => $application->latestScreeningResult->weaknesses,
-                    'risk_flags' => $application->latestScreeningResult->risk_flags,
-                    'summary' => $application->latestScreeningResult->summary,
-                    'recommendation' => $application->latestScreeningResult->recommendation,
-                    'prompt_tokens' => $application->latestScreeningResult->prompt_tokens,
-                    'completion_tokens' => $application->latestScreeningResult->completion_tokens,
-                    'latency_ms' => $application->latestScreeningResult->latency_ms,
-                    'raw_response' => $application->latestScreeningResult->raw_response,
-                    'error' => $application->latestScreeningResult->error,
+                'screening' => $screening ? [
+                    'id' => $screening->id,
+                    'model' => $screening->model,
+                    'overall_score' => $screening->overall_score,
+                    'criterion_scores' => $screening->criterion_scores,
+                    'strengths' => $screening->strengths,
+                    'weaknesses' => $screening->weaknesses,
+                    'risk_flags' => $screening->risk_flags,
+                    'summary' => $screening->summary,
+                    'recommendation' => $screening->recommendation,
+                    'completeness' => $parsedScreening['completeness'] ?? null,
+                    'missing_fields' => $parsedScreening['missing_fields'] ?? [],
+                    'prompt_tokens' => $screening->prompt_tokens,
+                    'completion_tokens' => $screening->completion_tokens,
+                    'latency_ms' => $screening->latency_ms,
+                    'error' => $screening->error,
                 ] : null,
                 'agent_executions' => $application->agentExecutions()
                     ->orderBy('created_at')
@@ -141,6 +148,11 @@ class ApplicationController extends Controller
             'program' => [
                 'id' => $application->program->id,
                 'name' => $application->program->name,
+            ],
+            'rubric' => [
+                'id' => $rubric->id,
+                'name' => $rubric->name,
+                'criteria' => $rubric->criteria,
             ],
         ]);
     }

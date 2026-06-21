@@ -62,7 +62,7 @@ export function buildHomeJsonLd(appUrl, seo) {
                 '@id': `${base}/#organization`,
                 name: seo.siteName,
                 url: base,
-                logo: `${base}/images/og-default.svg`,
+                logo: `${base}/images/venturelens-logo.png`,
                 description: seo.description,
                 email: seo.organization?.contactEmail,
             },

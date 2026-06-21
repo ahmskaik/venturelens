@@ -12,7 +12,10 @@ class PromptBuilder
 
     public function buildScreeningPrompt(Application $application, Rubric $rubric, string $documentsSummary = ''): array
     {
-        $system = 'You are an expert startup evaluator for innovation programs. Score applications fairly, explainably, and consistently. Evaluate content in its original language. Return summary in English unless the application is clearly in Arabic or Turkish — then provide summary in that language. Return valid JSON only matching the output_schema.';
+        $system = 'You are an expert startup evaluator for innovation programs. Score applications fairly, explainably, and consistently. '
+            .'Every criterion score and overall_score must be on a 0–100 scale (not 1–10). '
+            .'Evaluate content in its original language. Return summary in English unless the application is clearly in Arabic or Turkish — then provide summary in that language. '
+            .'Return valid JSON only matching the output_schema.';
 
         $applicationPayload = [
             'startup_name' => $application->startup_name,

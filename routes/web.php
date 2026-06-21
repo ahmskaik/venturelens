@@ -62,6 +62,9 @@ Route::middleware(['auth', 'incubator'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/cohorts', [ProgramController::class, 'index'])->name('cohorts.index');
+    Route::post('/cohorts', [ProgramController::class, 'store'])->name('cohorts.store');
+    Route::put('/cohorts/{program}', [ProgramController::class, 'update'])->name('cohorts.update');
+    Route::delete('/cohorts/{program}', [ProgramController::class, 'destroy'])->name('cohorts.destroy');
 
     Route::get('/applications', [AdminApplicationController::class, 'organizationIndex'])
         ->name('applications.index');

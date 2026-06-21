@@ -29,8 +29,9 @@
         <meta name="twitter:image" content="{{ rtrim(config('app.url'), '/') }}{{ config('seo.og_image') }}">
 
         <link rel="canonical" href="{{ config('app.url') }}">
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="manifest" href="/site.webmanifest">
+        <link rel="icon" href="/images/favicon/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/images/favicon/favicon.ico" sizes="any">
+        <link rel="manifest" href="/images/favicon/site.webmanifest">
 
         <title inertia>{{ config('app.name', 'VentureLens') }}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">

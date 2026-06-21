@@ -1,7 +1,7 @@
 # VentureLens — Comprehensive Competition Brief for External Review
 
 **Purpose:** Single upload for Manus — full project context **plus review instructions (Section 0)**.  
-**Prepared:** 2026-06-19 (updated afternoon for **re-judge**)  
+**Prepared:** 2026-06-20 (updated for **second re-judge**)  
 **Living status:** [`PROJECT_STATUS.md`](PROJECT_STATUS.md) (summarized in this brief)  
 **Team product:** VentureLens — AI-native startup screening SaaS for incubators  
 **Production URL:** https://venturelens.app  
@@ -9,8 +9,8 @@
 **Submission deadline:** August 17, 2026, 1:00 PM PT (internal target: **August 15**)
 
 > **For Manus:** Read **Section 0** first, then the rest. Short prompt: [`MANUS_REVIEW_PROMPT.md`](MANUS_REVIEW_PROMPT.md).  
-> **Latest Manus verdict (2026-06-19 afternoon):** [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md) — **72% ready**, AI-Native **10/10**, Prize **high potential**.  
-> **Re-judge context:** Section **0.1** · Verify live: `https://venturelens.app/api/v1/impact.json`.
+> **Latest Manus verdict (2026-06-20 evening):** [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md) — **80% ready**, Viability **9/10**, Impact **8/10**, Prize **High Tier / top 3 conversation**.  
+> **Live verify:** `https://venturelens.app/api/v1/impact.json` · Section **0.1** has production deltas; Section **18** has Manus answers.
 
 ---
 
@@ -24,9 +24,10 @@ I'm building **VentureLens** solo (with AI-assisted development) for the **Build
 
 **My situation:**
 - **Production app live:** https://venturelens.app — Gemini screening, 6 AI agents, Stripe, `/impact` KPIs.
-- **Product and AI-native story feel strong**; afternoon push added **500 Gohorto profiles** + bulk screening queue.
+- **Bulk cohort is draining:** **143/500** screened on live `/impact` (crossed **100-app floor**); **~357** still queued; worker re-queued **370 jobs** at 18:27 UTC Jun 20 after another 429 stall.
+- **Revenue jumped:** **$2,489 / 11 arms-length customers** on live API (was $995 / 5 on Jun 19).
 - **~8 weeks left**, time-constrained — need **what to do next**, not a generic checklist.
-- **Production KPI sync is resolved** ($995 / 5 customers live). Remaining gap: **completed screening volume** (26 done, 494 queued) + **video/testimonial**.
+- **Remaining gaps:** finish **500-app cohort**, **demo video**, **testimonial URL**, **Devpost submit**, **GitHub shared with judges**.
 
 ### Exactly what I need from you
 
@@ -49,37 +50,53 @@ Respond in **structured sections**. Be **direct and critical**.
 
 ---
 
-### 0.1 Re-judge context — what changed since morning review (2026-06-19)
+### 0.1 Re-judge context — what changed since Jun 19 afternoon review
 
-**Live production snapshot** (`GET /api/v1/impact.json`, verified 2026-06-19 ~12:29 UTC):
+**Live production snapshot** (`GET /api/v1/impact.json`, verified **2026-06-20 ~18:28 UTC**):
 
-| Metric | Morning (Manus 08:26 UTC) | Now (afternoon) | Delta |
-|--------|---------------------------|-----------------|-------|
-| Arms-length revenue | $796 | **$995** | +$199 ✅ |
-| Arms-length customers | 4 | **5** | +1 ✅ |
-| Applications screened | 9 | **26** | +17 🟡 |
-| Gemini API calls | 15 | **33** | +18 🟡 |
-| % decisions by AI | 80.8% | **99.8%** | ↑ ✅ |
-| Agent actions (total) | 73 | **8,740** | massive ↑ ✅ |
-| Founder hours saved | 6.8 | **19.5** | +12.7 🟡 |
-| Accepted startups | 0 (smoke) / 1 local | **2** | prod ✅ |
-| Registered orgs / programs / countries | 4 / — / 4 | **6 / 5 / 6** | ↑ |
+| Metric | Jun 19 afternoon (Manus) | **Now (Jun 20 evening)** | Delta |
+|--------|--------------------------|----------------------------|-------|
+| Arms-length revenue | $995 | **$2,489** | +$1,494 ✅ |
+| Arms-length customers | 5 | **11** | +6 ✅ |
+| Applications screened | 26 | **143** | +117 ✅ **(100 floor passed)** |
+| Gemini API calls | 33 | **150** | +117 🟡 |
+| % decisions by AI | 99.8% | **99.9%** | ↑ ✅ |
+| Agent actions (total) | 8,740 | **30,247** | +21,507 ✅ |
+| Founder hours saved | 19.5 | **107.3** | +87.8 ✅ |
+| Founders w/ timely feedback | — | **140** | ↑ |
+| Accepted startups | 2 | **2** | — |
+| Registered orgs / programs / countries | 6 / 5 / 6 | **13 / 11 / 12** | ↑ |
+| Gemini tokens | 57,453 | **318,549** | ↑ |
+| Testimonial public URL | null | **null** | unchanged ❌ |
 
-**New entries & infrastructure (since morning):**
+**New entries & infrastructure (since Jun 19 afternoon):**
 
-1. **500-profile Gohorto import** — `data/imports/gohorto-project-profiles-2026-06-19-500.json` loaded into `summer-2026` cohort (local + production); ~500 real startup profiles from Gohorto ecosystem (MENA focus).
-2. **Bulk screening queued** — `screening:retry-stuck --program=summer-2026 --delay=10` on prod; **494** applications re-queued; worker `venturelens-worker-00015` draining queue.
-3. **Gemini API key rotated** — new key uploaded to Secret Manager (`gemini-api-key` v9); web `venturelens-web-00036`, worker `venturelens-worker-00015` redeployed.
-4. **Production KPI sync resolved** — `/impact` and `/api/v1/impact.json` now agree on revenue ($995 / 5 customers). Prior prod/local mismatch is **closed**.
-5. **RAG / Ask improvements** — Arabic query support (name-phrase extraction), RTL text direction in chat UI, index-on-import + full-cohort reindex for `summer-2026`.
-6. **Applications UX** — server-side pagination, filter panel (status, country full names, score range), 500+ apps browsable on prod.
-7. **Evidence snapshot** — `docs/evidence/impact-20260619.json` refreshed from live API.
+1. **Screening queue drained in bursts** — multiple `queue:flush` → `queue:clear` → `screening:retry-stuck --program=summer-2026 --delay=10` cycles on prod; screened count **26 → 63 → 141 → 143** across Jun 19–20 as free-tier quotas reset and re-queues run.
+2. **Gemini 4-key pool deployed** — `GEMINI_KEY_POOL_ENABLED=true`, `gemini-api-keys-pool` v2 (4 distinct keys), round-robin with 60s cooldown on 429; worker `venturelens-worker-00017-r5p`, web `venturelens-web-00038-g58`.
+3. **Arms-length revenue growth** — **6 new paying customers** since Jun 19; live `/impact` shows **$2,489 / 11 customers** (no related-party on prod).
+4. **100-app impact floor crossed** — `applications_screened: 143` on live API; **~357** of ~500 cohort still unscreened.
+5. **Latest re-queue (Jun 20 18:27 UTC)** — **370** screening jobs re-dispatched; worker resumed completions within minutes (apps #50, #63 scored at 18:27).
+6. **GitHub hygiene** — repo pushed clean to `main` (`a1ba486`); `.env` gitignored, `.env.example` sanitized; ready for judge collaborator invites.
+7. **Evidence on `/impact`** — archived snapshot **`impact-20260620.json`** visible on live page (GCS + repo pipeline).
 
-**Active blocker (afternoon):**
+**Active blockers (Jun 20 evening):**
 
-- **Gemini free-tier 429** — worker logs show `generate_content_free_tier_requests, limit: 20` RPM. Bulk queue is **dispatched** but throughput is capped until **AI Studio billing** is linked on the new API key's project. Some screenings succeed (~26 total); many jobs fail/retry. **Done-when:** billing linked → queue drains → `applications_screened` trends toward 100+.
+- **Intermittent Gemini 429** — all 4 free-tier keys still hit `generate_content_free_tier_requests, limit: 20` RPM; queue **stalls for hours**, then progresses after flush/retry-stuck. Agent feed shows **successful screenings at 18:27** but **429 failures still visible from 13:14** — judges scrolling the feed may see both.
+- **Cohort not complete** — **143/500 screened** (~29%); competitive narrative needs **500 completed** or a credible "in progress with billing fix" story.
+- **Packaging unchanged** — no demo video, testimonial URL still `null`, Devpost not submitted, GitHub not yet shared with judges.
 
-**Re-judge focus:** Given the above, please **re-score Category Impact** and **Gates D/E**, confirm whether **Business Viability** moved up, and whether the **Gohorto 500 import + queued screening** changes the "polished demo" narrative — or if judges still see insufficient *completed* volume.
+**Manus second re-judge verdict (2026-06-20 evening):** See [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md). Summary:
+
+| Question | Manus answer |
+|----------|--------------|
+| Viability 8→? | **9/10** — $2,489 / 11 customers |
+| Impact 6→? | **8/10** — 143 screened, 107 founder-hours saved |
+| 30,247 actions | **Strengthen** AI-native story |
+| 429 fatal? | **No** — minor; 100-app floor passed |
+| Video timing? | **Record NOW** — don't wait for 500th app |
+| Ready % | **80%** · Prize **High Tier** |
+
+**Remaining blockers (packaging only):** GitHub judge invites · demo video · testimonial URLs · Devpost submit · billing key for clean final drain.
 
 ---
 
@@ -93,9 +110,9 @@ Respond in **structured sections**. Be **direct and critical**.
 
 **Strategic wedge:** Land on AI screening (acute pain, fast ROI) → attach committee reports and founder comms → expand to full program operations. Built as a **new product** (post–May 19, 2026) by a team with incubator domain expertise from **Gohorto**, with pilot context from **BINA Business Incubator** (Turkey, 9+ countries, 20,000+ startup ecosystem).
 
-**Current overall position (honest estimate):** ~**65–72%** of advanced-stage requirements met (up from ~55–65% morning). **Product, AI-native ops, and production revenue are strong**; **completed screening volume** and **submission packaging** (video, testimonial URL, Devpost) remain the gaps. Prize contention improved if bulk screening completes; still not guaranteed without video + evidence sync.
+**Current overall position (Manus Jun 20):** **80% competition-ready** · **Advanced-Stage (Complete)** · **Prize-Competitive (High Tier)** — likely **top 3 conversation** in category. **Revenue ($2,489), AI-native ops (30k actions), and impact floor (143 screened) are proven.** Remaining gap is **packaging only**: video, GitHub judge invites, testimonial URLs, Devpost submit.
 
-**Afternoon thesis shift:** We are no longer fighting prod/local KPI mismatch — we are fighting **throughput** (Gemini quota) and **packaging** (video, testimonial, Devpost).
+**Jun 20 thesis shift:** Manus: *"You are now playing for a podium spot, not just a certificate."* Lead narrative: **"The $2,500/mo AI-Operated Incubator"** + **Autonomy at Scale**.
 
 ---
 
@@ -213,16 +230,16 @@ Partner reach
 
 We use six gates (A–F). **Advanced stage = all six green.** Source: `docs/ADVANCED_STAGE_GATE.md`.
 
-| Gate | Name | What's required | Status (as of 2026-06-19 afternoon) |
+| Gate | Name | What's required | Status (as of 2026-06-20 evening) |
 |------|------|-----------------|-------------------------------|
-| **A** | Compliance | Gemini + GCP in prod, repo shared, video live | 🟡 Partial — video still missing |
-| **B** | Viability | ≥$600 arms-length, 3+ customers, revenue PDF | 🟢 **$995 / 5 customers** on live `/impact` |
-| **C** | AI-Native | 6 live agents, ≥50% AI decisions (75% target) | 🟢 **99.8%** AI decisions; 8,740 agent actions |
-| **D** | Impact | Screened apps > 0, jobs > 0, real testimonial URL | 🟡 **26 screened**, 494 queued; testimonial URL still null |
-| **E** | Evidence | Video, 5 screenshots, Devpost submitted | 🔴 Video missing; `impact-20260619.json` refreshed |
-| **F** | Deploy | Prod URL works end-to-end incl. revenue | 🟢 Live — `/up` OK, revenue verified on `/impact` |
+| **A** | Compliance | Gemini + GCP in prod, repo shared, video live | 🟡 Partial — video still missing; GitHub ready to share |
+| **B** | Viability | ≥$600 arms-length, 3+ customers, revenue PDF | 🟢 **$2,489 / 11 customers** on live `/impact` |
+| **C** | AI-Native | 6 live agents, ≥50% AI decisions (75% target) | 🟢 **99.9%** AI decisions; **30,247** agent actions |
+| **D** | Impact | Screened apps > 0, jobs > 0, real testimonial URL | 🟢 **143 screened** (100 floor ✅); testimonial URL still null (packaging) |
+| **E** | Evidence | Video, 5 screenshots, Devpost submitted | 🔴 Video missing; `impact-20260620.json` on live `/impact` |
+| **F** | Deploy | Prod URL works end-to-end incl. revenue | 🟢 Live — `/up` OK, revenue + screening verified |
 
-**Gate count:** **4/6 green** (B, C, F + partial A/D). **Judges check the live URL first** — revenue story is now credible; volume story is in progress.
+**Gate count:** **5/6 green or partial** (B, C, D, F 🟢; A, E 🟡). Manus: packaging (video + GitHub invites) is **#1 risk**.
 
 ---
 
@@ -232,29 +249,29 @@ Source: `docs/VENTURELENS_SYSTEM_REQUIREMENTS.md` §3.3, `CompetitionMetrics` se
 
 ### 5.1 Master KPI table
 
-| KPI | Floor (pass) | Target (competitive) | Stretch (winning) | Local snapshot (2026-06-11) | **Production (live, 2026-06-19)** | Notes |
+| KPI | Floor (pass) | Target (competitive) | Stretch (winning) | Local snapshot (2026-06-11) | **Production (live, 2026-06-20)** | Notes |
 |-----|--------------|----------------------|-------------------|----------------------------|--------------------------------|-------|
-| Arms-length revenue (USD) | $600 | $4,000 | $12,000+ | **$697** ✅ | **$995** ✅ | Verified live API |
-| Arms-length paying customers | 3 | 8 | 15+ | **3** ✅ | **5** ✅ | +1 since morning |
+| Arms-length revenue (USD) | $600 | $4,000 | $12,000+ | **$697** ✅ | **$2,489** ✅ | +$1,494 since Jun 19 |
+| Arms-length paying customers | 3 | 8 | 15+ | **3** ✅ | **11** ✅ | Target (8) nearly met |
 | Related-party revenue (USD) | Report separately | — | — | **$199** | **$0** on prod | BINA checkout local only |
-| Applications screened | 100 | 1,000 | 5,000+ | **7** | **26** 🟡 | **494 queued**; free-tier 429 |
-| Gemini API calls | 500 | 5,000 | 25,000+ | **7** | **33** 🟡 | Climbing; quota-limited |
-| % decisions by AI (L2–L3) | 50% | 75% | 90% | **88.6%** ✅ | **99.8%** ✅ | **Strongest metric** |
-| Registered organizations | 5 | 25 | 75+ | **7** | **6** | |
-| Programs enabled | — | — | — | — | **5** | Gohorto cohort + seeds |
-| Founder hours saved | — | 2,000 | 10,000+ | **5.3** | **19.5** | Auto-computed |
+| Applications screened | 100 | 1,000 | 5,000+ | **7** | **143** ✅ | **100 floor passed**; ~357 remain |
+| Gemini API calls | 500 | 5,000 | 25,000+ | **7** | **150** 🟡 | Climbing; quota-limited |
+| % decisions by AI (L2–L3) | 50% | 75% | 90% | **88.6%** ✅ | **99.9%** ✅ | **Strongest metric** |
+| Registered organizations | 5 | 25 | 75+ | **7** | **13** | |
+| Programs enabled | — | — | — | — | **11** | Gohorto cohort + seeds |
+| Founder hours saved | — | 2,000 | 10,000+ | **5.3** | **107.3** | Auto-computed |
 | Accepted startups | 1 | — | — | **1** ✅ | **2** ✅ | Prod has 2 accepted |
 | Jobs influenced (modeled) | > 0 | — | — | **3** | **6** | 2 accepted × 3 |
-| Countries reached | 1 | 5 | 9+ | **4** | **6** | Gohorto import diversity |
-| Agent actions (total) | — | — | — | **79** | **8,740** | Bulk screening logs |
-| Gemini tokens | — | — | — | — | **57,453** | |
+| Countries reached | 1 | 5 | 9+ | **4** | **12** ✅ | Gohorto import diversity |
+| Agent actions (total) | — | — | — | **79** | **30,247** | Bulk screening logs |
+| Gemini tokens | — | — | — | — | **318,549** | |
 | Public testimonial URLs | 1 | 3 | 6+ | **null** ❌ | **null** ❌ | **Cannot be faked** |
 | Subscription renewals | — | 1 | 3+ | **0** | **0** | |
 | Demo video < 3 min | Required | — | — | ❌ Not recorded | — | Script ready |
 | Devpost final submit | Required | — | — | ❌ Draft only | — | Copy ready |
-| GitHub shared with judges | Required | — | — | ❌ | — | 2-minute task |
+| GitHub shared with judges | Required | — | — | ❌ | — | Repo clean; 2-minute task |
 
-> **Data integrity note for reviewer (updated):** Production `/api/v1/impact.json` is **authoritative** as of 2026-06-19 afternoon. Prior Jun 17 smoke ($0) and stale `impact-20260618.json` are superseded. Committed snapshot: `docs/evidence/impact-20260619.json`. **Bulk screening in flight** — re-check live API in 24–48h if Gemini billing is linked.
+> **Data integrity note for reviewer (updated):** Production `/api/v1/impact.json` is **authoritative** as of **2026-06-20 ~18:28 UTC**. Prior Jun 17 smoke ($0) and stale snapshots are superseded. Live archive: **`impact-20260620.json`** on `/impact`. **Bulk screening in flight** — re-check live API; count may climb between review and video recording.
 
 ### 5.2 Revenue detail (local committed evidence)
 
@@ -344,7 +361,7 @@ All six agents live in production code with tests:
 | **Cloud Scheduler** | Nightly impact archive to GCS |
 | **Deploy scripts** | `scripts/deploy-cloud-run.ps1`, `setup-gcp-secrets.ps1` |
 | **GitHub Actions** | `.github/workflows/deploy.yml` |
-| **Production URL** | https://venturelens.app (web `00036`, worker `00015`, Jun 19) |
+| **Production URL** | https://venturelens.app (web `00038`, worker `00017`, Jun 20) |
 
 ### 6.6 Technology stack
 
@@ -357,6 +374,7 @@ All six agents live in production code with tests:
 | Queue | Laravel queue (Cloud Run worker) |
 | Payments | Stripe (test mode for hackathon) |
 | All LLM calls | `app/Services/Gemini/GeminiClient.php` |
+| **Gemini key pool** | `GeminiKeyPool.php` — 4-key round-robin, 60s cooldown on free-tier 429 |
 
 ### 6.7 Test coverage
 
@@ -409,8 +427,8 @@ Per competition focus — do not build until advanced gate is green:
 | Revenue evidence PDF | ✅ |
 | ≥4 agents on `/ai-operations` | ✅ **6 live** |
 | Decision workflow + founder email | ✅ |
-| `/impact` + impact JSON snapshots | ✅ Live + `impact-20260619.json` committed |
-| Arms-length Stripe revenue ≥ $600 | ✅ **$995 / 5 customers** on live `/impact` |
+| `/impact` + impact JSON snapshots | ✅ Live + `impact-20260620.json` on `/impact` |
+| Arms-length Stripe revenue ≥ $600 | ✅ **$2,489 / 11 customers** on live `/impact` |
 | Demo video < 3 min | ❌ Script ready, not recorded |
 | Devpost final submit | ❌ Due Aug 17 (target Aug 15) |
 | GitHub shared with judges | ❌ |
@@ -423,38 +441,39 @@ Per competition focus — do not build until advanced gate is green:
 | Area | Why it's strong |
 |------|-----------------|
 | **AI-native architecture** | 6 live agents with L0–L3 autonomy — rare among hackathon entries |
-| **99.8% AI decision rate** | Single most impressive metric for AI-native criterion (up from 80.8%) |
+| **99.9% AI decision rate** | Single most impressive metric for AI-native criterion |
 | **Gemini depth** | Screening + embeddings + RAG + 6 agent reasoning paths — not a wrapper |
 | **Code depth** | Laravel + Vue + queue workers + vector RAG + GCS archiver + Evidence Explorer — real product |
 | **Evidence infrastructure** | Live `/impact`, JSON API, snapshots, smoke CLI, judge docs — methodical |
-| **Business viability (production)** | **$995** arms-length / **5** customers on live URL — prod/local mismatch **resolved** |
-| **Scale pipeline** | 500 real Gohorto profiles imported; 494 screenings queued on prod worker |
-| **Documentation** | ADVANCED_STAGE_GATE, PROJECT_STATUS, DEVPOST_SUBMISSION — judge-aware |
+| **Business viability (production)** | **$2,489** arms-length / **11** customers — past $2k psychological threshold |
+| **Impact floor passed** | **143 screened**, **107 founder-hours saved** — 100-app competition floor cleared |
+| **Scale pipeline** | 500 real Gohorto profiles; **143 completed**, **~357** in queue with active worker |
+| **Gemini key pool** | 4-key rotation on 429 — operational workaround documented in `GEMINI_SETUP.md` |
 
 ---
 
 ## 11. Critical Gaps & Blockers (What Manus Should Prioritize)
 
 ### ~~Blocker 1 — Production KPI consistency~~ ✅ Resolved (2026-06-19)
-Live `/api/v1/impact.json` shows **$995 / 5 customers**, **26 screened**, **2 accepted** — matches production DB. Prior Jun 17 smoke mismatch is closed.
+Live `/api/v1/impact.json` matches production DB.
 
-### Blocker 1 (new) — Gemini quota throttling bulk screening
-494 applications queued; worker hits **free-tier 429** (`limit: 20` RPM). **Fix:** Link AI Studio billing on the new API key project → queue drains → `applications_screened` crosses 100 floor. See `docs/commercialization/GEMINI_SETUP.md`.
+### Blocker 1 (current) — Incomplete cohort + Gemini 429 throttling
+**143/500 screened** (~29%); **~357** remain. Worker cycles through bursts then stalls when all 4 free-tier keys hit **429** (`limit: 20` RPM). **Fix options:** (a) link AI Studio billing on primary key → `GEMINI_KEY_POOL_ENABLED=false` → drain in hours; (b) continue flush/retry-stuck cycles overnight. **Done-when:** `applications_screened` → 500 OR video narrates defensible partial with billing fix in flight.
 
-### Blocker 2 — No demo video
-Script complete (`DEMO_VIDEO_SCRIPT.md`, 2:45 target). Preflight script exists (`scripts/preflight-demo-video.ps1`). **Cannot submit without recording** after prod KPIs are green.
+### Blocker 2 — No demo video (**#1 risk per Manus Jun 20**)
+Script complete (`DEMO_VIDEO_SCRIPT.md`, 2:45 target). Preflight script exists (`scripts/preflight-demo-video.ps1`). **Manus Jun 20: Record NOW** — lead with "143 startups, 100+ founder-hours saved, 30k agent actions." Do not wait for 500th app.
 
 ### Blocker 3 — No verifiable testimonial URL
-Seeded quote from "Sarah Chen" has `url: null`. Judges want public LinkedIn/Twitter URLs. **Requires a real person** (target: Mustafa/BINA LinkedIn post). Cannot be fabricated.
+Seeded quote from "Sarah Chen" has `url: null`. With **11 customers**, judges will look harder. **Requires a real person** (target: Mustafa/BINA LinkedIn post). Cannot be fabricated.
 
 ### Blocker 4 — Devpost not submitted
 All copy is paste-ready; gallery mostly ready. Final submit pending.
 
 ### Blocker 5 — Repo not shared with judges
-Add `testing@devpost.com` and `judging@hacker.fund` as GitHub collaborators.
+GitHub clean on `main`; add `testing@devpost.com` and `judging@hacker.fund` as collaborators.
 
-### Gap 6 — Completed screening volume vs internal floors
-**26 screened / 33 Gemini calls** (up from 9/15 morning) — still below competitive floors (100 / 500), but **494 queued** and agent action count (**8,740**) shows real operational load. Judges may accept "in progress" if video narrates the Gohorto import + live queue; completed count matters more.
+### ~~Gap 6 — Screening below 100-app floor~~ ✅ Resolved (2026-06-20)
+**143 screened** on live `/impact`. Competitive target (1,000) and full cohort (500) still open.
 
 ### ~~Gap 7 — Accepted startup on production~~ ✅ Resolved
 Production: **2 accepted startups**, **6 jobs influenced** (modeled).
@@ -493,7 +512,13 @@ Per spec — do not reorder:
 | 2026-06-19 | **500 Gohorto import** — 500 profiles → `summer-2026` local + prod; RAG reindex; country full names |
 | 2026-06-19 | **Bulk screening** — `gemini-api-key` v9; 494 jobs queued; 26 screened / 33 Gemini calls on live `/impact` |
 | 2026-06-19 | **Ask/RAG** — Arabic retrieval + RTL chat UI; applications pagination/filters |
-| 2026-06-19 | Manus morning review — 65% ready; afternoon re-judge brief updated |
+| 2026-06-19 | Manus afternoon review — 72% ready; first re-judge brief |
+| 2026-06-20 | **Gemini 4-key pool** — `gemini-api-keys-pool` v2; worker `00017`, web `00038`; key rotation on 429 |
+| 2026-06-20 | **Queue drain bursts** — multiple flush/clear/retry-stuck cycles; **26 → 143 screened**; 100-app floor passed |
+| 2026-06-20 | **Revenue growth** — **$2,489 / 11 customers** on live `/impact` (+6 customers since Jun 19) |
+| 2026-06-20 | **GitHub push** — clean `main` (`a1ba486`); secrets removed from history concern documented |
+| 2026-06-20 | **Latest re-queue** — 370 jobs at 18:27 UTC; screening resumed within minutes |
+| 2026-06-20 | **Second Manus re-judge brief** — this document updated |
 
 ---
 
@@ -546,7 +571,8 @@ Per spec — do not reorder:
 | `docs/commercialization/JUDGE_EVIDENCE.md` | Screenshot + API checklist |
 | `docs/commercialization/STRIPE_JUDGE_GUIDE.md` | Arms-length testing guide |
 | `docs/evidence/impact-20260611.json` | Historical local KPI snapshot |
-| `docs/evidence/impact-20260619.json` | **Latest production KPI snapshot** |
+| `docs/evidence/impact-20260619.json` | Jun 19 production KPI snapshot |
+| `docs/evidence/impact-20260620.json` | **Latest production KPI snapshot** (also on live `/impact`) |
 | `docs/evidence/revenue-evidence.json` | Stripe charge audit trail |
 | `docs/integrations/GOHORTO_IMPORT.md` | 500-profile import runbook |
 
@@ -557,45 +583,45 @@ Per spec — do not reorder:
 We are in genuine **top-tier contention** when ALL of the following are true on the **live production URL**:
 
 ```
-✅ /api/v1/impact.json shows arms_length_revenue_usd ≥ 600          — $995 ✅
-🟡 /impact shows applications_screened ≥ 10 (ideally toward 100)    — 26, 494 queued
+✅ /api/v1/impact.json shows arms_length_revenue_usd ≥ 600          — $2,489 ✅
+✅ /impact shows applications_screened ≥ 100                         — 143 ✅ (~357 remain)
 ✅ Testimonial section has a public LinkedIn/Twitter URL (not null)  — still null ❌
 ❌ Demo video < 3 min live on YouTube or Vimeo
 ❌ Devpost gallery has 5 screenshots + video
 ❌ Devpost fully submitted (not draft)
 ❌ GitHub repo shared with testing@devpost.com and judging@hacker.fund
-✅ 6 agents visible with recent agent_executions in last 7 days       — 8,740 actions
-✅ pct_decisions_by_ai ≥ 75%                                         — 99.8% ✅
+✅ 6 agents visible with recent agent_executions in last 7 days       — 30,247 actions
+✅ pct_decisions_by_ai ≥ 75%                                         — 99.9% ✅
 ```
 
-**Tie-break reminder:** Business Viability → AI-Native Operations → Category Impact. We are strongest on **AI-native**; **completed screening volume** is the remaining Category Impact gap.
+**Tie-break reminder:** Business Viability → AI-Native Operations → Category Impact. We are strongest on **AI-native**; **full 500-app cohort + packaging** are the remaining gaps.
 
 ---
 
-## 18. Questions for Manus — **Answered** (2026-06-19 afternoon)
+## 18. Questions for Manus — **Answered (2026-06-20 evening)**
 
-See **[`MANUS_JUDGE_REVIEW.md` §8](MANUS_JUDGE_REVIEW.md)** for full answers. Summary:
+Full review: **[`MANUS_JUDGE_REVIEW.md` §8](MANUS_JUDGE_REVIEW.md)**.
 
 | # | Question | Manus answer |
 |---|----------|--------------|
-| 1 | Viability 7→8? | **Yes** — $995 / 5 customers |
-| 2 | Impact 4→? | **6/10** — 9/10 possible when queue drains |
-| 3 | 99.8% AI enough? | **Pending** — completed screenings still matter |
-| 4 | #1 blocker? | **Gemini 429** — link billing first |
-| 5 | Gohorto narrative? | Disclose as scale testing; $995 is arms-length |
-| 6 | Video now or later? | **After** 500 screenings complete — not while queued |
-| 7 | 429 in agent feed? | **Fatal** red flag if judges see it |
-| 8 | Updated probability? | **72%** ready; prize **high potential** |
+| 1 | Viability 8→? | **9/10** — $2,489 / 11 customers |
+| 2 | Impact 6→? | **8/10** — 143 screened, 107 founder-hours saved |
+| 3 | 30,247 actions | **Strengthen** — AI-native claim verified |
+| 4 | 429 fatal? | **No** — minor; 100-app floor passed |
+| 5 | Video now or later? | **Record NOW** |
+| 6 | Prize competitive? | **Yes, High Tier** — top 3 conversation |
+| 7 | Blockers? | Packaging only (video, Devpost, GitHub) |
+| 8 | Next step? | **Share GitHub repo** with judges |
 
 ---
 
 ## 19. Probability Estimate (Manus + internal)
 
-| Outcome | Morning | Manus afternoon | Internal afternoon |
-|---------|---------|-----------------|-------------------|
-| Advanced stage accepted | ~55–65% | **72% ready** | ~70–75% |
-| Top 3 / Prize contention | ~20–30% | **High potential** | ~25–35% |
-| Eliminated at intake | ~5% | Low risk | ~5% |
-| Honorable mention | ~75% | — | ~80% |
+| Outcome | Jun 19 afternoon | **Jun 20 evening (Manus)** |
+|---------|-------------------|----------------------------|
+| Advanced stage accepted | **72% ready** | **80% ready** |
+| Top 3 / Prize contention | High potential | **High Tier / top 3 conversation** |
+| Eliminated at intake | Low risk | Low risk |
+| Honorable mention | — | Likely if packaging slips |
 
-*Manus afternoon re-judge (72% ready) recorded in [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md). Re-verify live:* `https://venturelens.app/api/v1/impact.json` *— metrics update as the screening queue drains.*
+*Manus second re-judge recorded in [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md). **Re-verify live:** `https://venturelens.app/api/v1/impact.json`*
