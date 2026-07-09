@@ -615,7 +615,7 @@ README Judge Quickstart: repository README.md#judge-quickstart-read-this-first
 | KPI numbers refreshed from live `/impact` | ⬜ |
 | Video uploaded + URL pasted | ✅ https://www.youtube.com/watch?v=26YEt4dUeLU |
 | GitHub shared with judges | ⬜ |
-| 4–6 screenshots in gallery | ✅ 4 ready |
+| 4–6 screenshots in gallery | ✅ 4 uploaded to Project Media |
 | P&L / revenue PDF attached | ✅ |
 | Public testimonial URL | 🟡 Have quote + Mustafa's profile link (not a public post yet — upgrade if time allows) |
 | GCP live (Cloud Run URL works) | 🟡 Verify before submit |
