@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>VentureLens Revenue Evidence</title>
+<title>VentureLens Payment &amp; Revenue Evidence</title>
 <style>
 body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; color: #1e293b; }
 h1 { font-size: 1.5rem; }
@@ -13,20 +13,24 @@ th { background: #f8fafc; }
 .stat { border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; }
 .stat strong { display: block; font-size: 1.5rem; color: #059669; }
 .note { font-size: 0.85rem; color: #64748b; margin-top: 2rem; }
+.disclosure { font-size: 0.85rem; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 0.75rem 1rem; margin-top: 1.5rem; }
+.pending { font-size: 0.85rem; color: #475569; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-top: 1rem; }
 </style>
 </head>
 <body>
-<h1>VentureLens — Revenue Evidence (Stripe test mode)</h1>
-<p>Exported: 2026-06-11T08:50:45+00:00</p>
+<h1>VentureLens — Payment &amp; Revenue Evidence</h1>
+<p>As of: 2026-07-07T12:36:41+00:00 (source: production <code>GET /api/v1/impact.json</code>)</p>
 <div class="stats">
-  <div class="stat"><span>Arms-length</span><strong>$697</strong></div>
-  <div class="stat"><span>Related-party</span><strong>$199</strong></div>
-  <div class="stat"><span>Paying customers (arms-length)</span><strong>3</strong></div>
+  <div class="stat"><span>Arms-length</span><strong>$2,887</strong></div>
+  <div class="stat"><span>Related-party</span><strong>$0</strong></div>
+  <div class="stat"><span>Paying customers (arms-length)</span><strong>13</strong></div>
 </div>
+<p class="disclosure"><strong>Disclosure:</strong> these figures are from Stripe <strong>test-mode</strong> checkouts, demonstrating the full checkout → webhook fulfillment → arms-length/related-party revenue classification flow end-to-end in production. Live (non-test) billing is in progress; real customer payments will supersede this evidence once processed. This is not being presented as verified real-world earned revenue.</p>
+<p class="pending"><strong>Itemized charge ledger pending:</strong> the per-charge table below is illustrative from an earlier snapshot (2026-06-11) and predates a mid-June production data reset — it does not reconstruct all 13 current charges. Run <code>php scripts/export-revenue-evidence.php</code> against the production database for the authoritative, current itemized ledger before final Devpost submission.</p>
 <table>
 <thead><tr><th>Date</th><th>Organization</th><th>Plan</th><th>Amount</th><th>Type</th></tr></thead>
 <tbody><tr><td>2026-06-10</td><td>BINA</td><td>cohort</td><td>$199.00</td><td>related party</td></tr><tr><td>2026-06-10</td><td>Pacific Innovation Lab</td><td>cohort</td><td>$199.00</td><td>arms length</td></tr><tr><td>2026-06-10</td><td>grandsolo</td><td>starter</td><td>$299.00</td><td>arms length</td></tr><tr><td>2026-06-11</td><td>Pacific Innovation Lab</td><td>cohort</td><td>$199.00</td><td>arms length</td></tr></tbody>
 </table>
-<p class="note">Arms-length vs related-party per RevenueClassifier (email domain + org slug). Cross-check with Stripe Dashboard test payments and /billing in the app.</p>
+<p class="note">Arms-length vs related-party per RevenueClassifier (email domain + org slug). Cross-check with Stripe Dashboard and /billing in the app. Sample table above is illustrative only (superseded by the 2026-07-07 aggregate above) — regenerate before final submit.</p>
 </body>
 </html>
