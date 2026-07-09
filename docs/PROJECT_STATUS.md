@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-07-09  
 **Competition:** [Build with Gemini XPRIZE](https://www.geminixprize.com/) · Category: **Entrepreneurship & Job Creation**  
-**Devpost:** Project **VentureLens** (draft in progress) · Submission deadline: **Aug 17, 2026, 1:00 PM PT**  
+**Devpost:** Project **VentureLens** — **first submission clicked 2026-07-09**, editable until deadline · Submission deadline: **Aug 17, 2026, 1:00 PM PT**  
 **Phase:** **Advanced stage push** — see [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) for mandatory path  
 **Advanced gate:** A 🟡 · B 🟢 · C 🟢 · D 🟢 · E 🟡 · F 🟢 — **5/6 green or partial** (per [Manus second re-judge](MANUS_JUDGE_REVIEW.md), 2026-06-20)
 
@@ -55,7 +55,7 @@ VentureLens is an **AI-native B2B SaaS** that screens startup applications for i
 | **AI-Native Operations** | 🟢 **10/10** (Manus) | **99.9%** AI decisions, **34,579** agent actions |
 | **Category Impact** | 🟢 **8/10** (Manus) | **165** screened, **123.8** founder-hours saved, **2** accepted — 100-app floor ✅ |
 | **Google Cloud (rules)** | 🟢 Live | Cloud Run web + worker + impact archiver; GCS evidence |
-| **Devpost submission** | 🟡 In progress | Demo video live: [YouTube](https://www.youtube.com/watch?v=26YEt4dUeLU) — paste into Devpost + share GitHub next |
+| **Devpost submission** | ✅ Submitted (editable) | All 5 steps done, GitHub shared with judges, video live: [YouTube](https://www.youtube.com/watch?v=26YEt4dUeLU) — polish items remain, see Next actions |
 
 **Manus verdict (2026-06-20 evening):** **80% ready** · Advanced-stage **Complete** · Prize **High Tier / top 3 conversation** · Full review: [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md)
 
@@ -315,13 +315,12 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 
 Per [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md) (2026-06-20 evening). **Packaging only** — no new product scope until video + Devpost ship.
 
-1. **Fix stale $0 revenue on Devpost "Additional info" tab** — draft form showed $0 total / all-zero months / 3 users / 1 paying customer, which understates live production ($2,887 / 13 customers / 15 orgs); corrected paste-ready copy in [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) → "Additional info tab" section
-2. **Invite GitHub judges** — **(Gate A/E, serious)** Add `testing@devpost.com` and `judging@hacker.fund` to repo — form's confirmation checkbox does not do this automatically
-3. **Upload profit evidence file** on Additional info tab — `docs/evidence/revenue-evidence.pdf` (regenerate via `scripts/export-revenue-evidence.php` first if stale vs current revenue)
-4. **Paste remaining Devpost fields** from [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md); refresh KPIs from live `/impact` before submit
-5. **Devpost final submit** by Aug 15 (hard deadline Aug 17)
+**Devpost first submit clicked 2026-07-09** ✅ — all 5 steps (Manage team, Project overview, Project details, Additional info, Submit) complete; GitHub confirmed shared with judges; can still edit until Aug 15/17 deadline. Remaining items below are polish, not blockers.
 
-**Also:** Confirm gallery screenshots + `revenue-evidence.pdf` attached.
+1. **Resolve live/reported data discrepancy** — production `/impact` and `/ai-operations` currently show 36 arms-length customers / $9,764 (a batch the founder manually created across different browsers to test the checkout flow), while the Devpost submission reports the confirmed pre-batch figures (13 / $2,887) throughout. Not reverted per founder's decision (see [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) → Image gallery section). Revisit before Aug 15 if there's time — a judge visiting the live site directly would see numbers that don't match the submission.
+2. **Upgrade testimonial evidence** — currently a direct quote + Mustafa's LinkedIn profile link (not a public post). Ask him to publish a short LinkedIn post with the quote, then swap in the post URL for full verifiability.
+3. **Verify GCP Cloud Run URL** is live and responsive right before the deadline (last checked 2026-07-09).
+4. **Decide on Stripe live vs. test mode** — all reported revenue is currently Stripe test-mode transactions; consider flipping to live billing and getting one real charge before Aug 15 to drop the test-mode caveat entirely.
 
 **Narrative (Manus):** Lead with **"The $2,500/mo AI-Operated Incubator"** · emphasize **Autonomy at Scale** (30k actions) · frame **11 customers** as global validation, not BINA pilot.
 
@@ -391,6 +390,7 @@ php artisan test --filter=RevenueClassifierTest
 
 | Date | Change |
 |------|--------|
+| 2026-07-09 | **Devpost first submission clicked** — all 5 steps complete (Manage team, Project overview, Project details, Additional info, Submit); GitHub confirmed shared with `testing@devpost.com` / `judging@hacker.fund`; refreshed all 4 image-gallery screenshots (2 live captures, 2 faithful static reproductions built from `impact-20260707.json` since live production numbers were inflated by a manually-created test batch — see disclosure in [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md)); fixed an unbuilt-feature overclaim on the public project page ("committee-ready evaluation reports and side-by-side comparisons" → replaced with the actual admin dashboard capability); can still edit until Aug 15/17 deadline |
 | 2026-07-09 | **Devpost "Additional info" tab reviewed** — flagged stale $0 revenue / 3-users draft vs live $2,887 / 13 customers / 15 orgs; added paste-ready copy (business model sustainability, GitHub evidence links, revenue-by-month, pre-existing resources disclosure) to [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) |
 | 2026-07-09 | **Demo video published** — [YouTube unlisted](https://www.youtube.com/watch?v=26YEt4dUeLU); URL saved in [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md); next: paste into Devpost + share GitHub with judges |
 | 2026-07-07 | **Real testimonial on `/impact`** — Mustafa Sagezli (General Manager, BINA Program) quote + photo; replaced seeded Sarah Chen entry; deployed `venturelens-web-00044-kz2` |
