@@ -538,19 +538,17 @@ Scale path: team has incubator distribution context (9+ countries via partner ec
 ### Testimonials / social proof
 
 ```
-REPLACE_WITH_PUBLIC_TESTIMONIAL_URL_1
+"BINA runs entrepreneurship programs in 9+ countries within an ecosystem of 20,000+ startups. VentureLens cut our application review time dramatically, Gemini screens every submission and gives our team committee-ready insights in hours, not weeks. A game-changer for programs at our scale."
 
-Optional second URL:
-REPLACE_WITH_PUBLIC_TESTIMONIAL_URL_2
+— Mustafa Elsagezli Sakizli, Program Director at BINA Program
+LinkedIn: https://www.linkedin.com/in/mustafa-elsagezli-sakizli-68a250132/
+
+Note: this is a direct quote provided by Mustafa to our team, not a public LinkedIn post — the profile link above is provided so judges can verify Mustafa is a real person and his role at BINA. BINA is an actual pilot/registered organization on VentureLens.
 ```
 
-**Seeded quote (not public URL yet — replace before submit):**
+**Note:** BINA is disclosed elsewhere in this doc (see "Are you using any pre-existing business resources?") as a related-party relationship for revenue-classification purposes — that only affects revenue counting, not eligibility to give a product testimonial as a genuine registered/pilot organization.
 
-```
-"We screened our entire cohort in a weekend instead of three weeks. Founders got feedback the same day." — Sarah Chen, Program Director, Demo Incubator
-```
-
-**Target:** Mustafa / BINA LinkedIn testimonial URL (see PROJECT_STATUS.md Next actions).
+**Stronger version if time allows:** ask Mustafa to publish this (or a shorter version) as an actual LinkedIn post before final submit, then replace the framing above with the direct post URL — that upgrades this from "verifiable identity, unverifiable quote" to fully verifiable public evidence.
 
 ### Number of paying customers (arms-length)
 
@@ -592,7 +590,7 @@ README Judge Quickstart: repository README.md#judge-quickstart-read-this-first
 | GitHub shared with judges | ⬜ |
 | 4–6 screenshots in gallery | ✅ 4 ready |
 | P&L / revenue PDF attached | ✅ |
-| Public testimonial URL | ⬜ |
+| Public testimonial URL | 🟡 Have quote + Mustafa's profile link (not a public post yet — upgrade if time allows) |
 | GCP live (Cloud Run URL works) | 🟡 Verify before submit |
 | Final submit clicked | ⬜ by Aug 15 |
 
