@@ -13,7 +13,7 @@ Context: I'm building solo with AI-assisted dev. Live app: https://venturelens.a
 
 Please return all 7 required deliverables from Section 0:
 1) Verdict (advanced-stage? prize-competitive? % ready)
-2) Scorecard 1–10 per criterion + proof + weakness
+2) Scorecard 1–10 per criterion + proof + weakness 
 3) Gates A–F (🟢/🟡/🔴 + single blocker each)
 4) 5-minute judge reality check on live /impact
 5) Exactly 5 prioritized actions for the next 14 days
