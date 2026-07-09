@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-07-09  
 **Competition:** [Build with Gemini XPRIZE](https://www.geminixprize.com/) · Category: **Entrepreneurship & Job Creation**  
-**Devpost:** Project **VentureLens** — **first submission clicked 2026-07-09**, editable until deadline · Submission deadline: **Aug 17, 2026, 1:00 PM PT**  
+**Devpost:** [VentureLens](https://devpost.com/software/venturelens-pfnghu) — **submitted 2026-07-09**, editable until deadline · Submission deadline: **Aug 17, 2026, 1:00 PM PT**  
 **Phase:** **Advanced stage push** — see [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) for mandatory path  
 **Advanced gate:** A 🟡 · B 🟢 · C 🟢 · D 🟢 · E 🟡 · F 🟢 — **5/6 green or partial** (per [Manus second re-judge](MANUS_JUDGE_REVIEW.md), 2026-06-20)
 
@@ -55,7 +55,7 @@ VentureLens is an **AI-native B2B SaaS** that screens startup applications for i
 | **AI-Native Operations** | 🟢 **10/10** (Manus) | **99.9%** AI decisions, **34,579** agent actions |
 | **Category Impact** | 🟢 **8/10** (Manus) | **165** screened, **123.8** founder-hours saved, **2** accepted — 100-app floor ✅ |
 | **Google Cloud (rules)** | 🟢 Live | Cloud Run web + worker + impact archiver; GCS evidence |
-| **Devpost submission** | ✅ Submitted (editable) | All 5 steps done, GitHub shared with judges, video live: [YouTube](https://www.youtube.com/watch?v=26YEt4dUeLU) — polish items remain, see Next actions |
+| **Devpost submission** | ✅ Submitted (editable) | [Public page](https://devpost.com/software/venturelens-pfnghu) · GitHub shared with judges · video: [YouTube](https://www.youtube.com/watch?v=26YEt4dUeLU) — polish items remain, see Next actions |
 
 **Manus verdict (2026-06-20 evening):** **80% ready** · Advanced-stage **Complete** · Prize **High Tier / top 3 conversation** · Full review: [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md)
 
@@ -141,7 +141,7 @@ Source: live **`https://venturelens.app/api/v1/impact.json`** (2026-07-07 ~12:36
 | Image gallery (4–6 screenshots) | ✅ 4 PNGs in `docs/evidence/` (impact, billing, AI ops, application screening) |
 | Demo video (< 3 min) | ✅ [YouTube](https://www.youtube.com/watch?v=26YEt4dUeLU) — paste into Devpost Video field |
 | Final submit | ⬜ Due Aug 17, 2026 (target Aug 15 buffer) |
-| GitHub shared with judges | ⬜ Confirm `testing@devpost.com`, `judging@hacker.fund` |
+| GitHub shared with judges | ✅ `testing@devpost.com`, `judging@hacker.fund` |
 
 **Revenue reporting (Devpost form):**
 
@@ -305,7 +305,7 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 | Demo video (< 3 min) | ✅ [YouTube](https://www.youtube.com/watch?v=26YEt4dUeLU) |
 | Screenshot set (5 images) | ✅ 4/5 — [`docs/evidence/`](evidence/) (optional: replay-screening PNG) |
 | `docs/evidence/revenue-evidence.pdf` | ✅ Generated from `revenue-evidence.html` (or Stripe Dashboard export) |
-| Devpost final submit (by Aug 15) | ⬜ Todo |
+| Devpost final submit (by Aug 15) | ✅ [devpost.com/software/venturelens-pfnghu](https://devpost.com/software/venturelens-pfnghu) |
 | Repo public or shared with judges | ⬜ Confirm |
 | GCP product in production | 🟡 Run deploy — see [`DEPLOY_CLOUD_RUN.md`](commercialization/DEPLOY_CLOUD_RUN.md) |
 
@@ -390,6 +390,7 @@ php artisan test --filter=RevenueClassifierTest
 
 | Date | Change |
 |------|--------|
+| 2026-07-09 | **Devpost public page live** — [devpost.com/software/venturelens-pfnghu](https://devpost.com/software/venturelens-pfnghu); story, 4 captioned screenshots, and tagline verified on public gallery |
 | 2026-07-09 | **Devpost first submission clicked** — all 5 steps complete (Manage team, Project overview, Project details, Additional info, Submit); GitHub confirmed shared with `testing@devpost.com` / `judging@hacker.fund`; refreshed all 4 image-gallery screenshots (2 live captures, 2 faithful static reproductions built from `impact-20260707.json` since live production numbers were inflated by a manually-created test batch — see disclosure in [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md)); fixed an unbuilt-feature overclaim on the public project page ("committee-ready evaluation reports and side-by-side comparisons" → replaced with the actual admin dashboard capability); can still edit until Aug 15/17 deadline |
 | 2026-07-09 | **Devpost "Additional info" tab reviewed** — flagged stale $0 revenue / 3-users draft vs live $2,887 / 13 customers / 15 orgs; added paste-ready copy (business model sustainability, GitHub evidence links, revenue-by-month, pre-existing resources disclosure) to [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) |
 | 2026-07-09 | **Demo video published** — [YouTube unlisted](https://www.youtube.com/watch?v=26YEt4dUeLU); URL saved in [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md); next: paste into Devpost + share GitHub with judges |

@@ -2,8 +2,9 @@
 
 **Hackathon:** [Build with Gemini XPRIZE](https://xprize.devpost.com)  
 **Project:** VentureLens  
+**Public project page:** https://devpost.com/software/venturelens-pfnghu  
 **Category:** Entrepreneurship & Job Creation  
-**Deadline:** Aug 17, 2026, 1:00 PM PT (submit by **Aug 15** buffer)
+**Deadline:** Aug 17, 2026, 1:00 PM PT (submit by **Aug 15** buffer) · **First submit:** 2026-07-09
 
 Paste-ready text for each Devpost field. **Refresh dollar amounts** from live `/impact` or `docs/evidence/impact-YYYYMMDD.json` before final submit.
 
@@ -619,7 +620,7 @@ README Judge Quickstart: repository README.md#judge-quickstart-read-this-first
 | P&L / revenue PDF attached | ✅ |
 | Public testimonial URL | 🟡 Have quote + Mustafa's profile link (not a public post yet — upgrade if time allows) |
 | GCP live (Cloud Run URL works) | 🟡 Verify before submit |
-| Final submit clicked | ⬜ by Aug 15 |
+| Final submit clicked | ✅ 2026-07-09 — [public page](https://devpost.com/software/venturelens-pfnghu) |
 
 ---
 
