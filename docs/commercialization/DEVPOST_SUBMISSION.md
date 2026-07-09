@@ -611,10 +611,10 @@ README Judge Quickstart: repository README.md#judge-quickstart-read-this-first
 
 | Item | Status |
 |------|--------|
-| All fields above pasted | ⬜ |
-| KPI numbers refreshed from live `/impact` | ⬜ |
+| All fields above pasted | ✅ |
+| KPI numbers refreshed from live `/impact` | ✅ (13 / $2,887 confirmed pre-batch figures — see disclosed live/reported discrepancy above) |
 | Video uploaded + URL pasted | ✅ https://www.youtube.com/watch?v=26YEt4dUeLU |
-| GitHub shared with judges | ⬜ |
+| GitHub shared with judges | ✅ Confirmed shared with testing@devpost.com / judging@hacker.fund |
 | 4–6 screenshots in gallery | ✅ 4 uploaded to Project Media |
 | P&L / revenue PDF attached | ✅ |
 | Public testimonial URL | 🟡 Have quote + Mustafa's profile link (not a public post yet — upgrade if time allows) |
