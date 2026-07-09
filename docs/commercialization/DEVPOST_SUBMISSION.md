@@ -36,8 +36,10 @@ VentureLens
 ### Tagline / elevator pitch (short)
 
 ```
-AI-operated startup screening for incubators — Gemini on Google Cloud, real Stripe revenue.
+Gemini-powered application screening for startup incubators — score, summarize, and decide on cohorts in minutes, not weeks.
 ```
+
+*(Confirmed fit: 124/200 characters. Fixes a grammar issue in an earlier draft — "startup application screening for incubators, score, summarize, and decide..." mixed a noun phrase with a verb list with no connector. Also removed "real Stripe revenue" per the test-mode wording caveat used throughout this doc.)*
 
 ### Category
 
@@ -53,83 +55,88 @@ Add every registered teammate on Devpost. Each person must be registered separat
 
 ## Project details
 
-### Inspiration
+*This is the "About the project" markdown field on the **public** Devpost project page (not judges-only) — supersedes the earlier draft below. Confirmed live/pasted as of 2026-07-09, with one correction applied (see note).*
 
 ```
-Incubator program directors told us the same story: hundreds of applications per cohort, weeks of manual review in spreadsheets, founders waiting too long for feedback, and smaller programs priced out of enterprise tools. We built VentureLens as a new product (post–May 19, 2026) to make fair, fast AI screening accessible to every program — and to prove that the company selling AI screening can itself be run by AI agents in production.
+## Inspiration
+Incubators and accelerators receive hundreds of startup applications every cohort. Most programs still review them manually, spreadsheets, email threads, and weeks of committee meetings. Founders wait too long for answers. Reviewers burn out. Smaller programs without enterprise budgets are locked out of AI-powered tools entirely.
+
+Our team has spent years building incubation software through Gohorto, serving 500+ organizations and 20,000+ startups. When the Build with Gemini XPRIZE opened, we asked: What if we built a focused, Gemini-native product that solves the single hardest bottleneck, application screening, for programs that can't afford a full platform?
+
+That question became VentureLens.
+
+## What it does
+
+VentureLens is an AI-native SaaS tool that helps innovation programs evaluate startup applications in minutes instead of weeks.
+
+Program managers can:
+- Accept applications via web forms or PDF/pitch deck upload.
+- Run every submission through Gemini for structured scoring, risk flags, and plain-language summaries.
+- View every applicant's Gemini score, risk flags, and plain-language summary in a structured admin dashboard, so committees can review and compare candidates without digging through raw submissions.
+- Send AI-drafted feedback emails to founders (reviewed by staff before sending).
+- Track screening throughput, API usage, and agent execution logs in a production dashboard.
+
+Every inbound application is processed by Gemini before a human reviewer sees it, AI runs the operation, not just a feature on the side.
+
+## How we built it
+
+VentureLens was built as a new product during the hackathon window (May - August 2026) by a team with deep incubator domain expertise.
+
+Stack:
+- Gemini API: core screening engine (at least one LLM call per application in production).
+- Google Cloud Run: API and web app hosting.
+- Google Cloud SQL: application and evaluation data.
+- Google Cloud Storage: pitch deck and document uploads.
+- Laravel + Vue.js: backend and frontend.
+- Stripe: subscription and cohort-package billing.
+
+AI-native operations:
+- Gemini screens 100% of inbound applications automatically.
+- AI generates committee briefs and founder communication drafts.
+- Production dashboards log every Gemini API call, screening result, and agent action.
+
+Pre-existing work disclosure: Team members bring incubator domain knowledge and open-source framework experience from Gohorto. VentureLens is a separate product, new brand, new codebase, new customer relationships, created after the submission period began. Standard frameworks were used as boilerplate; all Gemini integration and screening logic is original work from this build window.
+
+## Challenges we ran into
+
+- Fair, explainable scoring: Startup evaluation is subjective. We had to design rubrics that work across different program types while giving Gemini enough structure to score consistently and enough flexibility for program managers to override.
+
+- Multilingual applications: Our target market includes MENA and Turkey. Applications arrive in English, Arabic, and Turkish. Gemini handles multilingual input well, but normalizing outputs for mixed-language committees required careful prompt engineering.
+
+- Trusting AI with real decisions: Program directors are accountable for who gets into a cohort. We learned that AI must "assist" decisions, not replace them, so every score comes with reasoning, and humans always have final say.
+
+- Building a real business in 90 days: The competition requires real users and real revenue, not just a demo. That pushed us to ship fast, talk to customers early, and iterate on pricing (cohort packages vs. monthly subscriptions) within the first weeks.
+
+## Accomplishments that we're proud of
+
+- Shipped a production-deployed product on Google Cloud with Gemini running core screening workflows, not a prototype, not a slide deck.
+- Turned years of incubation domain expertise into a focused product that programs can adopt in days, not months.
+- Built an AI-native operation where Gemini handles screening, reporting, and communication drafting end-to-end.
+- On track to serve real programs with real paying customers during the competition window.
+- Made AI-powered application screening accessible to smaller programs that could never afford enterprise incubation software.
+
+## What we learned
+
+- AI-native means AI runs the business: Judges don't want a chatbot bolted onto a form. They want to see Gemini executing key operational decisions in production, with logs to prove it.
+
+- Domain expertise is a moat: Knowing how incubators actually run cohorts, evaluation criteria, committee dynamics, founder communication, let us build something useful in weeks that a generalist team couldn't in months.
+
+- Revenue validates the problem: When a program director pays $199 for a cohort screening package, that's stronger proof than any benchmark score.
+
+- Gemini's document understanding is a game-changer: Parsing unstructured pitch decks and extracting evaluable content multimodally is exactly what manual reviewers struggle with most.
+
+## What's next for VentureLens
+
+- Scale pilots: across incubators in Turkey, MENA, and Europe through direct outreach and incubator network partnerships.
+- Freemium tier: 5 free screenings to onboard new programs, converting to paid cohort packages ($199–$799/mo).
+- Expand AI operations: mentor matching post-selection, automated progress check-ins, and AI-generated program impact reports.
+- Integrate with larger ecosystems: VentureLens as the lightweight entry point; Gohorto as the full platform for programs that outgrow it.
+- Category impact: help 1,000+ programs screen 100,000+ applications fairly and fast, so more founders get the chance to build businesses and create jobs.
 ```
 
-### What it does
+**Correction applied (2026-07-09):** the "What it does" bullet originally read *"Generate committee-ready evaluation reports and side-by-side applicant comparisons"* — verified against `PROJECT_STATUS.md` ("Committee report + PDF export" is explicitly **Cut / Not Implemented, P2**) and the codebase (no side-by-side comparison view exists anywhere in `resources/js/Pages`). Replaced with a description of what's actually built: the admin applications list + detail view showing per-applicant Gemini scores, risk flags, and summaries. This is on the **public** project page, so an unbuilt-feature claim here is higher-risk than the same mistake on the judges-only Additional Info tab (already fixed once for the Cloud Storage field — don't let it recur elsewhere).
 
-```
-VentureLens is a B2B SaaS platform for incubators, accelerators, and university innovation programs.
-
-• Founders apply through a public intake form (web + pitch deck upload to Google Cloud Storage).
-• Every inbound application is screened by Google Gemini against configurable evaluation rubrics before a human reviews it.
-• Program managers receive structured scores, risk flags, and committee-ready summaries.
-• Managers record Accept, Shortlist, Reject, or Waitlist decisions; Gemini drafts founder emails for human approval before send.
-• Programs pay via Stripe (Cohort $199 one-time or Starter $299/month).
-
-What makes us different: six Gemini-powered business agents — Screening, Growth, Onboarding, Support, Finance, and Success — run sales outreach, onboarding, support, finance reconciliation, and success operations. Every agent action is logged with an autonomy level (L0–L3) on a public AI Operations dashboard.
-
-Judges can verify live KPIs at /impact and GET /api/v1/impact.json.
-```
-
-### How we built it
-
-```
-Stack: Laravel 11, Vue 3, Inertia, Tailwind, MySQL.
-
-AI: All LLM calls go through GeminiClient (app/Services/Gemini/GeminiClient.php) — screening, business agents, and RAG embeddings. Structured JSON output for scores; 3× retry with backoff on rate limits. ≥1 Gemini API call per submitted application, logged with token counts and latency.
-
-Agents: Six agents implement BusinessAgentInterface under app/Services/Agents/. Triggers include ScreenApplicationJob (screening), Stripe webhooks (finance + success), registration (onboarding), and scheduled jobs (growth, support). Every decision writes to agent_executions.
-
-RAG: Project-scoped Ask chat (/ask) uses Gemini embedContent, knowledge_chunks, and hybrid retrieval (MySQL or optional Qdrant).
-
-Infrastructure: Google Cloud Run (web + worker), Cloud SQL (MySQL), Cloud Storage (uploads). Secrets in GCP Secret Manager. Deploy via scripts/deploy-cloud-run.ps1.
-
-Billing: Stripe Checkout + webhooks; RevenueClassifier splits arms-length vs related-party revenue per competition rules.
-
-Evidence: CompetitionMetrics service powers /impact; php artisan impact:snapshot commits JSON to docs/evidence/.
-
-Boilerplate disclosure: Laravel/Vue starter scaffolding only; screening pipeline, agents, billing, and evidence layer are original work created during the hackathon window (May–August 2026).
-```
-
-### Challenges we ran into
-
-```
-• Stripe + Inertia: browser checkout needed Inertia::location() and form POST instead of XHR redirect.
-• Gemini free-tier 429s during heavy demo — added exponential backoff; production uses billed API.
-• Proving AI-native operations, not a thin wrapper — required six distinct agents with logged autonomy levels and a judge-visible /ai-operations dashboard.
-• Arms-length revenue evidence — Finance Agent (L3) auto-classifies every Stripe charge; related-party pilot revenue (BINA/Gohorto context) reported separately.
-• Queue workers on Cloud Run — separate worker service for ScreenApplicationJob so screening does not block web requests.
-```
-
-### Accomplishments that we're proud of
-
-```
-• Six production agents with 88.6% of logged decisions at L2–L3 autonomy (79 total agent actions in latest snapshot).
-• $697 arms-length Stripe revenue from 3 independent paying customers, plus $199 related-party reported separately.
-• 7 applications screened by Gemini; 1 startup accepted; 5.3 founder hours saved (modeled); 3 jobs influenced (modeled).
-• Public /impact dashboard and machine-readable API — judges verify numbers without a slide deck.
-• Full submit → screen → committee decision → founder email flow with agent audit trail.
-```
-
-### What we learned
-
-```
-Judges weight three criteria equally: business viability, AI-native operations, and category impact. Revenue alone is not enough — we had to show AI running the company (finance, onboarding, growth, support), not just screening applications. Earned revenue means customers paying for the product; grants and donations do not count. Niche B2B focus (incubators) beats vague "help all founders" positioning. Evidence as a first-class feature (/impact, snapshots, agent logs) saves judges time and builds trust.
-```
-
-### What's next for VentureLens
-
-```
-• Live Stripe (move from test mode) and first subscription renewal.
-• Public verifiable testimonials from program directors (LinkedIn/social URLs).
-• Scale outreach via Growth agent with human-approved sends.
-• Mentor matching and cohort operations (post-hackathon product roadmap).
-• Expand from LAND (screening) to ATTACH (committee reports, founder comms) across more programs in Turkey, MENA, and university innovation hubs.
-```
+**Gohorto scale figures ("500+ organizations and 20,000+ startups"):** confirmed by founder as accurate Gohorto history, not the BINA partner-ecosystem number (which separately also happens to be 20,000+ startups, per `VENTURELENS_SYSTEM_REQUIREMENTS.md` §1 — coincidental overlap, not a copy-paste error).
 
 ### Built with
 
