@@ -393,7 +393,7 @@ PATH TO PROFITABILITY: Unit economics are already strong — marginal cost per s
 WHY ACHIEVABLE: During the hackathon window alone (no paid marketing, direct outreach only) we acquired 13 arms-length paying customers and $2,887 in Stripe checkout revenue. 165 applications have been screened by Gemini in production across 14 countries — proving the core product works at real usage volume, not just in a demo. Our team's prior incubator-network relationships (BINA Business Incubator, Turkey; 20,000+ startups across a partner ecosystem) give distribution reach most screening tools lack.
 ```
 
-*(Refresh the $2,887 / 13 / 165 / 14 figures from `/api/v1/impact.json` right before pasting — see Live KPIs in `PROJECT_STATUS.md`. ⚠️ Word choice: "Stripe checkout revenue," not "real Stripe revenue" — these are currently Stripe **test-mode** transactions, see the unresolved test-mode/burst caveats in the Revenue by month section above and in `docs/evidence/pl-statement-20260709-draft.xlsx`. Do not upgrade this wording to "real revenue" until Stripe is confirmed live with genuine payments. Also deliberately does NOT use the newer $9,764/36-customer figures from production as of 2026-07-09 — that jump includes an unverified, scripted-looking burst; kept to the confirmed-through-07-07 numbers for consistency with the P&L.)*
+*(Refresh the $2,887 / 13 / 165 / 14 figures from `/api/v1/impact.json` right before pasting — see Live KPIs in `PROJECT_STATUS.md`. ⚠️ Word choice: "Stripe checkout revenue," not "real Stripe revenue" — these are currently Stripe **test-mode** transactions, see the unresolved test-mode/burst caveats in the Revenue by month section above and in `docs/evidence/pl-statement-20260709.xlsx`. Do not upgrade this wording to "real revenue" until Stripe is confirmed live with genuine payments. Also deliberately does NOT use the newer $9,764/36-customer figures from production as of 2026-07-09 — that jump includes an unverified, scripted-looking burst; kept to the confirmed-through-07-07 numbers for consistency with the P&L, which is now at `docs/evidence/pl-statement-20260709.xlsx`.)*
 
 ### Please explain which product from Google Cloud you used during the hackathon and how
 
@@ -498,7 +498,24 @@ $0
 No paid advertising or promotion activities during the hackathon period to date.
 ```
 
-**Note:** these match the $0 expense placeholders in `docs/evidence/pl-statement-20260709-draft.xlsx` (SG&A, personnel, software subscriptions, tokens all $0 — team ran on free-tier GCP/Gemini quotas and volunteer time during the hackathon window). If any paid subscriptions or contractor costs were actually incurred, update both this doc and the P&L before final submit — don't leave a real expense unreported just because it's inconvenient to Business Viability optics.
+**Note:** these match the $0 expense placeholders in `docs/evidence/pl-statement-20260709.xlsx` (SG&A, personnel, software subscriptions, tokens all $0 — team ran on free-tier GCP/Gemini quotas and volunteer time during the hackathon window). If any paid subscriptions or contractor costs were actually incurred, update both this doc and the P&L before final submit — don't leave a real expense unreported just because it's inconvenient to Business Viability optics.
+
+### General "Upload a File" field (top of Additional info tab)
+
+This is a separate, generic file-upload slot ("Upload a file as part of your submission - e.g., zip, pdf, word, apk, etc.") that appears before the specific Profit-evidence upload below — judges-only, not shown on the public project page. Use it to give judges a consolidated evidence pack instead of just the one profit PDF.
+
+Upload `docs/evidence/evidence-pack.zip` (built from, and containing):
+- `revenue-evidence.pdf` — payment/revenue evidence
+- `pl-statement-20260709.xlsx` — filled P&L template with disclosure notes
+- `impact-20260707.json` — live KPI snapshot (product-running + agent-activity evidence)
+- `ai-operations-dashboard.png`, `application-screening.png`, `billing-split.png`, `impact-page.png` — product screenshots
+
+Regenerate the zip if any of these files change before final submit:
+
+```bash
+cd docs/evidence
+powershell -Command "Compress-Archive -Path revenue-evidence.pdf,pl-statement-20260709.xlsx,impact-20260707.json,ai-operations-dashboard.png,application-screening.png,billing-split.png,impact-page.png -DestinationPath evidence-pack.zip -Force"
+```
 
 ### Profit evidence upload
 
