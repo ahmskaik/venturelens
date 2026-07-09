@@ -54,6 +54,188 @@
             "url": null
         }
     ],
+    "recent_agent_executions": [
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to MENA Startup Accelerator (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-07-07T09:00:07+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to Istanbul University Innovation Hub (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-07-06T09:00:11+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to MENA Startup Accelerator (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-07-05T09:01:33+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to Istanbul University Innovation Hub (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-07-04T09:00:09+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to Istanbul University Innovation Hub (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-07-03T09:00:06+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to GreenTech Foundry (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-07-02T09:00:08+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to GreenTech Foundry (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-07-01T09:00:14+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to GreenTech Foundry (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-30T09:00:10+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to Istanbul University Innovation Hub (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-29T09:00:10+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to MENA Startup Accelerator (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-28T09:00:22+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to GreenTech Foundry (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-27T09:00:12+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to MENA Startup Accelerator (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-26T09:00:11+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to Istanbul University Innovation Hub (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-25T09:01:58+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to GreenTech Foundry (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-24T09:02:58+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to Istanbul University Innovation Hub (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-23T09:00:46+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to Istanbul University Innovation Hub (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-22T09:00:15+00:00"
+        },
+        {
+            "agent_name": "growth",
+            "step": "growth_outreach_drafted",
+            "decision": "draft_outreach",
+            "action_taken": "Drafted outreach to GreenTech Foundry (not sent \u2014 human review required)",
+            "autonomy_level": 1,
+            "status": "completed",
+            "created_at": "2026-06-21T09:00:09+00:00"
+        },
+        {
+            "agent_name": "support",
+            "step": "rag_chat_answer",
+            "decision": "rag_answer",
+            "action_taken": "RAG chat answered from project knowledge",
+            "autonomy_level": 3,
+            "status": "completed",
+            "created_at": "2026-06-21T08:49:37+00:00"
+        },
+        {
+            "agent_name": "screening",
+            "step": "screening_complete",
+            "decision": "reject",
+            "action_taken": "Scored 10.0 \u2014 status set to needs_info",
+            "autonomy_level": 3,
+            "status": "completed",
+            "created_at": "2026-06-21T08:49:00+00:00"
+        },
+        {
+            "agent_name": "screening",
+            "step": "gemini_screen_called",
+            "decision": "call_gemini",
+            "action_taken": "Invoking Gemini screening API",
+            "autonomy_level": 3,
+            "status": "started",
+            "created_at": "2026-06-21T08:48:39+00:00"
+        }
+    ],
     "scorecard_floors": {
         "arms_length_paying_customers": 3,
         "arms_length_revenue_usd": 600,

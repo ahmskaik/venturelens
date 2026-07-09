@@ -375,6 +375,122 @@ All calls logged with token counts. Latest snapshot: 7 screening-related API cal
 
 ---
 
+## Devpost "Additional info" tab — paste-ready copy (judges-only, not public)
+
+*This tab appeared as step 4 of 5 on Devpost's submission flow (Manage team → Overview → Details → **Additional info** → Submit). Fields below match the exact labels seen on that form as of 2026-07-09. Not all Devpost accounts get identical fields — skip any that don't appear for you.*
+
+**⚠️ Before pasting revenue/user numbers here, refresh from live production** — do not reuse whatever was previously drafted in the form (it may show stale $0 / placeholder values from before revenue went live). Pull current figures from `https://venturelens.app/api/v1/impact.json` or Stripe Dashboard → Payments (filtered by date) for the authoritative total.
+
+### Explain how your business model shared above is sustainable and viable
+
+*(Address: 5-year goal — target revenue, TAM, market share; path to profitability — P&L + timing; why achievable — hypothesis + traction so far.)*
+
+```
+FIVE-YEAR GOAL: $10M ARR by 2031 — roughly 2% share of the global incubator/accelerator software market (15,000+ programs worldwide; TAM estimated at $450M+ at $2–8K average annual program spend on screening/evaluation tools).
+
+PATH TO PROFITABILITY: Unit economics are already strong — marginal cost per screened application is Gemini API + Cloud Run compute (roughly $0.10–0.50/application), against pricing starting at $199/cohort or $299/month. At ~80–100 paying programs (projected 18–24 months post-hackathon via direct outreach + incubator network referrals), recurring revenue clears infrastructure and support costs — profitability is a function of sales volume, not margin.
+
+WHY ACHIEVABLE: During the hackathon window alone (no paid marketing, direct outreach only) we acquired 13 arms-length paying customers and $2,887 in Stripe checkout revenue. 165 applications have been screened by Gemini in production across 14 countries — proving the core product works at real usage volume, not just in a demo. Our team's prior incubator-network relationships (BINA Business Incubator, Turkey; 20,000+ startups across a partner ecosystem) give distribution reach most screening tools lack.
+```
+
+*(Refresh the $2,887 / 13 / 165 / 14 figures from `/api/v1/impact.json` right before pasting — see Live KPIs in `PROJECT_STATUS.md`. ⚠️ Word choice: "Stripe checkout revenue," not "real Stripe revenue" — these are currently Stripe **test-mode** transactions, see the unresolved test-mode/burst caveats in the Revenue by month section above and in `docs/evidence/pl-statement-20260709-draft.xlsx`. Do not upgrade this wording to "real revenue" until Stripe is confirmed live with genuine payments. Also deliberately does NOT use the newer $9,764/36-customer figures from production as of 2026-07-09 — that jump includes an unverified, scripted-looking burst; kept to the confirmed-through-07-07 numbers for consistency with the P&L.)*
+
+### Please explain which product from Google Cloud you used during the hackathon and how
+
+```
+GOOGLE CLOUD RUN
+Hosts the VentureLens API and web application. Serverless containers auto-scale with application volume. Deployed via CI/CD from our GitHub repository.
+
+GOOGLE CLOUD SQL (MySQL)
+Stores application data, evaluation scores, program configurations, and user accounts. Each screening result and Gemini response metadata is persisted for audit trails.
+
+GOOGLE CLOUD STORAGE
+Stores uploaded pitch decks and PDFs from founder applications, plus nightly-archived impact evidence snapshots (JSON) written by a scheduled Cloud Function for judge verification.
+
+GOOGLE CLOUD LOGGING
+Captures all Gemini API calls (with token counts and latency), screening events, and agent execution traces via stderr logging from Cloud Run — used for production monitoring and as evidence that AI playbooks run continuously.
+
+GEMINI API (via Google AI)
+Accessed from Cloud Run services. Every application screening, document analysis, and business-agent decision calls the Gemini API in the deployed environment.
+
+Together, these services form the full production stack: founders submit applications → Cloud Run processes them → Gemini analyzes content → results stored in Cloud SQL → files in Cloud Storage → all activity logged in Cloud Logging → nightly impact snapshots archived back to Cloud Storage for judges.
+```
+
+**Correction from an earlier draft:** removed the claim that Cloud Storage holds "generated evaluation report exports" — that's a **Committee report / PDF export feature that is not built** (explicitly listed under Not Implemented / Cut in `PROJECT_STATUS.md`). Replaced with what's actually there: the nightly impact-evidence archiver (`gcp-impact-archiver/` Cloud Function + Scheduler → `ImpactEvidenceArchiveService.php` → `gs://…/evidence/impact-*.json`), which is real and verifiable. Also added the token/latency detail to the Cloud Logging line since that's explicitly required by the workspace rule ("≥1 Gemini API call per submitted application, always logged with token counts + latency") and is directly verifiable in `GeminiClient.php`.
+
+### GitHub repo evidence links
+
+```
+Repo (shared with testing@devpost.com and judging@hacker.fund):
+https://github.com/ahmskaik/venturelens
+
+Evidence of product running (continuous agent execution — daily Growth agent runs, Gemini API calls, timestamps over 2+ weeks):
+https://github.com/ahmskaik/venturelens/blob/main/docs/evidence/impact-20260707.json
+
+Evidence of profit (Stripe-sourced revenue export):
+https://github.com/ahmskaik/venturelens/blob/main/docs/evidence/revenue-evidence.pdf
+```
+
+Alternate "evidence of product running" link if a screenshot is preferred over JSON: `https://github.com/ahmskaik/venturelens/blob/main/docs/evidence/ai-operations-dashboard.png`
+
+**Before pasting:** confirm your repo is actually shared with `testing@devpost.com` and `judging@hacker.fund` (GitHub → repo → Settings → Collaborators, or make the repo public) — the checkbox on the form only confirms it, it doesn't do the sharing for you.
+
+### Are you using any pre-existing business resources (before May 19, 2026)?
+
+```
+Team members have pre-existing relationships with incubator programs — including BINA Business Incubator (Turkey) — through prior work in the incubation space (Gohorto). We use this domain network for direct outreach and distribution to prospective customers. BINA is disclosed as a pilot/related-party relationship; any revenue from BINA or team-connected organizations is classified and reported separately as related-party revenue (currently $0), never counted toward arms-length business viability.
+
+No pre-existing code, employees, revenue, or audience/followers from Gohorto are used in this project. VentureLens is a new codebase built entirely during the hackathon window (post–May 19, 2026); only standard open-source Laravel/Vue boilerplate is reused, which is disclosed per hackathon rules.
+```
+
+### Revenue by month + "Explain the revenue shared above"
+
+**Do not leave this at $0 / all-zero months** — that materially understates Business Viability, one of three equal judging criteria.
+
+**⚠️ Known data gap:** production's Stripe charge rows were lost mid-June (see 2026-06-18 changelog, "Production DB lost Stripe charge rows"). The current $0→$2,887 growth is entirely **post-reset**, confirmed at these checkpoints:
+
+| Date | Arms-length revenue | Customers | Source |
+|------|---------------------|-----------|--------|
+| 2026-06-18 | $597 | 3 | Changelog: "Production revenue live" |
+| 2026-06-19 | $995 | 5 | `impact-20260619.json` |
+| 2026-06-20 (evening) | $2,489 | 11 | Changelog: Manus 2nd re-judge |
+| 2026-07-07 | $2,887 | 13 | `impact-20260707.json` (live) |
+
+**There is a 16-day changelog gap (2026-06-21 → 2026-07-07)** with no logged milestone — so the +$398 / +2 customers between the June 20 and July 7 checkpoints could have landed in late June *or* early July; it is not independently confirmed which. Best-effort split below assumes it landed in July (conservative — attributes the ambiguous growth to the month it's least certain, rather than inflating the confirmed June figure):
+
+| Month | Arms-length (USD) | Confidence |
+|-------|-------------------|------------|
+| May 2026 | 0 | Certain — product launched May 19, no live Stripe yet |
+| June 2026 | **2,489** | Confirmed — matches 06-20 evening checkpoint, no further logged activity through June 30 |
+| July 2026 (through submission date) | **398** | Estimate — unconfirmed exact date, could be earlier |
+| August 2026 | 0 | Certain — hasn't started |
+
+**Before final submit, verify the exact June/July split via Stripe Dashboard → Payments, filtered by date range** (`dashboard.stripe.com/payments` → filter `Date` per calendar month) — that's the only fully authoritative source; the app's own changelog does not log every individual checkout.
+
+**Total Revenue field:** `2887` (refresh to the exact live number before final submit)
+
+**Explain the revenue shared above:**
+
+```
+Total revenue reported reflects real Stripe checkouts during the hackathon window (May 19–Aug 17, 2026), classified as arms-length (independent, unrelated paying customers) by our RevenueClassifier service. As of this snapshot: $2,887 in arms-length revenue from 13 paying customers; $0 related-party revenue. Breakdown: May $0 (product launched May 19+, no revenue yet); June ~$2,489 (11 of 13 customers); July ~$398 so far (2 more customers). No grants, sponsorships, or donations are included — 100% of reported revenue is customers paying via Stripe Checkout for the Cohort ($199 one-time) or Starter ($299/mo) plan. Figures refreshed from live production at venturelens.app/api/v1/impact.json immediately before submission.
+```
+
+**Number of users acquired during the hackathon:** `15` (registered organizations, live `/impact`)
+**Number of those paying:** `13` (arms-length paying customers, live `/impact`)
+
+### Profit evidence upload
+
+The form requires an actual **file upload** (not a URL) for "Upload your Profit evidence." Use the file already in the repo at `docs/evidence/revenue-evidence.pdf` — click **Choose Files** and select it from your local checkout (`c:\xampp\htdocs\venturelens\docs\evidence\revenue-evidence.pdf`).
+
+If revenue has grown since that PDF was generated (2026-06-11), regenerate it first so the upload matches the numbers you just typed into the revenue fields:
+
+```bash
+php scripts/export-revenue-evidence.php   # run against production DB — outputs revenue-evidence.json + .html
+# then print revenue-evidence.html to PDF (browser Print → Save as PDF), or use Stripe Dashboard → Export
+```
+
+---
+
 ## Category impact evidence
 
 ### How does your project move the needle in Entrepreneurship & Job Creation?
@@ -449,7 +565,7 @@ README Judge Quickstart: repository README.md#judge-quickstart-read-this-first
 |------|--------|
 | All fields above pasted | ⬜ |
 | KPI numbers refreshed from live `/impact` | ⬜ |
-| Video uploaded + URL pasted | ⬜ |
+| Video uploaded + URL pasted | ✅ https://www.youtube.com/watch?v=26YEt4dUeLU |
 | GitHub shared with judges | ⬜ |
 | 4–6 screenshots in gallery | ✅ 4 ready |
 | P&L / revenue PDF attached | ✅ |

@@ -1,6 +1,6 @@
 # VentureLens — Project Status
 
-**Last updated:** 2026-07-07  
+**Last updated:** 2026-07-09  
 **Competition:** [Build with Gemini XPRIZE](https://www.geminixprize.com/) · Category: **Entrepreneurship & Job Creation**  
 **Devpost:** Project **VentureLens** (draft in progress) · Submission deadline: **Aug 17, 2026, 1:00 PM PT**  
 **Phase:** **Advanced stage push** — see [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) for mandatory path  
@@ -55,7 +55,7 @@ VentureLens is an **AI-native B2B SaaS** that screens startup applications for i
 | **AI-Native Operations** | 🟢 **10/10** (Manus) | **99.9%** AI decisions, **34,579** agent actions |
 | **Category Impact** | 🟢 **8/10** (Manus) | **165** screened, **123.8** founder-hours saved, **2** accepted — 100-app floor ✅ |
 | **Google Cloud (rules)** | 🟢 Live | Cloud Run web + worker + impact archiver; GCS evidence |
-| **Devpost submission** | 🟡 In progress | Video script + ElevenLabs narration + recording flow ready (**#1 risk** per Manus); **record now** |
+| **Devpost submission** | 🟡 In progress | Demo video live: [YouTube](https://www.youtube.com/watch?v=26YEt4dUeLU) — paste into Devpost + share GitHub next |
 
 **Manus verdict (2026-06-20 evening):** **80% ready** · Advanced-stage **Complete** · Prize **High Tier / top 3 conversation** · Full review: [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md)
 
@@ -139,7 +139,7 @@ Source: live **`https://venturelens.app/api/v1/impact.json`** (2026-07-07 ~12:36
 | Written narrative (500–1,000 words) | ✅ Draft in DEVPOST_SUBMISSION.md |
 | Additional info (revenue, agents, GCP) | ✅ Draft in DEVPOST_SUBMISSION.md |
 | Image gallery (4–6 screenshots) | ✅ 4 PNGs in `docs/evidence/` (impact, billing, AI ops, application screening) |
-| Demo video (< 3 min) | 🟡 Script + ElevenLabs narration finalized, recording todo — [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md) + `scripts/preflight-demo-video.ps1` |
+| Demo video (< 3 min) | ✅ [YouTube](https://www.youtube.com/watch?v=26YEt4dUeLU) — paste into Devpost Video field |
 | Final submit | ⬜ Due Aug 17, 2026 (target Aug 15 buffer) |
 | GitHub shared with judges | ⬜ Confirm `testing@devpost.com`, `judging@hacker.fund` |
 
@@ -302,7 +302,7 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 | Founder email draft + send | ✅ |
 | Replay screening → activity KPIs > 0 | ✅ `impact-20260611.json` |
 | Devpost field-by-field copy | ✅ [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) |
-| Demo video (< 3 min) | 🟡 Script + AI (ElevenLabs) narration + recording flow finalized — [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md); recording itself still todo |
+| Demo video (< 3 min) | ✅ [YouTube](https://www.youtube.com/watch?v=26YEt4dUeLU) |
 | Screenshot set (5 images) | ✅ 4/5 — [`docs/evidence/`](evidence/) (optional: replay-screening PNG) |
 | `docs/evidence/revenue-evidence.pdf` | ✅ Generated from `revenue-evidence.html` (or Stripe Dashboard export) |
 | Devpost final submit (by Aug 15) | ⬜ Todo |
@@ -315,13 +315,13 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 
 Per [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md) (2026-06-20 evening). **Packaging only** — no new product scope until video + Devpost ship.
 
-1. **Invite GitHub judges** — **(Gate A/E, serious)** Add `testing@devpost.com` and `judging@hacker.fund` to repo — 2-minute task
-2. **Record "Breakthrough" video** — **(Gate A, #1 risk)** Record **NOW** — "143 startups, 100+ founder-hours, 30k agent actions"; do not wait for 500th app
-3. **Fix testimonial URLs** — Replace `null` links; **11 customers** — at least one public shout-out required
-4. **Impact story blog** — 500-word piece on 12 countries; use screened-app data (e.g. green-tech in MENA)
-5. **Billing on primary Gemini key** — Disable key pool; drain final ~357 apps without 429 in submission window
+1. **Fix stale $0 revenue on Devpost "Additional info" tab** — draft form showed $0 total / all-zero months / 3 users / 1 paying customer, which understates live production ($2,887 / 13 customers / 15 orgs); corrected paste-ready copy in [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) → "Additional info tab" section
+2. **Invite GitHub judges** — **(Gate A/E, serious)** Add `testing@devpost.com` and `judging@hacker.fund` to repo — form's confirmation checkbox does not do this automatically
+3. **Upload profit evidence file** on Additional info tab — `docs/evidence/revenue-evidence.pdf` (regenerate via `scripts/export-revenue-evidence.php` first if stale vs current revenue)
+4. **Paste remaining Devpost fields** from [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md); refresh KPIs from live `/impact` before submit
+5. **Devpost final submit** by Aug 15 (hard deadline Aug 17)
 
-**Also:** Devpost final submit by Aug 15.
+**Also:** Confirm gallery screenshots + `revenue-evidence.pdf` attached.
 
 **Narrative (Manus):** Lead with **"The $2,500/mo AI-Operated Incubator"** · emphasize **Autonomy at Scale** (30k actions) · frame **11 customers** as global validation, not BINA pilot.
 
@@ -391,6 +391,8 @@ php artisan test --filter=RevenueClassifierTest
 
 | Date | Change |
 |------|--------|
+| 2026-07-09 | **Devpost "Additional info" tab reviewed** — flagged stale $0 revenue / 3-users draft vs live $2,887 / 13 customers / 15 orgs; added paste-ready copy (business model sustainability, GitHub evidence links, revenue-by-month, pre-existing resources disclosure) to [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) |
+| 2026-07-09 | **Demo video published** — [YouTube unlisted](https://www.youtube.com/watch?v=26YEt4dUeLU); URL saved in [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md); next: paste into Devpost + share GitHub with judges |
 | 2026-07-07 | **Real testimonial on `/impact`** — Mustafa Sagezli (General Manager, BINA Program) quote + photo; replaced seeded Sarah Chen entry; deployed `venturelens-web-00044-kz2` |
 | 2026-07-07 | **Demo video finalized for recording** — ElevenLabs AI-narration script (10 synced scene blocks + tag/settings guidance) and AI-narrated recording flow (audio-first → silent screen capture → edit sync) added to [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md); live KPIs refreshed from prod (**$2,887 / 13 customers, $0 related-party, 165 screened, 34,579 agent actions, 99.9% AI, 123.8 founder-hours, 2 accepted**); snapshot saved to [`impact-20260707.json`](evidence/impact-20260707.json) |
 | 2026-06-20 | **Manus second re-judge** — **80%** ready (↑ from 72%); Viability **9/10**, Impact **8/10**, Gate D 🟢; video **record NOW**; top 3 conversation → [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md) |
