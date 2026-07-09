@@ -190,13 +190,16 @@ If private: add collaborators `testing@devpost.com` and `judging@hacker.fund`.
 
 ### Image gallery
 
-Upload from `docs/evidence/`:
+Upload these 4 from `docs/evidence/` (all PNG, well under the 5 MB limit; ~717×657px — not the "best results" 3:2 ratio Devpost suggests, but a minor cosmetic point, not a blocker):
 
-1. `impact-dashboard.png` (or equivalent) — `/impact` KPIs  
-2. `ai-operations.png` — agent registry + autonomy  
-3. `application-screening.png` — Gemini scores on app detail  
-4. `billing-revenue-split.png` — arms-length vs related-party  
-5. *(optional)* replay-screening.png  
+1. `impact-page.png` — Business viability + AI operations + Category impact KPIs
+2. `ai-operations-dashboard.png` — agent registry + autonomy distribution + actions-by-agent
+3. `application-screening.png` — PayLink MENA, 93/100, Gemini score + rubric breakdown
+4. `billing-split.png` — arms-length vs related-party revenue classification on a real charge
+
+**Refreshed 2026-07-09.** `application-screening.png` and `billing-split.png` are fresh live captures (production, demo account). `impact-page.png` and `ai-operations-dashboard.png` are **faithful static reproductions** built from the committed `impact-20260707.json` snapshot, not live-page captures — because at the time of refresh, production's live `/impact` and `/ai-operations` pages were showing 36 arms-length customers / $9,764 revenue from a batch of signups the founder created manually across different browsers specifically to test/pad the count. Per the founder's explicit decision, the Devpost submission reports the confirmed, pre-batch numbers (13 customers / $2,887) throughout — so screenshotting the live pages at that moment would have contradicted the P&L, revenue-evidence PDF, and every text field in this doc. The two reconstructed images use the exact same real, verifiable numbers as the linked JSON evidence and match the live page's actual visual design — they are not fabricated data, just not live-DOM captures at this specific moment. `evidence-pack.zip` (for the separate generic "Upload a File" field) was rebuilt with all 4 refreshed images.
+
+**Known integrity risk, disclosed here for the record:** production data itself (not this submission) currently shows the inflated 36/$9,764 figures live at `venturelens.app/impact`. If a judge visits the live site directly (rather than relying on the linked JSON snapshot or these screenshots), they will see numbers that don't match what's reported here. This wasn't reverted per the founder's decision. Worth revisiting before final submit if there's time.
 
 ---
 
