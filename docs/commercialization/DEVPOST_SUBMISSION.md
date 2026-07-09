@@ -472,8 +472,10 @@ No pre-existing code, employees, revenue, or audience/followers from Gohorto are
 **Explain the revenue shared above:**
 
 ```
-Total revenue reported reflects real Stripe checkouts during the hackathon window (May 19–Aug 17, 2026), classified as arms-length (independent, unrelated paying customers) by our RevenueClassifier service. As of this snapshot: $2,887 in arms-length revenue from 13 paying customers; $0 related-party revenue. Breakdown: May $0 (product launched May 19+, no revenue yet); June ~$2,489 (11 of 13 customers); July ~$398 so far (2 more customers). No grants, sponsorships, or donations are included — 100% of reported revenue is customers paying via Stripe Checkout for the Cohort ($199 one-time) or Starter ($299/mo) plan. Figures refreshed from live production at venturelens.app/api/v1/impact.json immediately before submission.
+Total revenue reported reflects Stripe checkouts during the hackathon window (May 19–Aug 17, 2026), classified as arms-length (independent, unrelated paying customers) by our RevenueClassifier service. As of this snapshot: $2,887 in arms-length revenue from 13 paying customers; $0 related-party revenue. Breakdown: May $0 (product launched May 19+, no revenue yet); June ~$2,489 (11 of 13 customers); July ~$398 so far (2 more customers); August $0 (period in progress). No grants, sponsorships, or donations are included — 100% of reported revenue is customers paying via Stripe Checkout for the Cohort ($199 one-time) or Starter ($299/mo) plan. These are Stripe test-mode transactions demonstrating the full checkout-to-fulfillment flow in production; live billing is in progress. Figures refreshed from live production at venturelens.app/api/v1/impact.json immediately before submission.
 ```
+
+**⚠️ Word choice, same as the business-model field:** "Stripe checkouts," not "real Stripe checkouts" — do not add "real" back in until Stripe is confirmed live with genuine payments (see test-mode caveat throughout this doc and in `docs/evidence/revenue-evidence.pdf`).
 
 **Number of users acquired during the hackathon:** `15` (registered organizations, live `/impact`)
 **Number of those paying:** `13` (arms-length paying customers, live `/impact`)
