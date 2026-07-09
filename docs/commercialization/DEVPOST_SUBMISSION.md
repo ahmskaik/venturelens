@@ -480,6 +480,26 @@ Total revenue reported reflects Stripe checkouts during the hackathon window (Ma
 **Number of users acquired during the hackathon:** `15` (registered organizations, live `/impact`)
 **Number of those paying:** `13` (arms-length paying customers, live `/impact`)
 
+### Expenses
+
+**Total Expenses:** `0`
+
+**Total Cost of Goods Sold:**
+
+```
+$0
+Development-time Gemini API usage stayed within free-tier limits, so no COGS has been incurred to date. When live at scale, COGS will include per-application Gemini API costs plus Cloud Run/Cloud SQL usage directly tied to delivering screening services to paying customers.
+```
+
+**Total marketing and customer acquisition expense:**
+
+```
+$0
+No paid advertising or promotion activities during the hackathon period to date.
+```
+
+**Note:** these match the $0 expense placeholders in `docs/evidence/pl-statement-20260709-draft.xlsx` (SG&A, personnel, software subscriptions, tokens all $0 — team ran on free-tier GCP/Gemini quotas and volunteer time during the hackathon window). If any paid subscriptions or contractor costs were actually incurred, update both this doc and the P&L before final submit — don't leave a real expense unreported just because it's inconvenient to Business Viability optics.
+
 ### Profit evidence upload
 
 The form requires an actual **file upload** (not a URL) for "Upload your Profit evidence." Use the file already in the repo at `docs/evidence/revenue-evidence.pdf` — click **Choose Files** and select it from your local checkout (`c:\xampp\htdocs\venturelens\docs\evidence\revenue-evidence.pdf`).
@@ -500,12 +520,13 @@ php scripts/export-revenue-evidence.php   # run against production DB — output
 ```
 VentureLens lowers the cost and time for incubators to run application cycles, so more programs — including under-resourced university and regional hubs — can offer fair selection to founders.
 
-Quantified production impact (latest snapshot):
-• 7 applications screened by Gemini (founders receive structured feedback faster than manual review).
-• 5.3 founder hours saved (modeled vs 45 min manual review per app).
-• 1 startup accepted into a program; 3 jobs influenced (modeled from accepted startup team size).
-• 4 countries with registered program organizations.
-• 4 programs enabled on the platform.
+Quantified production impact (latest snapshot, 2026-07-07):
+• 165 applications screened by Gemini (founders receive structured feedback faster than manual review).
+• 123.8 founder hours saved (modeled vs 45 min manual review per app).
+• 2 startups accepted into a program; 6 jobs influenced (modeled from accepted startup team size).
+• 14 countries with registered program organizations.
+• 13 programs enabled on the platform.
+• 34,579 total agent actions logged (99.9% AI-decided) — the business itself runs on Gemini agents, not just the product.
 
 Scale path: team has incubator distribution context (9+ countries via partner ecosystem). Land with screening ($199–$299); expand to full cohort operations. Each enabled program multiplies founder access to capital and mentorship pathways.
 ```
@@ -534,13 +555,13 @@ REPLACE_WITH_PUBLIC_TESTIMONIAL_URL_2
 ### Number of paying customers (arms-length)
 
 ```
-3
+13
 ```
 
 ### Number of registered organizations / users
 
 ```
-7 registered organizations (latest impact snapshot)
+15 registered organizations (latest impact snapshot)
 ```
 
 ---
