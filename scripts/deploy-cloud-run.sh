@@ -43,7 +43,7 @@ stripe_env_vars() {
   local vars="STRIPE_PRICE_COHORT=${STRIPE_PRICE_COHORT:-}"
   vars+=",STRIPE_PRICE_STARTER=${STRIPE_PRICE_STARTER:-}"
   vars+=",DEMO_USER_EMAIL=${DEMO_USER_EMAIL:-demo@venturelens.app}"
-  vars+=",DEMO_USER_PASSWORD=${DEMO_USER_PASSWORD:-demo-password-change-me}"
+  vars+=",DEMO_USER_PASSWORD=${DEMO_USER_PASSWORD:-demo123}"
   vars+=",GEMINI_MAX_RETRIES=${GEMINI_MAX_RETRIES:-5}"
   vars+=",$(rag_env_vars)"
   vars+=",SESSION_DRIVER=database,CACHE_STORE=database"

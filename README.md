@@ -20,7 +20,7 @@ VentureLens helps incubators, accelerators, and university innovation programs e
 | **Impact KPIs** | http://127.0.0.1:8000/impact |
 | **Impact JSON** | http://127.0.0.1:8000/api/v1/impact.json |
 | **Email** | `demo@venturelens.app` |
-| **Password** | `demo-password-change-me` |
+| **Password** | `demo123` |
 
 ### Production (after Cloud Run deploy)
 
@@ -155,7 +155,7 @@ STRIPE_PRICE_STARTER=price_...
 
 # Demo (judges)
 DEMO_USER_EMAIL=demo@venturelens.app
-DEMO_USER_PASSWORD=demo-password-change-me
+DEMO_USER_PASSWORD=demo123
 ```
 
 ---
@@ -228,7 +228,7 @@ This uploads Stripe/Gemini secrets from `.env` to GCP Secret Manager when you ru
 |--------|---------|
 | `STRIPE_PRICE_COHORT` | `price_1TglZY...` |
 | `STRIPE_PRICE_STARTER` | `price_1TglZZ...` |
-| `DEMO_USER_PASSWORD` | `demo-password-change-me` |
+| `DEMO_USER_PASSWORD` | `demo123` |
 
 GCP Secret Manager: `stripe-secret`, `stripe-webhook-secret`, `gemini-api-key`, `venturelens-app-key`, `venturelens-db-password`
 

@@ -29,7 +29,7 @@ const form = useForm({
                     Structured AI evaluation, committee workflows, and founder communications — in one platform.
                 </p>
             </div>
-            <p class="text-xs text-slate-400">Demo: demo@venturelens.app</p>
+            <p class="text-xs text-slate-400">Demo: demo@venturelens.app / demo123</p>
         </div>
 
         <div class="flex flex-1 items-center justify-center bg-white px-6 py-12">

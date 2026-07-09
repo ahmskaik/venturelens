@@ -7,7 +7,7 @@ No new product scope — paths and screenshots judges can verify in ~3 minutes.
 | Item | URL |
 |------|-----|
 | App | http://127.0.0.1:8000 |
-| Demo login | `demo@venturelens.app` / `demo-password-change-me` |
+| Demo login | `demo@venturelens.app` / `demo123` |
 | Impact KPIs | http://127.0.0.1:8000/impact |
 | Impact JSON | http://127.0.0.1:8000/api/v1/impact.json |
 | AI Operations | http://127.0.0.1:8000/ai-operations |

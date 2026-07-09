@@ -17,7 +17,7 @@ Paste-ready text for each Devpost field. **Refresh dollar amounts** from live `/
 |------|----------------|
 | KPI snapshot source | `docs/evidence/impact-20260611.json` (run `php artisan impact:snapshot` before submit) |
 | Production URL | `https://venturelens.app` *(update if redeployed)* |
-| Demo login | `demo@venturelens.app` / `demo-password-change-me` |
+| Demo login | `demo@venturelens.app` / `demo123` |
 | GitHub | `https://github.com/ahmskaik/venturelens` — share with judges if private |
 | Video | YouTube/Vimeo **unlisted** URL after recording — `DEMO_VIDEO_SCRIPT.md` |
 | P&L attachment | `docs/evidence/revenue-evidence.pdf` |
@@ -152,7 +152,7 @@ Laravel, Vue.js, Inertia.js, Tailwind CSS, MySQL, Google Gemini API, Google Clou
 **Login instructions (paste in additional info or README field):**
 
 ```
-Demo account: demo@venturelens.app / demo-password-change-me
+Demo account: demo@venturelens.app / demo123
 
 Judge quickstart (3 minutes):
 1. Dashboard → Applications → open scored app → Replay screening (live Gemini call).
@@ -168,7 +168,7 @@ Judge quickstart (3 minutes):
 ### Video demo
 
 ```
-REPLACE_WITH_YOUTUBE_OR_VIMEO_URL
+https://www.youtube.com/watch?v=26YEt4dUeLU
 ```
 
 Record per `DEMO_VIDEO_SCRIPT.md` (≤3:00). Must show AI live (replay screening) and key operational decisions (/ai-operations).
@@ -246,7 +246,7 @@ TECHNICAL COMPLIANCE
 • Google Cloud — Cloud Run, Cloud SQL (MySQL), Cloud Storage for uploads.
 • New project — VentureLens is new (post–May 19, 2026); Laravel/Vue boilerplate disclosed; screening, agents, and evidence are original.
 
-Try it: production URL in Try it out fields. Demo: demo@venturelens.app / demo-password-change-me. Evidence: /impact, /ai-operations, docs/evidence/impact-*.json in repo.
+Try it: production URL in Try it out fields. Demo: demo@venturelens.app / demo123. Evidence: /impact, /ai-operations, docs/evidence/impact-*.json in repo.
 ```
 
 ---

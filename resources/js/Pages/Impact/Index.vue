@@ -178,10 +178,22 @@ function barWidth(count, max) {
             <section v-if="metrics.testimonials?.length" class="vl-card p-6">
                 <h2 class="text-base font-semibold text-slate-900">Testimonials</h2>
                 <div class="mt-4 grid gap-4 sm:grid-cols-2">
-                    <blockquote v-for="(t, i) in metrics.testimonials" :key="i" class="rounded-lg border border-slate-100 bg-slate-50 p-5 text-sm">
-                        <p class="text-slate-700">"{{ t.quote }}"</p>
-                        <footer class="mt-3 text-slate-500">— {{ t.name }}, {{ t.role }}</footer>
-                        <a v-if="t.url" :href="t.url" target="_blank" class="mt-2 inline-block text-xs font-medium text-brand-600 hover:underline">Verify source</a>
+                    <blockquote
+                        v-for="(t, i) in metrics.testimonials"
+                        :key="i"
+                        class="flex gap-4 rounded-lg border border-slate-100 bg-slate-50 p-5 text-sm"
+                    >
+                        <img
+                            v-if="t.image"
+                            :src="t.image"
+                            :alt="t.name"
+                            class="h-16 w-16 shrink-0 rounded-full border border-slate-200 object-cover object-top"
+                        />
+                        <div class="min-w-0">
+                            <p class="text-slate-700">"{{ t.quote }}"</p>
+                            <footer class="mt-3 text-slate-500">— {{ t.name }}, {{ t.role }}</footer>
+                            <a v-if="t.url" :href="t.url" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block text-xs font-medium text-brand-600 hover:underline">Verify source</a>
+                        </div>
                     </blockquote>
                 </div>
             </section>

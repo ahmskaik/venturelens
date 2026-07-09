@@ -1,0 +1,64 @@
+{
+    "generated_at": "2026-07-07T12:36:41+00:00",
+    "assumptions": {
+        "manual_review_minutes_per_app": 45,
+        "avg_jobs_per_startup": 3,
+        "jobs_influenced_note": "Modeled: accepted_startups \u00d7 avg_jobs_per_startup"
+    },
+    "business": {
+        "arms_length_paying_customers": 13,
+        "arms_length_revenue_usd": 2887,
+        "related_party_revenue_usd": 0,
+        "total_revenue_usd": 2887,
+        "subscription_renewals": 0
+    },
+    "activity": {
+        "applications_screened": 165,
+        "gemini_api_calls": 175,
+        "gemini_tokens": 369071,
+        "registered_organizations": 15,
+        "programs_enabled": 13,
+        "countries_reached": 14
+    },
+    "ai_operations": {
+        "total_agent_actions": 34579,
+        "ai_decided_actions": 34530,
+        "pct_decisions_by_ai": 99.9,
+        "autonomy_distribution": [
+            3,
+            46,
+            13,
+            34517
+        ],
+        "by_agent": {
+            "screening": 34495,
+            "growth": 25,
+            "support": 13,
+            "onboarding": 16,
+            "finance": 15,
+            "success": 15
+        },
+        "human_hours_displaced": 142.9
+    },
+    "impact": {
+        "founder_hours_saved": 123.8,
+        "founders_timely_feedback": 162,
+        "jobs_influenced_modeled": 6,
+        "accepted_startups": 2
+    },
+    "testimonials": [
+        {
+            "name": "Sarah Chen",
+            "role": "Program Director, Demo Incubator",
+            "quote": "We screened our entire cohort in a weekend instead of three weeks. Founders got feedback the same day.",
+            "url": null
+        }
+    ],
+    "scorecard_floors": {
+        "arms_length_paying_customers": 3,
+        "arms_length_revenue_usd": 600,
+        "applications_screened": 100,
+        "pct_decisions_by_ai": 50
+    },
+    "source_note": "Fetched directly from production GET /api/v1/impact.json (venturelens.app) for demo-video KPI refresh. Local artisan snapshot not run because this shell targets the local dev DB, not production."
+}

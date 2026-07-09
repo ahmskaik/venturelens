@@ -32,7 +32,7 @@ for (const arg of args) {
 }
 
 const email = process.env.DEMO_USER_EMAIL || 'demo@venturelens.app';
-const password = process.env.DEMO_USER_PASSWORD || 'demo-password-change-me';
+const password = process.env.DEMO_USER_PASSWORD || 'demo123';
 
 const VIEWPORT = { width: 1440, height: 900 };
 

@@ -50,7 +50,7 @@ STRIPE_KEY=pk_test_...
 STRIPE_PRICE_COHORT=price_...
 STRIPE_PRICE_STARTER=price_...
 STRIPE_WEBHOOK_SECRET=      # optional until webhook registered
-DEMO_USER_PASSWORD=demo-password-change-me
+DEMO_USER_PASSWORD=demo123
 ```
 
 `GCP_DB_PASSWORD` is used for Cloud SQL user `venturelens` and must match what Secret Manager stores. Local Laravel uses `DB_PASSWORD` for XAMPP only.
@@ -167,7 +167,7 @@ Deployed. Web URL: https://venturelens-web-xxxxx-uc.a.run.app
 
 1. Open `{URL}/up` → `{"status":"ok"}`
 2. Open `{URL}/impact` → KPIs (empty revenue until you run test checkouts on production URL)
-3. Login `demo@venturelens.app` / `demo-password-change-me`
+3. Login `demo@venturelens.app` / `demo123`
 
 ### Stripe webhook (optional for Cohort one-time)
 

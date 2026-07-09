@@ -1,6 +1,6 @@
 # VentureLens — Project Status
 
-**Last updated:** 2026-06-21  
+**Last updated:** 2026-07-07  
 **Competition:** [Build with Gemini XPRIZE](https://www.geminixprize.com/) · Category: **Entrepreneurship & Job Creation**  
 **Devpost:** Project **VentureLens** (draft in progress) · Submission deadline: **Aug 17, 2026, 1:00 PM PT**  
 **Phase:** **Advanced stage push** — see [`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md) for mandatory path  
@@ -51,11 +51,11 @@ VentureLens is an **AI-native B2B SaaS** that screens startup applications for i
 
 | Judging criterion | Status | Evidence |
 |-------------------|--------|----------|
-| **Business Viability** | 🟢 **9/10** (Manus) | **$2,489** arms-length, **11** customers on live `/impact` |
-| **AI-Native Operations** | 🟢 **10/10** (Manus) | **99.9%** AI decisions, **30,247** agent actions |
-| **Category Impact** | 🟢 **8/10** (Manus) | **143** screened, **107.3** founder-hours saved — 100-app floor ✅ |
+| **Business Viability** | 🟢 **9/10** (Manus) | **$2,887** arms-length, **13** customers, **$0** related-party on live `/impact` |
+| **AI-Native Operations** | 🟢 **10/10** (Manus) | **99.9%** AI decisions, **34,579** agent actions |
+| **Category Impact** | 🟢 **8/10** (Manus) | **165** screened, **123.8** founder-hours saved, **2** accepted — 100-app floor ✅ |
 | **Google Cloud (rules)** | 🟢 Live | Cloud Run web + worker + impact archiver; GCS evidence |
-| **Devpost submission** | 🟡 In progress | Video missing (**#1 risk** per Manus); **record NOW** |
+| **Devpost submission** | 🟡 In progress | Video script + ElevenLabs narration + recording flow ready (**#1 risk** per Manus); **record now** |
 
 **Manus verdict (2026-06-20 evening):** **80% ready** · Advanced-stage **Complete** · Prize **High Tier / top 3 conversation** · Full review: [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md)
 
@@ -104,19 +104,22 @@ Full gate definitions: **[`ADVANCED_STAGE_GATE.md`](ADVANCED_STAGE_GATE.md)**
 
 ---
 
-Source: live **`https://venturelens.app/api/v1/impact.json`** (2026-06-20 ~18:28 UTC) · Refresh: `php artisan impact:snapshot` on prod
+Source: live **`https://venturelens.app/api/v1/impact.json`** (2026-07-07 ~12:36 UTC) · Snapshot saved: [`docs/evidence/impact-20260707.json`](evidence/impact-20260707.json) · Refresh: `php artisan impact:snapshot` on prod
 
 | KPI | Current (prod) | Scorecard floor | Target (competitive) | Manus note |
 |-----|----------------|-----------------|----------------------|------------|
-| Arms-length revenue (USD) | **2,489** ✅ | 600 | 4,000 | **9/10** viability |
-| Arms-length paying customers | **11** ✅ | 3 | 8 | Target nearly met |
-| Applications screened | **143** ✅ | 100 | 1,000 | **8/10** impact; ~357 remain |
-| Gemini API calls | **150** 🟡 | 500 | 5,000 | Climbing |
+| Arms-length revenue (USD) | **2,887** ✅ | 600 | 4,000 | Climbing past viability target |
+| Arms-length paying customers | **13** ✅ | 3 | 8 | ✅ Target exceeded |
+| Related-party revenue (USD) | **0** ✅ | — | — | Cleanest split yet — no ambiguity for judges |
+| Applications screened | **165** ✅ | 100 | 1,000 | ~835 remain to reach stretch target |
+| Gemini API calls | **175** 🟡 | 500 | 5,000 | Climbing (369,071 tokens) |
 | % decisions by AI | **99.9%** ✅ | 50% | 75% | Gold standard |
+| Accepted startups | **2** ✅ | — | — | Up from 0 |
 | Jobs influenced (modeled) | **6** ✅ | > 0 | — | |
-| Founder hours saved | **107.3** | — | — | Winning metric |
-| Agent actions (total) | **30,247** | — | — | |
-| Testimonial public URL | **null** 🔴 | 1 | 3+ | Serious red flag |
+| Founder hours saved | **123.8** | — | — | Winning metric |
+| Agent actions (total) | **34,579** | — | — | |
+| Countries reached | **14** | — | — | |
+| Testimonial public URL | **null** 🔴 | 1 | 3+ | Still the #1 credibility gap |
 
 **Verify in browser:** `/impact` · `/ai-operations` (check Growth agent for `gemini_error`)
 
@@ -136,7 +139,7 @@ Source: live **`https://venturelens.app/api/v1/impact.json`** (2026-06-20 ~18:28
 | Written narrative (500–1,000 words) | ✅ Draft in DEVPOST_SUBMISSION.md |
 | Additional info (revenue, agents, GCP) | ✅ Draft in DEVPOST_SUBMISSION.md |
 | Image gallery (4–6 screenshots) | ✅ 4 PNGs in `docs/evidence/` (impact, billing, AI ops, application screening) |
-| Demo video (< 3 min) | ⬜ Todo — [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md) + `scripts/preflight-demo-video.ps1` |
+| Demo video (< 3 min) | 🟡 Script + ElevenLabs narration finalized, recording todo — [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md) + `scripts/preflight-demo-video.ps1` |
 | Final submit | ⬜ Due Aug 17, 2026 (target Aug 15 buffer) |
 | GitHub shared with judges | ⬜ Confirm `testing@devpost.com`, `judging@hacker.fund` |
 
@@ -252,7 +255,7 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 | **6 agents story** | All 6 live in production code | Seeded history still mixed with live logs in DB |
 | **Decision workflow** | Accept/reject/shortlist/waitlist + impact KPIs | Accept 1 app + snapshot for `jobs_influenced` |
 | **Gemini quota** | Retry/backoff in client | Free tier 429s during heavy demo — enable billing/credits |
-| **Testimonials** | 1 seeded quote on `/impact` | Real public URL (Mustafa/BINA LinkedIn) — **null URL erodes trust** |
+| **Testimonials** | Mustafa Sagezli (BINA GM) quote + photo on `/impact` | Public verify URL (LinkedIn) still optional |
 | **Evidence pack** | JSON snapshot + markdown docs | **Stale** `impact-*.json` vs prod — sync + demo video |
 | **Devpost** | Draft + copy prepared | Final submit + gallery complete |
 
@@ -299,7 +302,7 @@ Use **personal Gmail** orgs for arms-length; **demo@venturelens.app** / Gohorto/
 | Founder email draft + send | ✅ |
 | Replay screening → activity KPIs > 0 | ✅ `impact-20260611.json` |
 | Devpost field-by-field copy | ✅ [`DEVPOST_SUBMISSION.md`](commercialization/DEVPOST_SUBMISSION.md) |
-| Demo video (< 3 min) | ⬜ Todo — [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md) + `scripts/preflight-demo-video.ps1` |
+| Demo video (< 3 min) | 🟡 Script + AI (ElevenLabs) narration + recording flow finalized — [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md); recording itself still todo |
 | Screenshot set (5 images) | ✅ 4/5 — [`docs/evidence/`](evidence/) (optional: replay-screening PNG) |
 | `docs/evidence/revenue-evidence.pdf` | ✅ Generated from `revenue-evidence.html` (or Stripe Dashboard export) |
 | Devpost final submit (by Aug 15) | ⬜ Todo |
@@ -362,7 +365,7 @@ php artisan test --filter=RevenueClassifierTest
 | http://127.0.0.1:8000/ai-operations | Agent registry + log |
 | http://127.0.0.1:8000/billing | Revenue split |
 
-**Demo:** `demo@venturelens.app` / `demo-password-change-me` (related-party for checkout tests)
+**Demo:** `demo@venturelens.app` / `demo123` (related-party for checkout tests)
 
 ---
 
@@ -388,6 +391,8 @@ php artisan test --filter=RevenueClassifierTest
 
 | Date | Change |
 |------|--------|
+| 2026-07-07 | **Real testimonial on `/impact`** — Mustafa Sagezli (General Manager, BINA Program) quote + photo; replaced seeded Sarah Chen entry; deployed `venturelens-web-00044-kz2` |
+| 2026-07-07 | **Demo video finalized for recording** — ElevenLabs AI-narration script (10 synced scene blocks + tag/settings guidance) and AI-narrated recording flow (audio-first → silent screen capture → edit sync) added to [`DEMO_VIDEO_SCRIPT.md`](commercialization/DEMO_VIDEO_SCRIPT.md); live KPIs refreshed from prod (**$2,887 / 13 customers, $0 related-party, 165 screened, 34,579 agent actions, 99.9% AI, 123.8 founder-hours, 2 accepted**); snapshot saved to [`impact-20260707.json`](evidence/impact-20260707.json) |
 | 2026-06-20 | **Manus second re-judge** — **80%** ready (↑ from 72%); Viability **9/10**, Impact **8/10**, Gate D 🟢; video **record NOW**; top 3 conversation → [`MANUS_JUDGE_REVIEW.md`](MANUS_JUDGE_REVIEW.md) |
 | 2026-06-20 | **Production breakthroughs** — **$2,489 / 11 customers**, **143 screened**, **30,247** agent actions; 4-key Gemini pool; 100-app floor passed |
 | 2026-06-21 | **AI Operations UX** — command-center hero, tabbed layout (overview/fleet/log/tools), agent cards + side-panel log |

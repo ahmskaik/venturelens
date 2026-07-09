@@ -26,6 +26,7 @@ $user = App\Models\User::firstOrCreate(
         'account_type' => 'incubator',
     ],
 );
+$user->update(['password' => Illuminate\Support\Facades\Hash::make($password)]);
 
 if (! $user->organizations()->where('organizations.id', $org->id)->exists()) {
     $user->organizations()->attach($org->id, ['role' => 'owner']);

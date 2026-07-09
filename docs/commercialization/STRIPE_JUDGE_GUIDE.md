@@ -95,7 +95,7 @@ php scripts/verify-arms-length-checkout.php
 
 ### 4. Related-party demo
 
-Login `demo@venturelens.app` / `demo-password-change-me` — org slug `demo-incubator` → checkout metadata **related-party** (reported separately on `/impact`).
+Login `demo@venturelens.app` / `demo123` — org slug `demo-incubator` → checkout metadata **related-party** (reported separately on `/impact`).
 
 ## Troubleshooting: `Received unknown parameter: agent_identity_token`
 

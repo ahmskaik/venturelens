@@ -72,7 +72,7 @@ jobs:
           STRIPE_PRICE_STARTER: ${{ secrets.STRIPE_PRICE_STARTER }}
           DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
         run: |
-          ENV_VARS="APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,QUEUE_CONNECTION=database,RUN_MIGRATIONS=true,GEMINI_MODEL_FLASH=gemini-2.5-flash,GEMINI_MAX_RETRIES=5,SESSION_DRIVER=database,CACHE_STORE=database,DB_CONNECTION=mysql,DB_SOCKET=/cloudsql/${{ env.PROJECT_ID }}:${{ env.REGION }}:venturelens,DB_DATABASE=venturelens,DB_USERNAME=venturelens,DEMO_USER_EMAIL=demo@venturelens.app,DEMO_USER_PASSWORD=${DEMO_USER_PASSWORD:-demo-password-change-me},STRIPE_PRICE_COHORT=${STRIPE_PRICE_COHORT},STRIPE_PRICE_STARTER=${STRIPE_PRICE_STARTER}"
+          ENV_VARS="APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,QUEUE_CONNECTION=database,RUN_MIGRATIONS=true,GEMINI_MODEL_FLASH=gemini-2.5-flash,GEMINI_MAX_RETRIES=5,SESSION_DRIVER=database,CACHE_STORE=database,DB_CONNECTION=mysql,DB_SOCKET=/cloudsql/${{ env.PROJECT_ID }}:${{ env.REGION }}:venturelens,DB_DATABASE=venturelens,DB_USERNAME=venturelens,DEMO_USER_EMAIL=demo@venturelens.app,DEMO_USER_PASSWORD=${DEMO_USER_PASSWORD:-demo123},STRIPE_PRICE_COHORT=${STRIPE_PRICE_COHORT},STRIPE_PRICE_STARTER=${STRIPE_PRICE_STARTER}"
           SECRETS="APP_KEY=venturelens-app-key:latest,GEMINI_API_KEY=gemini-api-key:latest,DB_PASSWORD=venturelens-db-password:latest,STRIPE_SECRET=stripe-secret:latest,STRIPE_WEBHOOK_SECRET=stripe-webhook-secret:latest"
           gcloud run deploy ${{ env.SERVICE_WEB }} \
             --image "$IMAGE_URI" \
@@ -94,7 +94,7 @@ jobs:
           STRIPE_PRICE_STARTER: ${{ secrets.STRIPE_PRICE_STARTER }}
           DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
         run: |
-          ENV_VARS="CONTAINER_ROLE=worker,APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,QUEUE_CONNECTION=database,GEMINI_MODEL_FLASH=gemini-2.5-flash,GEMINI_MAX_RETRIES=5,SESSION_DRIVER=database,CACHE_STORE=database,DB_CONNECTION=mysql,DB_SOCKET=/cloudsql/${{ env.PROJECT_ID }}:${{ env.REGION }}:venturelens,DB_DATABASE=venturelens,DB_USERNAME=venturelens,DEMO_USER_EMAIL=demo@venturelens.app,DEMO_USER_PASSWORD=${DEMO_USER_PASSWORD:-demo-password-change-me},STRIPE_PRICE_COHORT=${STRIPE_PRICE_COHORT},STRIPE_PRICE_STARTER=${STRIPE_PRICE_STARTER}"
+          ENV_VARS="CONTAINER_ROLE=worker,APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,QUEUE_CONNECTION=database,GEMINI_MODEL_FLASH=gemini-2.5-flash,GEMINI_MAX_RETRIES=5,SESSION_DRIVER=database,CACHE_STORE=database,DB_CONNECTION=mysql,DB_SOCKET=/cloudsql/${{ env.PROJECT_ID }}:${{ env.REGION }}:venturelens,DB_DATABASE=venturelens,DB_USERNAME=venturelens,DEMO_USER_EMAIL=demo@venturelens.app,DEMO_USER_PASSWORD=${DEMO_USER_PASSWORD:-demo123},STRIPE_PRICE_COHORT=${STRIPE_PRICE_COHORT},STRIPE_PRICE_STARTER=${STRIPE_PRICE_STARTER}"
           gcloud run deploy ${{ env.SERVICE_WORKER }} \
             --image "$IMAGE_URI" \
             --region ${{ env.REGION }} \

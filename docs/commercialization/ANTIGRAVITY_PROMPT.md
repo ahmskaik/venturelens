@@ -34,7 +34,7 @@ You are building **satellite tools** for **VentureLens** — an AI-operated B2B 
 | Public impact API | `GET /api/v1/impact.json` | CORS `*` enabled |
 | Judge smoke CLI | `npm run judge:smoke` in main repo | ✅ Done |
 | Impact embed widget | `/widgets/impact/` | ✅ Done (deploy to see on production) |
-| Demo login | `demo@venturelens.app` / `demo-password-change-me` | Judges |
+| Demo login | `demo@venturelens.app` / `demo123` | Judges |
 | Evidence snapshots | `docs/evidence/impact-YYYYMMDD.json` | Committed KPI JSON |
 
 ### Public API contract (for your tools)

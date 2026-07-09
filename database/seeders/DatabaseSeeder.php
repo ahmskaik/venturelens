@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make($demoPassword),
             ]
         );
+        $user->update(['password' => Hash::make($demoPassword)]);
 
         $organization = Organization::firstOrCreate(
             ['slug' => 'demo-incubator'],

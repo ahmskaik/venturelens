@@ -524,7 +524,7 @@ Per spec — do not reorder:
 
 ## 14. How to Verify (5-Minute Judge Path)
 
-**Demo credentials:** `demo@venturelens.app` / `demo-password-change-me`
+**Demo credentials:** `demo@venturelens.app` / `demo123`
 
 | Step | URL | What to see |
 |------|-----|-------------|
